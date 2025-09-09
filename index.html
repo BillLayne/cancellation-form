@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Policy Cancellation Request - Bill Layne Insurance</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px 10px;
+        }
+        
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .acord-header {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-bottom: 2px solid #dee2e6;
+            text-align: center;
+        }
+        
+        .acord-logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #495057;
+            margin-bottom: 5px;
+        }
+        
+        .acord-title {
+            font-size: 18px;
+            color: #6c757d;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .form-container {
+            padding: 25px 20px;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2a5298;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+        
+        .field-row {
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+        }
+        
+        .field-label {
+            font-weight: 600;
+            color: #495057;
+            font-size: 13px;
+            min-width: 140px;
+        }
+        
+        .field-value {
+            flex: 1;
+            font-size: 14px;
+            color: #212529;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 5px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .warning-box h3 {
+            color: #856404;
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .warning-icon {
+            margin-right: 8px;
+            font-size: 20px;
+        }
+        
+        .warning-box ul {
+            margin-left: 25px;
+            color: #856404;
+            font-size: 14px;
+        }
+        
+        .warning-box li {
+            margin-bottom: 5px;
+        }
+        
+        .signature-section {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f0f4ff;
+            border-radius: 10px;
+            border: 2px solid #667eea;
+        }
+        
+        .signature-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2a5298;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .legal-text {
+            font-size: 13px;
+            color: #495057;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 5px;
+        }
+        
+        #signature-pad {
+            border: 2px dashed #dee2e6;
+            border-radius: 8px;
+            display: block;
+            width: 100%;
+            height: 180px;
+            cursor: crosshair;
+            background: white;
+            touch-action: none;
+        }
+        
+        .signature-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .signature-label label {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        .signature-label span {
+            color: #6c757d;
+            font-size: 12px;
+        }
+        
+        .signature-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .btn-clear {
+            background: #dc3545;
+            color: white;
+            flex: 1;
+        }
+        
+        .btn-clear:hover {
+            background: #c82333;
+        }
+        
+        .btn-submit {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            width: 100%;
+            margin-top: 20px;
+            font-size: 18px;
+            padding: 15px;
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(40, 167, 69, 0.4);
+        }
+        
+        .btn-submit:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .success-message,
+        .error-message {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+        
+        .success-message {
+            background: #28a745;
+            color: white;
+        }
+        
+        .error-message {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #dee2e6;
+        }
+        
+        .footer p {
+            color: #6c757d;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+        
+        .autofill-notice {
+            background: #28a745;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+            display: none;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            animation: slideDown 0.5s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Hidden form fields for data storage */
+        .hidden-fields {
+            display: none;
+        }
+        
+        @media (max-width: 600px) {
+            .field-row {
+                flex-direction: column;
+            }
+            
+            .field-label {
+                margin-bottom: 5px;
+            }
+            
+            .header h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="acord-header">
+            <div class="acord-logo">ACORD®</div>
+            <div class="acord-title">CANCELLATION REQUEST / POLICY RELEASE</div>
+        </div>
+        
+        <div class="header">
+            <h1>Bill Layne Insurance Agency</h1>
+            <p>Policy Cancellation Request</p>
+        </div>
+        
+        <form id="cancellationForm" class="form-container">
+            <div class="autofill-notice" id="autofillNotice">
+                ✓ Your cancellation information has been loaded
+            </div>
+            
+            <!-- Producer Information (Pre-filled) -->
+            <div class="section">
+                <div class="section-title">Producer Information</div>
+                <div class="field-row">
+                    <span class="field-label">Agency:</span>
+                    <span class="field-value">Bill Layne Insurance</span>
+                </div>
+                <div class="field-row">
+                    <span class="field-label">Address:</span>
+                    <span class="field-value">1283 N Bridge St, Elkin, NC 28621</span>
+                </div>
+                <div class="field-row">
+                    <span class="field-label">Phone:</span>
+                    <span class="field-value">336-835-1993</span>
+                </div>
+            </div>
+            
+            <!-- Policy Information -->
+            <div class="section">
+                <div class="section-title">Policy to be Cancelled</div>
+                <div class="field-row">
+                    <span class="field-label">Policy Number:</span>
+                    <span class="field-value" id="display-policyNumber">Loading...</span>
+                </div>
+                <div class="field-row">
+                    <span class="field-label">Insured Name:</span>
+                    <span class="field-value" id="display-insuredName">Loading...</span>
+                </div>
+                <div class="field-row">
+                    <span class="field-label">Insurance Company:</span>
+                    <span class="field-value" id="display-company">Loading...</span>
+                </div>
+                <div class="field-row">
+                    <span class="field-label">Policy Type:</span>
+                    <span class="field-value" id="display-policyType">Loading...</span>
+                </div>
+            </div>
+            
+            <!-- Cancellation Details -->
+            <div class="section">
+                <div class="section-title">Cancellation Details</div>
+                <div class="field-row">
+                    <span class="field-label">Cancellation Date:</span>
+                    <span class="field-value" id="display-cancelDate">Loading...</span>
+                </div>
+                <div class="field-row">
+                    <span class="field-label">Cancellation Time:</span>
+                    <span class="field-value" id="display-cancelTime">Loading...</span>
+                </div>
+                <div class="field-row">
+                    <span class="field-label">Reason:</span>
+                    <span class="field-value" id="display-reason">Loading...</span>
+                </div>
+                <div class="field-row" id="refundRow" style="display: none;">
+                    <span class="field-label">Refund Amount:</span>
+                    <span class="field-value" id="display-refund">$0.00</span>
+                </div>
+            </div>
+            
+            <!-- Warning Box -->
+            <div class="warning-box">
+                <h3><span class="warning-icon">⚠️</span>Important Notice</h3>
+                <ul>
+                    <li>Coverage will terminate on the date and time shown above</li>
+                    <li>No claims will be covered after the cancellation date</li>
+                    <li>You may be without insurance coverage</li>
+                    <li>Any refund will be calculated per policy terms</li>
+                </ul>
+            </div>
+            
+            <!-- Signature Section -->
+            <div class="signature-section">
+                <div class="signature-title">ELECTRONIC SIGNATURE REQUIRED</div>
+                
+                <div class="legal-text">
+                    By signing below, I acknowledge that:
+                    <br><br>
+                    • I am requesting cancellation of the above-referenced policy<br>
+                    • The policy is either lost, destroyed, or being retained<br>
+                    • No claims will be made after the cancellation date<br>
+                    • Any premium adjustment will be made per policy terms<br>
+                    • This representation is true and accurate
+                </div>
+                
+                <div class="signature-label">
+                    <label>Signature of Named Insured *</label>
+                    <span>Draw your signature below</span>
+                </div>
+                <canvas id="signature-pad"></canvas>
+                <div class="signature-buttons">
+                    <button type="button" class="btn btn-clear" onclick="clearSignature()">Clear Signature</button>
+                </div>
+            </div>
+            
+            <!-- Hidden form fields for data submission -->
+            <div class="hidden-fields">
+                <input type="hidden" id="policyNumber" name="policyNumber">
+                <input type="hidden" id="insuredName" name="insuredName">
+                <input type="hidden" id="insuredAddress" name="insuredAddress">
+                <input type="hidden" id="insuredPhone" name="insuredPhone">
+                <input type="hidden" id="insuredEmail" name="insuredEmail">
+                <input type="hidden" id="company" name="company">
+                <input type="hidden" id="policyType" name="policyType">
+                <input type="hidden" id="effectiveDate" name="effectiveDate">
+                <input type="hidden" id="expirationDate" name="expirationDate">
+                <input type="hidden" id="cancelDate" name="cancelDate">
+                <input type="hidden" id="cancelTime" name="cancelTime">
+                <input type="hidden" id="reason" name="reason">
+                <input type="hidden" id="refundAmount" name="refundAmount">
+                <input type="hidden" id="signature" name="signature">
+            </div>
+            
+            <div class="success-message" id="successMessage">
+                ✅ Your cancellation request has been successfully submitted!
+            </div>
+            
+            <div class="error-message" id="errorMessage">
+                ❌ There was an error submitting your request. Please try again.
+            </div>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p style="margin-top: 10px;">Submitting your cancellation request...</p>
+            </div>
+            
+            <button type="submit" class="btn btn-submit" id="submitBtn">
+                Submit Cancellation Request
+            </button>
+        </form>
+        
+        <div class="footer">
+            <p>
+                ACORD 35 (2017/05) © 1988-2017 ACORD CORPORATION. All rights reserved.<br>
+                The ACORD name and logo are registered marks of ACORD<br><br>
+                Bill Layne Insurance Agency<br>
+                1283 N Bridge St, Elkin NC 28621<br>
+                336-835-1993 | Docs@BillLayneInsurance.com
+            </p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+    <script>
+        // YOUR GOOGLE APPS SCRIPT URL
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyUsQN44g7sdU1YbNk2yhb0t-ZLzDfxHMHiaHQnu_A_IIMp6nbTY0peexiQ2XJQYtJ9/exec';
+        
+        let signaturePad;
+        
+        // Function to get URL parameters
+        function getUrlParameters() {
+            const params = new URLSearchParams(window.location.search);
+            const paramObject = {};
+            for (const [key, value] of params) {
+                paramObject[key] = decodeURIComponent(value);
+            }
+            return paramObject;
+        }
+        
+        // Function to format date for display
+        function formatDate(dateStr) {
+            if (!dateStr) return 'N/A';
+            const date = new Date(dateStr + 'T12:00:00');
+            return date.toLocaleDateString('en-US', { 
+                month: 'numeric', 
+                day: 'numeric', 
+                year: 'numeric' 
+            });
+        }
+        
+        // Function to format time for display
+        function formatTime(timeStr) {
+            if (!timeStr) return 'N/A';
+            // Expecting format like "12:00 PM"
+            return timeStr;
+        }
+        
+        // Auto-fill form from URL parameters
+        function autoFillForm() {
+            const params = getUrlParameters();
+            let fieldsAutoFilled = false;
+            
+            // Map URL parameters to both hidden fields and display elements
+            const fieldMapping = {
+                'policyNumber': { hidden: 'policyNumber', display: 'display-policyNumber' },
+                'insuredName': { hidden: 'insuredName', display: 'display-insuredName' },
+                'insuredAddress': { hidden: 'insuredAddress', display: null },
+                'insuredPhone': { hidden: 'insuredPhone', display: null },
+                'insuredEmail': { hidden: 'insuredEmail', display: null },
+                'company': { hidden: 'company', display: 'display-company' },
+                'insuranceCompany': { hidden: 'company', display: 'display-company' }, // Alternative name
+                'policyType': { hidden: 'policyType', display: 'display-policyType' },
+                'effectiveDate': { hidden: 'effectiveDate', display: null },
+                'expirationDate': { hidden: 'expirationDate', display: null },
+                'cancelDate': { hidden: 'cancelDate', display: 'display-cancelDate' },
+                'cancellationDate': { hidden: 'cancelDate', display: 'display-cancelDate' }, // Alternative
+                'cancelTime': { hidden: 'cancelTime', display: 'display-cancelTime' },
+                'cancellationTime': { hidden: 'cancelTime', display: 'display-cancelTime' }, // Alternative
+                'reason': { hidden: 'reason', display: 'display-reason' },
+                'refundAmount': { hidden: 'refundAmount', display: 'display-refund' },
+                'refund': { hidden: 'refundAmount', display: 'display-refund' } // Alternative
+            };
+            
+            // Process each parameter
+            for (const [urlParam, fields] of Object.entries(fieldMapping)) {
+                if (params[urlParam]) {
+                    // Set hidden field value
+                    if (fields.hidden) {
+                        const hiddenField = document.getElementById(fields.hidden);
+                        if (hiddenField) {
+                            hiddenField.value = params[urlParam];
+                            fieldsAutoFilled = true;
+                        }
+                    }
+                    
+                    // Set display value
+                    if (fields.display) {
+                        const displayElement = document.getElementById(fields.display);
+                        if (displayElement) {
+                            if (urlParam.includes('Date')) {
+                                displayElement.textContent = formatDate(params[urlParam]);
+                            } else if (urlParam.includes('Time')) {
+                                displayElement.textContent = formatTime(params[urlParam]);
+                            } else if (urlParam.includes('refund') || urlParam.includes('Amount')) {
+                                const amount = params[urlParam].replace('$', '');
+                                displayElement.textContent = '$' + parseFloat(amount).toFixed(2);
+                                // Show refund row if there's a refund
+                                if (parseFloat(amount) > 0) {
+                                    document.getElementById('refundRow').style.display = 'flex';
+                                }
+                            } else {
+                                displayElement.textContent = params[urlParam];
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // Handle special case for cancel date display
+            if (params.cancelDate || params.cancellationDate) {
+                const dateParam = params.cancelDate || params.cancellationDate;
+                const displayDate = document.getElementById('display-cancelDate');
+                if (displayDate) {
+                    displayDate.textContent = formatDate(dateParam);
+                }
+            }
+            
+            // Show notification if fields were auto-filled
+            if (fieldsAutoFilled) {
+                const notice = document.getElementById('autofillNotice');
+                notice.style.display = 'block';
+                setTimeout(() => {
+                    notice.style.opacity = '0';
+                    setTimeout(() => {
+                        notice.style.display = 'none';
+                        notice.style.opacity = '1';
+                    }, 500);
+                }, 3000);
+            }
+            
+            // Update any empty display fields
+            document.querySelectorAll('.field-value').forEach(element => {
+                if (element.textContent === 'Loading...') {
+                    element.textContent = 'Not provided';
+                }
+            });
+        }
+        
+        // Initialize signature pad
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-fill form from URL parameters
+            autoFillForm();
+            
+            // Initialize signature pad
+            const canvas = document.getElementById('signature-pad');
+            signaturePad = new SignaturePad(canvas, {
+                backgroundColor: 'rgb(255, 255, 255)',
+                penColor: 'rgb(0, 0, 0)'
+            });
+            
+            // Resize canvas to proper size
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+        });
+        
+        function resizeCanvas() {
+            const canvas = document.getElementById('signature-pad');
+            const ratio = Math.max(window.devicePixelRatio || 1, 1);
+            canvas.width = canvas.offsetWidth * ratio;
+            canvas.height = canvas.offsetHeight * ratio;
+            canvas.getContext('2d').scale(ratio, ratio);
+            if (signaturePad) {
+                signaturePad.clear();
+            }
+        }
+        
+        function clearSignature() {
+            signaturePad.clear();
+        }
+        
+        // Handle form submission
+        document.getElementById('cancellationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Validate signature
+            if (signaturePad.isEmpty()) {
+                alert('Please provide your signature before submitting the cancellation request.');
+                return;
+            }
+            
+            // Confirm cancellation
+            const confirmMsg = `Are you sure you want to cancel this policy?\n\n` +
+                             `Policy: ${document.getElementById('policyNumber').value}\n` +
+                             `Cancellation Date: ${document.getElementById('display-cancelDate').textContent}\n\n` +
+                             `This action cannot be undone and coverage will end.`;
+            
+            if (!confirm(confirmMsg)) {
+                return;
+            }
+            
+            // Get signature data
+            document.getElementById('signature').value = signaturePad.toDataURL();
+            
+            // Show loading
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('successMessage').style.display = 'none';
+            document.getElementById('errorMessage').style.display = 'none';
+            
+            // Prepare form data
+            const formData = new FormData(this);
+            formData.append('submissionDate', new Date().toLocaleString());
+            formData.append('formType', 'ACORD 35 Cancellation');
+            
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.text();
+                
+                if (result.includes('Success') || response.ok) {
+                    // Show success message
+                    document.getElementById('successMessage').style.display = 'block';
+                    document.getElementById('cancellationForm').style.display = 'none';
+                    
+                    // Scroll to top
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    throw new Error('Submission failed');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('submitBtn').disabled = false;
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
