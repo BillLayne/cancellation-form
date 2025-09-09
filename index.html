@@ -351,7 +351,7 @@
         
         <form id="cancellationForm" class="form-container">
             <div class="autofill-notice" id="autofillNotice">
-                ✓ Your cancellation information has been loaded
+                ✔ Your cancellation information has been loaded
             </div>
             
             <!-- Producer Information (Pre-filled) -->
@@ -463,6 +463,7 @@
                 <input type="hidden" id="cancelTime" name="cancelTime">
                 <input type="hidden" id="reason" name="reason">
                 <input type="hidden" id="refundAmount" name="refundAmount">
+                <input type="hidden" id="notes" name="notes">
                 <input type="hidden" id="signature" name="signature">
             </div>
             
@@ -526,7 +527,6 @@
         // Function to format time for display
         function formatTime(timeStr) {
             if (!timeStr) return 'N/A';
-            // Expecting format like "12:00 PM"
             return timeStr;
         }
         
@@ -543,17 +543,18 @@
                 'insuredPhone': { hidden: 'insuredPhone', display: null },
                 'insuredEmail': { hidden: 'insuredEmail', display: null },
                 'company': { hidden: 'company', display: 'display-company' },
-                'insuranceCompany': { hidden: 'company', display: 'display-company' }, // Alternative name
+                'insuranceCompany': { hidden: 'company', display: 'display-company' },
                 'policyType': { hidden: 'policyType', display: 'display-policyType' },
                 'effectiveDate': { hidden: 'effectiveDate', display: null },
                 'expirationDate': { hidden: 'expirationDate', display: null },
                 'cancelDate': { hidden: 'cancelDate', display: 'display-cancelDate' },
-                'cancellationDate': { hidden: 'cancelDate', display: 'display-cancelDate' }, // Alternative
+                'cancellationDate': { hidden: 'cancelDate', display: 'display-cancelDate' },
                 'cancelTime': { hidden: 'cancelTime', display: 'display-cancelTime' },
-                'cancellationTime': { hidden: 'cancelTime', display: 'display-cancelTime' }, // Alternative
+                'cancellationTime': { hidden: 'cancelTime', display: 'display-cancelTime' },
                 'reason': { hidden: 'reason', display: 'display-reason' },
                 'refundAmount': { hidden: 'refundAmount', display: 'display-refund' },
-                'refund': { hidden: 'refundAmount', display: 'display-refund' } // Alternative
+                'refund': { hidden: 'refundAmount', display: 'display-refund' },
+                'notes': { hidden: 'notes', display: null } // Notes are hidden from customer
             };
             
             // Process each parameter
@@ -577,281 +578,11 @@
                             } else if (urlParam.includes('Time')) {
                                 displayElement.textContent = formatTime(params[urlParam]);
                             } else if (urlParam.includes('refund') || urlParam.includes('Amount')) {
-                                const amount = params[urlParam].replace('
-                                displayElement.textContent = params[urlParam];
-                            }
-                        }
-                    }
-                }
-            }
-            
-            // Handle special case for cancel date display
-            if (params.cancelDate || params.cancellationDate) {
-                const dateParam = params.cancelDate || params.cancellationDate;
-                const displayDate = document.getElementById('display-cancelDate');
-                if (displayDate) {
-                    displayDate.textContent = formatDate(dateParam);
-                }
-            }
-            
-            // Show notification if fields were auto-filled
-            if (fieldsAutoFilled) {
-                const notice = document.getElementById('autofillNotice');
-                notice.style.display = 'block';
-                setTimeout(() => {
-                    notice.style.opacity = '0';
-                    setTimeout(() => {
-                        notice.style.display = 'none';
-                        notice.style.opacity = '1';
-                    }, 500);
-                }, 3000);
-            }
-            
-            // Update any empty display fields
-            document.querySelectorAll('.field-value').forEach(element => {
-                if (element.textContent === 'Loading...') {
-                    element.textContent = 'Not provided';
-                }
-            });
-        }
-        
-        // Initialize signature pad
-        document.addEventListener('DOMContentLoaded', function() {
-            // Auto-fill form from URL parameters
-            autoFillForm();
-            
-            // Initialize signature pad
-            const canvas = document.getElementById('signature-pad');
-            signaturePad = new SignaturePad(canvas, {
-                backgroundColor: 'rgb(255, 255, 255)',
-                penColor: 'rgb(0, 0, 0)'
-            });
-            
-            // Resize canvas to proper size
-            resizeCanvas();
-            window.addEventListener('resize', resizeCanvas);
-        });
-        
-        function resizeCanvas() {
-            const canvas = document.getElementById('signature-pad');
-            const ratio = Math.max(window.devicePixelRatio || 1, 1);
-            canvas.width = canvas.offsetWidth * ratio;
-            canvas.height = canvas.offsetHeight * ratio;
-            canvas.getContext('2d').scale(ratio, ratio);
-            if (signaturePad) {
-                signaturePad.clear();
-            }
-        }
-        
-        function clearSignature() {
-            signaturePad.clear();
-        }
-        
-        // Handle form submission
-        document.getElementById('cancellationForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            // Validate signature
-            if (signaturePad.isEmpty()) {
-                alert('Please provide your signature before submitting the cancellation request.');
-                return;
-            }
-            
-            // Confirm cancellation
-            const confirmMsg = `Are you sure you want to cancel this policy?\n\n` +
-                             `Policy: ${document.getElementById('policyNumber').value}\n` +
-                             `Cancellation Date: ${document.getElementById('display-cancelDate').textContent}\n\n` +
-                             `This action cannot be undone and coverage will end.`;
-            
-            if (!confirm(confirmMsg)) {
-                return;
-            }
-            
-            // Get signature data
-            document.getElementById('signature').value = signaturePad.toDataURL();
-            
-            // Show loading
-            document.getElementById('loading').style.display = 'block';
-            document.getElementById('submitBtn').disabled = true;
-            document.getElementById('successMessage').style.display = 'none';
-            document.getElementById('errorMessage').style.display = 'none';
-            
-            // Prepare form data
-            const formData = new FormData(this);
-            formData.append('submissionDate', new Date().toLocaleString());
-            formData.append('formType', 'ACORD 35 Cancellation');
-            
-            try {
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                const result = await response.text();
-                
-                if (result.includes('Success') || response.ok) {
-                    // Show success message
-                    document.getElementById('successMessage').style.display = 'block';
-                    document.getElementById('cancellationForm').style.display = 'none';
-                    
-                    // Scroll to top
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                } else {
-                    throw new Error('Submission failed');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                document.getElementById('errorMessage').style.display = 'block';
-                document.getElementById('submitBtn').disabled = false;
-            } finally {
-                document.getElementById('loading').style.display = 'none';
-            }
-        });
-    </script>
-</body>
-</html>, '');
-                                displayElement.textContent = '
-                                displayElement.textContent = params[urlParam];
-                            }
-                        }
-                    }
-                }
-            }
-            
-            // Handle special case for cancel date display
-            if (params.cancelDate || params.cancellationDate) {
-                const dateParam = params.cancelDate || params.cancellationDate;
-                const displayDate = document.getElementById('display-cancelDate');
-                if (displayDate) {
-                    displayDate.textContent = formatDate(dateParam);
-                }
-            }
-            
-            // Show notification if fields were auto-filled
-            if (fieldsAutoFilled) {
-                const notice = document.getElementById('autofillNotice');
-                notice.style.display = 'block';
-                setTimeout(() => {
-                    notice.style.opacity = '0';
-                    setTimeout(() => {
-                        notice.style.display = 'none';
-                        notice.style.opacity = '1';
-                    }, 500);
-                }, 3000);
-            }
-            
-            // Update any empty display fields
-            document.querySelectorAll('.field-value').forEach(element => {
-                if (element.textContent === 'Loading...') {
-                    element.textContent = 'Not provided';
-                }
-            });
-        }
-        
-        // Initialize signature pad
-        document.addEventListener('DOMContentLoaded', function() {
-            // Auto-fill form from URL parameters
-            autoFillForm();
-            
-            // Initialize signature pad
-            const canvas = document.getElementById('signature-pad');
-            signaturePad = new SignaturePad(canvas, {
-                backgroundColor: 'rgb(255, 255, 255)',
-                penColor: 'rgb(0, 0, 0)'
-            });
-            
-            // Resize canvas to proper size
-            resizeCanvas();
-            window.addEventListener('resize', resizeCanvas);
-        });
-        
-        function resizeCanvas() {
-            const canvas = document.getElementById('signature-pad');
-            const ratio = Math.max(window.devicePixelRatio || 1, 1);
-            canvas.width = canvas.offsetWidth * ratio;
-            canvas.height = canvas.offsetHeight * ratio;
-            canvas.getContext('2d').scale(ratio, ratio);
-            if (signaturePad) {
-                signaturePad.clear();
-            }
-        }
-        
-        function clearSignature() {
-            signaturePad.clear();
-        }
-        
-        // Handle form submission
-        document.getElementById('cancellationForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            // Validate signature
-            if (signaturePad.isEmpty()) {
-                alert('Please provide your signature before submitting the cancellation request.');
-                return;
-            }
-            
-            // Confirm cancellation
-            const confirmMsg = `Are you sure you want to cancel this policy?\n\n` +
-                             `Policy: ${document.getElementById('policyNumber').value}\n` +
-                             `Cancellation Date: ${document.getElementById('display-cancelDate').textContent}\n\n` +
-                             `This action cannot be undone and coverage will end.`;
-            
-            if (!confirm(confirmMsg)) {
-                return;
-            }
-            
-            // Get signature data
-            document.getElementById('signature').value = signaturePad.toDataURL();
-            
-            // Show loading
-            document.getElementById('loading').style.display = 'block';
-            document.getElementById('submitBtn').disabled = true;
-            document.getElementById('successMessage').style.display = 'none';
-            document.getElementById('errorMessage').style.display = 'none';
-            
-            // Prepare form data
-            const formData = new FormData(this);
-            formData.append('submissionDate', new Date().toLocaleString());
-            formData.append('formType', 'ACORD 35 Cancellation');
-            
-            try {
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                const result = await response.text();
-                
-                if (result.includes('Success') || response.ok) {
-                    // Show success message
-                    document.getElementById('successMessage').style.display = 'block';
-                    document.getElementById('cancellationForm').style.display = 'none';
-                    
-                    // Scroll to top
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                } else {
-                    throw new Error('Submission failed');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                document.getElementById('errorMessage').style.display = 'block';
-                document.getElementById('submitBtn').disabled = false;
-            } finally {
-                document.getElementById('loading').style.display = 'none';
-            }
-        });
-    </script>
-</body>
-</html> + parseFloat(amount).toFixed(2);
+                                const amount = params[urlParam].replace('$', '');
+                                displayElement.textContent = '$' + parseFloat(amount).toFixed(2);
                                 // Show refund row if there's a refund
                                 if (parseFloat(amount) > 0) {
                                     document.getElementById('refundRow').style.display = 'flex';
-                                }
-                            } else if (urlParam === 'notes') {
-                                displayElement.textContent = params[urlParam];
-                                // Show notes row if there are notes
-                                if (params[urlParam] && params[urlParam].trim() !== '') {
-                                    document.getElementById('notesRow').style.display = 'flex';
                                 }
                             } else {
                                 displayElement.textContent = params[urlParam];
