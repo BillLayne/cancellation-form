@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ACORD 35 Cancellation Link Generator - Bill Layne Insurance</title>
+    <title>Policy Cancellation Request - Bill Layne Insurance</title>
     <style>
         * {
             margin: 0;
@@ -12,19 +12,38 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px 10px;
         }
         
         .container {
-            max-width: 800px;
+            max-width: 700px;
             margin: 0 auto;
             background: white;
-            border-radius: 20px;
+            border-radius: 10px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             overflow: hidden;
+        }
+        
+        .acord-header {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-bottom: 2px solid #dee2e6;
+            text-align: center;
+        }
+        
+        .acord-logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #495057;
+            margin-bottom: 5px;
+        }
+        
+        .acord-title {
+            font-size: 18px;
+            color: #6c757d;
         }
         
         .header {
@@ -35,7 +54,7 @@
         }
         
         .header h1 {
-            font-size: 24px;
+            font-size: 22px;
             margin-bottom: 10px;
         }
         
@@ -44,271 +63,272 @@
             opacity: 0.9;
         }
         
-        .system-badge {
-            display: inline-block;
-            background: #dc3545;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-        
         .form-container {
             padding: 25px 20px;
         }
         
-        .section-title {
+        .section {
+            margin-bottom: 25px;
+            padding: 15px;
             background: #f8f9fa;
-            padding: 10px 15px;
-            margin: 20px -20px 15px -20px;
-            font-weight: 600;
-            color: #495057;
-            border-left: 4px solid #dc3545;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
         }
         
-        .row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2a5298;
             margin-bottom: 15px;
+            text-transform: uppercase;
         }
         
-        .form-group {
+        .field-row {
+            margin-bottom: 12px;
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
+            align-items: start;
         }
         
-        .form-group.full-width {
-            grid-column: span 2;
-        }
-        
-        label {
-            font-size: 13px;
+        .field-label {
             font-weight: 600;
             color: #495057;
+            font-size: 13px;
+            min-width: 140px;
+        }
+        
+        .field-value {
+            flex: 1;
+            font-size: 14px;
+            color: #212529;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 5px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .warning-box h3 {
+            color: #856404;
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .warning-icon {
+            margin-right: 8px;
+            font-size: 20px;
+        }
+        
+        .warning-box ul {
+            margin-left: 25px;
+            color: #856404;
+            font-size: 14px;
+        }
+        
+        .warning-box li {
             margin-bottom: 5px;
         }
         
-        input, select, textarea {
-            padding: 10px 12px;
-            border: 1px solid #ddd;
+        .signature-section {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f0f4ff;
+            border-radius: 10px;
+            border: 2px solid #667eea;
+        }
+        
+        .signature-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2a5298;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .legal-text {
+            font-size: 13px;
+            color: #495057;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 5px;
+        }
+        
+        #signature-pad {
+            border: 2px dashed #dee2e6;
             border-radius: 8px;
+            display: block;
+            width: 100%;
+            height: 180px;
+            cursor: crosshair;
+            background: white;
+            touch-action: none;
+        }
+        
+        .signature-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .signature-label label {
+            font-weight: 600;
+            color: #333;
             font-size: 14px;
-            transition: all 0.3s ease;
         }
         
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: #007bff;
-            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+        .signature-label span {
+            color: #6c757d;
+            font-size: 12px;
         }
         
-        textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-        
-        .button-group {
-            margin-top: 30px;
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr;
+        .signature-buttons {
+            display: flex;
             gap: 10px;
+            margin-top: 10px;
         }
         
         .btn {
-            padding: 12px 20px;
+            padding: 12px 25px;
             border: none;
             border-radius: 8px;
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
+            text-align: center;
         }
         
-        .btn-generate {
-            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        .btn-clear {
+            background: #dc3545;
             color: white;
-            grid-column: span 1;
+            flex: 1;
         }
         
-        .btn-generate:hover {
+        .btn-clear:hover {
+            background: #c82333;
+        }
+        
+        .btn-submit {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            width: 100%;
+            margin-top: 20px;
+            font-size: 18px;
+            padding: 15px;
+        }
+        
+        .btn-submit:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(220,53,69,0.3);
+            box-shadow: 0 10px 20px rgba(40, 167, 69, 0.4);
         }
         
-        .btn-test {
+        .btn-submit:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .success-message,
+        .error-message {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+        
+        .success-message {
             background: #28a745;
             color: white;
         }
         
-        .btn-test:hover {
-            background: #218838;
-        }
-        
-        .btn-clear {
-            background: #6c757d;
+        .error-message {
+            background: #dc3545;
             color: white;
         }
         
-        .btn-clear:hover {
-            background: #5a6268;
-        }
-        
-        #resultSection {
+        .loading {
             display: none;
-            margin-top: 30px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            border: 2px solid #28a745;
-        }
-        
-        .result-title {
-            font-size: 18px;
-            font-weight: bold;
-            color: #28a745;
-            margin-bottom: 15px;
-        }
-        
-        .url-display {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            word-break: break-all;
-            font-family: 'Courier New', monospace;
-            font-size: 13px;
-            border: 1px solid #ddd;
-            margin-bottom: 15px;
-        }
-        
-        .action-buttons {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-        }
-        
-        .btn-action {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-copy {
-            background: #007bff;
-            color: white;
-        }
-        
-        .btn-copy:hover {
-            background: #0056b3;
-        }
-        
-        .btn-preview {
-            background: #17a2b8;
-            color: white;
-        }
-        
-        .btn-preview:hover {
-            background: #138496;
-        }
-        
-        .btn-text {
-            background: #ffc107;
-            color: #212529;
-        }
-        
-        .btn-text:hover {
-            background: #e0a800;
-        }
-        
-        .btn-email {
-            background: #2196F3;
-            color: white;
-        }
-        
-        .btn-email:hover {
-            background: #0b7dda;
-        }
-        
-        .text-template {
-            background: #fff3cd;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            border: 1px solid #ffc107;
-            white-space: pre-wrap;
-        }
-        
-        .copy-status {
-            display: none;
-            color: #28a745;
-            font-weight: 600;
             text-align: center;
-            margin-top: 10px;
+            padding: 20px;
         }
         
-        .instructions {
-            background: #fff3cd;
-            border: 1px solid #ffc107;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
         }
         
-        .instructions h4 {
-            color: #856404;
-            margin-bottom: 8px;
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         
-        .instructions ol {
-            margin-left: 20px;
-            color: #856404;
-            font-size: 14px;
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #dee2e6;
         }
         
-        .instructions li {
-            margin-bottom: 5px;
-        }
-        
-        .warning {
-            color: #dc3545;
-            font-weight: bold;
-        }
-        
-        .notes-info {
-            background: #d1ecf1;
-            border: 1px solid #bee5eb;
-            border-radius: 6px;
-            padding: 10px;
-            margin-top: 5px;
+        .footer p {
+            color: #6c757d;
             font-size: 12px;
-            color: #0c5460;
+            line-height: 1.5;
+        }
+        
+        .autofill-notice {
+            background: #28a745;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+            display: none;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            animation: slideDown 0.5s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Hidden form fields for data storage */
+        .hidden-fields {
+            display: none;
         }
         
         @media (max-width: 600px) {
-            .row {
-                grid-template-columns: 1fr;
+            .field-row {
+                flex-direction: column;
             }
             
-            .form-group.full-width {
-                grid-column: span 1;
-            }
-            
-            .button-group {
-                grid-template-columns: 1fr;
-            }
-            
-            .btn-generate {
-                grid-column: span 1;
-            }
-            
-            .action-buttons {
-                grid-template-columns: 1fr;
+            .field-label {
+                margin-bottom: 5px;
             }
             
             .header h1 {
@@ -319,330 +339,380 @@
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>📄 ACORD 35 Cancellation Link Generator</h1>
-            <p>Bill Layne Insurance Agency - Staff Tool</p>
-            <span class="system-badge">⚠️ CANCELLATION SYSTEM</span>
+        <div class="acord-header">
+            <div class="acord-logo">ACORD®</div>
+            <div class="acord-title">CANCELLATION REQUEST / POLICY RELEASE</div>
         </div>
         
-        <div class="form-container">
-            <div class="instructions">
-                <h4>📌 Instructions:</h4>
-                <ol>
-                    <li>Fill in all customer and policy information</li>
-                    <li>Double-check cancellation date and time</li>
-                    <li>Add any special notes (optional)</li>
-                    <li>Click "Generate Link"</li>
-                    <li>Send link to customer for signature</li>
-                    <li class="warning">⚠️ This creates a cancellation request!</li>
-                </ol>
+        <div class="header">
+            <h1>Bill Layne Insurance Agency</h1>
+            <p>Policy Cancellation Request</p>
+        </div>
+        
+        <form id="cancellationForm" class="form-container">
+            <div class="autofill-notice" id="autofillNotice">
+                ✔ Your cancellation information has been loaded
             </div>
             
-            <form id="linkGenerator">
-                <div class="section-title">Customer Information</div>
-                
-                <div class="row">
-                    <div class="form-group full-width">
-                        <label>Insured Name *</label>
-                        <input type="text" id="insuredName" required>
-                    </div>
+            <!-- Producer Information (Pre-filled) -->
+            <div class="section">
+                <div class="section-title">Producer Information</div>
+                <div class="field-row">
+                    <span class="field-label">Agency:</span>
+                    <span class="field-value">Bill Layne Insurance</span>
                 </div>
-                
-                <div class="row">
-                    <div class="form-group full-width">
-                        <label>Address</label>
-                        <input type="text" id="insuredAddress">
-                    </div>
+                <div class="field-row">
+                    <span class="field-label">Address:</span>
+                    <span class="field-value">1283 N Bridge St, Elkin, NC 28621</span>
                 </div>
-                
-                <div class="row">
-                    <div class="form-group">
-                        <label>Phone</label>
-                        <input type="tel" id="insuredPhone">
-                    </div>
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" id="insuredEmail">
-                    </div>
+                <div class="field-row">
+                    <span class="field-label">Phone:</span>
+                    <span class="field-value">336-835-1993</span>
                 </div>
-                
-                <div class="section-title">Policy Information</div>
-                
-                <div class="row">
-                    <div class="form-group">
-                        <label>Policy Number *</label>
-                        <input type="text" id="policyNumber" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Insurance Company *</label>
-                        <select id="company" required>
-                            <option value="">Select Company...</option>
-                            <option value="Progressive">Progressive</option>
-                            <option value="Nationwide">Nationwide</option>
-                            <option value="National General">National General</option>
-                            <option value="Alamance Farmers">Alamance Farmers</option>
-                            <option value="Travelers">Travelers</option>
-                            <option value="Foremost">Foremost</option>
-                            <option value="NC Grange">NC Grange</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
+            </div>
+            
+            <!-- Policy Information -->
+            <div class="section">
+                <div class="section-title">Policy to be Cancelled</div>
+                <div class="field-row">
+                    <span class="field-label">Policy Number:</span>
+                    <span class="field-value" id="display-policyNumber">Loading...</span>
                 </div>
-                
-                <div class="row">
-                    <div class="form-group">
-                        <label>Policy Type *</label>
-                        <select id="policyType" required>
-                            <option value="">Select Type...</option>
-                            <option value="Auto">Auto</option>
-                            <option value="Home">Home</option>
-                            <option value="Renters">Renters</option>
-                            <option value="Motorcycle">Motorcycle</option>
-                            <option value="RV">RV</option>
-                            <option value="Boat">Boat</option>
-                            <option value="Commercial">Commercial</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Refund Amount</label>
-                        <input type="text" id="refundAmount" placeholder="$0.00">
-                    </div>
+                <div class="field-row">
+                    <span class="field-label">Insured Name:</span>
+                    <span class="field-value" id="display-insuredName">Loading...</span>
                 </div>
-                
-                <div class="row">
-                    <div class="form-group">
-                        <label>Effective Date</label>
-                        <input type="date" id="effectiveDate">
-                    </div>
-                    <div class="form-group">
-                        <label>Expiration Date</label>
-                        <input type="date" id="expirationDate">
-                    </div>
+                <div class="field-row">
+                    <span class="field-label">Insurance Company:</span>
+                    <span class="field-value" id="display-company">Loading...</span>
                 </div>
-                
+                <div class="field-row">
+                    <span class="field-label">Policy Type:</span>
+                    <span class="field-value" id="display-policyType">Loading...</span>
+                </div>
+            </div>
+            
+            <!-- Cancellation Details -->
+            <div class="section">
                 <div class="section-title">Cancellation Details</div>
-                
-                <div class="row">
-                    <div class="form-group">
-                        <label>Cancellation Date *</label>
-                        <input type="date" id="cancelDate" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Cancellation Time</label>
-                        <select id="cancelTime">
-                            <option value="12:01 AM">12:01 AM</option>
-                            <option value="12:01 PM" selected>12:01 PM</option>
-                            <option value="11:59 PM">11:59 PM</option>
-                        </select>
-                    </div>
+                <div class="field-row">
+                    <span class="field-label">Cancellation Date:</span>
+                    <span class="field-value" id="display-cancelDate">Loading...</span>
                 </div>
-                
-                <div class="row">
-                    <div class="form-group full-width">
-                        <label>Reason for Cancellation *</label>
-                        <select id="reason" required>
-                            <option value="">Select Reason...</option>
-                            <option value="Insured Request">Insured Request</option>
-                            <option value="Non-Payment">Non-Payment</option>
-                            <option value="Rewritten">Rewritten with Another Carrier</option>
-                            <option value="Not Taken">Coverage Not Taken</option>
-                            <option value="Sold Property">Sold Property</option>
-                            <option value="Sold Vehicle">Sold Vehicle</option>
-                            <option value="No Longer Need">No Longer Need Coverage</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
+                <div class="field-row">
+                    <span class="field-label">Cancellation Time:</span>
+                    <span class="field-value" id="display-cancelTime">Loading...</span>
                 </div>
-                
-                <div class="section-title">Special Notes (Optional)</div>
-                
-                <div class="row">
-                    <div class="form-group full-width">
-                        <label>Staff Notes / Special Instructions</label>
-                        <textarea id="notes" placeholder="Add any special notes or instructions here (e.g., pending refund check, follow-up required, etc.)"></textarea>
-                        <div class="notes-info">
-                            ℹ️ These notes will appear on the PDF and in the Google Sheet but will NOT be visible to the customer
-                        </div>
-                    </div>
+                <div class="field-row">
+                    <span class="field-label">Reason:</span>
+                    <span class="field-value" id="display-reason">Loading...</span>
                 </div>
-                
-                <div class="button-group">
-                    <button type="button" class="btn btn-generate" onclick="generateLink()">
-                        🔗 Generate Cancellation Link
-                    </button>
-                    <button type="button" class="btn btn-test" onclick="testWithSampleData()">
-                        🧪 Test Sample
-                    </button>
-                    <button type="button" class="btn btn-clear" onclick="clearForm()">
-                        🔄 Clear Form
-                    </button>
+                <div class="field-row" id="refundRow" style="display: none;">
+                    <span class="field-label">Refund Amount:</span>
+                    <span class="field-value" id="display-refund">$0.00</span>
                 </div>
-            </form>
-            
-            <div id="resultSection">
-                <div class="result-title">✅ Cancellation Link Generated!</div>
-                <div class="url-display" id="generatedUrl"></div>
-                
-                <div class="action-buttons">
-                    <button class="btn-action btn-copy" onclick="copyLink()">
-                        📋 Copy Link
-                    </button>
-                    <button class="btn-action btn-preview" onclick="previewForm()">
-                        👁️ Preview Form
-                    </button>
-                    <button class="btn-action btn-text" onclick="sendToAgencyMatrix()">
-                        📱 Text Customer
-                    </button>
-                </div>
-                
-                <div class="text-template" id="textTemplate" style="display: none;">
-                    <strong>Text Message Template:</strong><br><br>
-                    <span id="textMessage"></span>
-                </div>
-                
-                <div class="copy-status" id="copyStatus"></div>
             </div>
+            
+            <!-- Warning Box -->
+            <div class="warning-box">
+                <h3><span class="warning-icon">⚠️</span>Important Notice</h3>
+                <ul>
+                    <li>Coverage will terminate on the date and time shown above</li>
+                    <li>No claims will be covered after the cancellation date</li>
+                    <li>You may be without insurance coverage</li>
+                    <li>Any refund will be calculated per policy terms</li>
+                </ul>
+            </div>
+            
+            <!-- Signature Section -->
+            <div class="signature-section">
+                <div class="signature-title">ELECTRONIC SIGNATURE REQUIRED</div>
+                
+                <div class="legal-text">
+                    By signing below, I acknowledge that:
+                    <br><br>
+                    • I am requesting cancellation of the above-referenced policy<br>
+                    • The policy is either lost, destroyed, or being retained<br>
+                    • No claims will be made after the cancellation date<br>
+                    • Any premium adjustment will be made per policy terms<br>
+                    • This representation is true and accurate
+                </div>
+                
+                <div class="signature-label">
+                    <label>Signature of Named Insured *</label>
+                    <span>Draw your signature below</span>
+                </div>
+                <canvas id="signature-pad"></canvas>
+                <div class="signature-buttons">
+                    <button type="button" class="btn btn-clear" onclick="clearSignature()">Clear Signature</button>
+                </div>
+            </div>
+            
+            <!-- Hidden form fields for data submission -->
+            <div class="hidden-fields">
+                <input type="hidden" id="policyNumber" name="policyNumber">
+                <input type="hidden" id="insuredName" name="insuredName">
+                <input type="hidden" id="insuredAddress" name="insuredAddress">
+                <input type="hidden" id="insuredPhone" name="insuredPhone">
+                <input type="hidden" id="insuredEmail" name="insuredEmail">
+                <input type="hidden" id="company" name="company">
+                <input type="hidden" id="policyType" name="policyType">
+                <input type="hidden" id="effectiveDate" name="effectiveDate">
+                <input type="hidden" id="expirationDate" name="expirationDate">
+                <input type="hidden" id="cancelDate" name="cancelDate">
+                <input type="hidden" id="cancelTime" name="cancelTime">
+                <input type="hidden" id="reason" name="reason">
+                <input type="hidden" id="refundAmount" name="refundAmount">
+                <input type="hidden" id="notes" name="notes">
+                <input type="hidden" id="signature" name="signature">
+            </div>
+            
+            <div class="success-message" id="successMessage">
+                ✅ Your cancellation request has been successfully submitted!
+            </div>
+            
+            <div class="error-message" id="errorMessage">
+                ❌ There was an error submitting your request. Please try again.
+            </div>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p style="margin-top: 10px;">Submitting your cancellation request...</p>
+            </div>
+            
+            <button type="submit" class="btn btn-submit" id="submitBtn">
+                Submit Cancellation Request
+            </button>
+        </form>
+        
+        <div class="footer">
+            <p>
+                ACORD 35 (2017/05) © 1988-2017 ACORD CORPORATION. All rights reserved.<br>
+                The ACORD name and logo are registered marks of ACORD<br><br>
+                Bill Layne Insurance Agency<br>
+                1283 N Bridge St, Elkin NC 28621<br>
+                336-835-1993 | Docs@BillLayneInsurance.com
+            </p>
         </div>
     </div>
-    
+
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
     <script>
-        let currentGeneratedUrl = '';
+        // YOUR GOOGLE APPS SCRIPT URL
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyUsQN44g7sdU1YbNk2yhb0t-ZLzDfxHMHiaHQnu_A_IIMp6nbTY0peexiQ2XJQYtJ9/exec';
         
-        function testWithSampleData() {
-            document.getElementById('insuredName').value = 'John Smith';
-            document.getElementById('insuredAddress').value = '123 Main St, Elkin, NC 28621';
-            document.getElementById('insuredPhone').value = '336-555-1234';
-            document.getElementById('insuredEmail').value = 'test@example.com';
-            document.getElementById('policyNumber').value = 'TEST-123456';
-            document.getElementById('company').value = 'Progressive';
-            document.getElementById('policyType').value = 'Auto';
-            document.getElementById('effectiveDate').value = '2024-01-15';
-            document.getElementById('expirationDate').value = '2025-01-15';
-            document.getElementById('cancelDate').value = new Date().toISOString().split('T')[0];
-            document.getElementById('reason').value = 'Insured Request';
-            document.getElementById('notes').value = 'Test cancellation - Sample notes for testing';
+        let signaturePad;
+        
+        // Function to get URL parameters
+        function getUrlParameters() {
+            const params = new URLSearchParams(window.location.search);
+            const paramObject = {};
+            for (const [key, value] of params) {
+                paramObject[key] = decodeURIComponent(value);
+            }
+            return paramObject;
         }
         
-        function generateLink() {
-            // Get form values
-            const insuredName = document.getElementById('insuredName').value;
-            const policyNumber = document.getElementById('policyNumber').value;
-            const company = document.getElementById('company').value;
-            const policyType = document.getElementById('policyType').value;
-            const cancelDate = document.getElementById('cancelDate').value;
-            const reason = document.getElementById('reason').value;
+        // Function to format date for display
+        function formatDate(dateStr) {
+            if (!dateStr) return 'N/A';
+            const date = new Date(dateStr + 'T12:00:00');
+            return date.toLocaleDateString('en-US', { 
+                month: 'numeric', 
+                day: 'numeric', 
+                year: 'numeric' 
+            });
+        }
+        
+        // Function to format time for display
+        function formatTime(timeStr) {
+            if (!timeStr) return 'N/A';
+            return timeStr;
+        }
+        
+        // Auto-fill form from URL parameters
+        function autoFillForm() {
+            const params = getUrlParameters();
+            let fieldsAutoFilled = false;
             
-            // Validate required fields
-            if (!insuredName || !policyNumber || !company || !policyType || !cancelDate || !reason) {
-                alert('Please fill in all required fields marked with *');
+            // Map URL parameters to both hidden fields and display elements
+            const fieldMapping = {
+                'policyNumber': { hidden: 'policyNumber', display: 'display-policyNumber' },
+                'insuredName': { hidden: 'insuredName', display: 'display-insuredName' },
+                'insuredAddress': { hidden: 'insuredAddress', display: null },
+                'insuredPhone': { hidden: 'insuredPhone', display: null },
+                'insuredEmail': { hidden: 'insuredEmail', display: null },
+                'company': { hidden: 'company', display: 'display-company' },
+                'insuranceCompany': { hidden: 'company', display: 'display-company' },
+                'policyType': { hidden: 'policyType', display: 'display-policyType' },
+                'effectiveDate': { hidden: 'effectiveDate', display: null },
+                'expirationDate': { hidden: 'expirationDate', display: null },
+                'cancelDate': { hidden: 'cancelDate', display: 'display-cancelDate' },
+                'cancellationDate': { hidden: 'cancelDate', display: 'display-cancelDate' },
+                'cancelTime': { hidden: 'cancelTime', display: 'display-cancelTime' },
+                'cancellationTime': { hidden: 'cancelTime', display: 'display-cancelTime' },
+                'reason': { hidden: 'reason', display: 'display-reason' },
+                'refundAmount': { hidden: 'refundAmount', display: 'display-refund' },
+                'refund': { hidden: 'refundAmount', display: 'display-refund' },
+                'notes': { hidden: 'notes', display: null } // Notes are hidden from customer
+            };
+            
+            // Process each parameter
+            for (const [urlParam, fields] of Object.entries(fieldMapping)) {
+                if (params[urlParam]) {
+                    // Set hidden field value
+                    if (fields.hidden) {
+                        const hiddenField = document.getElementById(fields.hidden);
+                        if (hiddenField) {
+                            hiddenField.value = params[urlParam];
+                            fieldsAutoFilled = true;
+                        }
+                    }
+                    
+                    // Set display value
+                    if (fields.display) {
+                        const displayElement = document.getElementById(fields.display);
+                        if (displayElement) {
+                            if (urlParam.includes('Date')) {
+                                displayElement.textContent = formatDate(params[urlParam]);
+                            } else if (urlParam.includes('Time')) {
+                                displayElement.textContent = formatTime(params[urlParam]);
+                            } else if (urlParam.includes('refund') || urlParam.includes('Amount')) {
+                                const amount = params[urlParam].replace('$', '');
+                                displayElement.textContent = '$' + parseFloat(amount).toFixed(2);
+                                // Show refund row if there's a refund
+                                if (parseFloat(amount) > 0) {
+                                    document.getElementById('refundRow').style.display = 'flex';
+                                }
+                            } else {
+                                displayElement.textContent = params[urlParam];
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // Handle special case for cancel date display
+            if (params.cancelDate || params.cancellationDate) {
+                const dateParam = params.cancelDate || params.cancellationDate;
+                const displayDate = document.getElementById('display-cancelDate');
+                if (displayDate) {
+                    displayDate.textContent = formatDate(dateParam);
+                }
+            }
+            
+            // Show notification if fields were auto-filled
+            if (fieldsAutoFilled) {
+                const notice = document.getElementById('autofillNotice');
+                notice.style.display = 'block';
+                setTimeout(() => {
+                    notice.style.opacity = '0';
+                    setTimeout(() => {
+                        notice.style.display = 'none';
+                        notice.style.opacity = '1';
+                    }, 500);
+                }, 3000);
+            }
+            
+            // Update any empty display fields
+            document.querySelectorAll('.field-value').forEach(element => {
+                if (element.textContent === 'Loading...') {
+                    element.textContent = 'Not provided';
+                }
+            });
+        }
+        
+        // Initialize signature pad
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-fill form from URL parameters
+            autoFillForm();
+            
+            // Initialize signature pad
+            const canvas = document.getElementById('signature-pad');
+            signaturePad = new SignaturePad(canvas, {
+                backgroundColor: 'rgb(255, 255, 255)',
+                penColor: 'rgb(0, 0, 0)'
+            });
+            
+            // Resize canvas to proper size
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+        });
+        
+        function resizeCanvas() {
+            const canvas = document.getElementById('signature-pad');
+            const ratio = Math.max(window.devicePixelRatio || 1, 1);
+            canvas.width = canvas.offsetWidth * ratio;
+            canvas.height = canvas.offsetHeight * ratio;
+            canvas.getContext('2d').scale(ratio, ratio);
+            if (signaturePad) {
+                signaturePad.clear();
+            }
+        }
+        
+        function clearSignature() {
+            signaturePad.clear();
+        }
+        
+        // Handle form submission
+        document.getElementById('cancellationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Validate signature
+            if (signaturePad.isEmpty()) {
+                alert('Please provide your signature before submitting the cancellation request.');
                 return;
             }
             
-            // Build URL parameters
-            const params = new URLSearchParams({
-                insuredName: insuredName,
-                insuredAddress: document.getElementById('insuredAddress').value || '',
-                insuredPhone: document.getElementById('insuredPhone').value || '',
-                insuredEmail: document.getElementById('insuredEmail').value || '',
-                policyNumber: policyNumber,
-                company: company,
-                policyType: policyType,
-                effectiveDate: document.getElementById('effectiveDate').value || '',
-                expirationDate: document.getElementById('expirationDate').value || '',
-                cancelDate: cancelDate,
-                cancelTime: document.getElementById('cancelTime').value || '12:01 PM',
-                reason: reason,
-                refundAmount: document.getElementById('refundAmount').value || '',
-                notes: document.getElementById('notes').value || ''
-            });
+            // Confirm cancellation
+            const confirmMsg = `Are you sure you want to cancel this policy?\n\n` +
+                             `Policy: ${document.getElementById('policyNumber').value}\n` +
+                             `Cancellation Date: ${document.getElementById('display-cancelDate').textContent}\n\n` +
+                             `This action cannot be undone and coverage will end.`;
             
-            // Generate the URL
-            const baseUrl = 'https://billlayne.github.io/cancellation-form/';
-            currentGeneratedUrl = baseUrl + '?' + params.toString();
-            
-            // Display result
-            document.getElementById('generatedUrl').textContent = currentGeneratedUrl;
-            document.getElementById('resultSection').style.display = 'block';
-            
-            // Generate text message
-            const phone = document.getElementById('insuredPhone').value || 'No phone';
-            const textMsg = `Hi ${insuredName.split(' ')[0]},\n\nPer your request, here's the link to sign your ${policyType} policy cancellation form (Policy: ${policyNumber}).\n\nCancellation Date: ${formatDate(cancelDate)} at ${document.getElementById('cancelTime').value}\n\nPlease review and sign:\n${currentGeneratedUrl}\n\nThank you,\nBill Layne Insurance Agency\n336-835-1993`;
-            
-            document.getElementById('textMessage').textContent = textMsg;
-            document.getElementById('textTemplate').style.display = 'block';
-            
-            // Scroll to results
-            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
-        }
-        
-        function formatDate(dateString) {
-            const date = new Date(dateString + 'T00:00:00');
-            return date.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' });
-        }
-        
-        function copyLink() {
-            navigator.clipboard.writeText(currentGeneratedUrl).then(function() {
-                showCopyStatus('✔ Link copied to clipboard!');
-            }).catch(function(err) {
-                // Fallback for older browsers
-                const textArea = document.createElement('textarea');
-                textArea.value = currentGeneratedUrl;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                showCopyStatus('✔ Link copied to clipboard!');
-            });
-        }
-        
-        function previewForm() {
-            if (currentGeneratedUrl) {
-                window.open(currentGeneratedUrl, '_blank');
+            if (!confirm(confirmMsg)) {
+                return;
             }
-        }
-        
-        function sendToAgencyMatrix() {
-            const textMessage = document.getElementById('textMessage').textContent;
-            const phone = document.getElementById('insuredPhone').value.replace(/\D/g, '');
-            const phoneDigits = phone.substring(phone.length - 10);
             
-            navigator.clipboard.writeText(textMessage).then(function() {
-                showCopyStatus('✔ Text message copied! Opening Agency Matrix...');
-                setTimeout(() => {
-                    const agencyMatrixUrl = `https://agents.agencymatrix.com/#/customer/search?selection=Phone&query=${phoneDigits}`;
-                    window.open(agencyMatrixUrl, '_blank');
-                }, 1500);
-            }).catch(function(err) {
-                alert('Please copy the text message manually, then click OK to open Agency Matrix');
-                const agencyMatrixUrl = `https://agents.agencymatrix.com/#/customer/search?selection=Phone&query=${phoneDigits}`;
-                window.open(agencyMatrixUrl, '_blank');
-            });
-        }
-        
-        function showCopyStatus(message = '✔ Link copied to clipboard!') {
-            const status = document.getElementById('copyStatus');
-            status.textContent = message;
-            status.style.display = 'block';
-            setTimeout(() => {
-                status.style.display = 'none';
-            }, 3000);
-        }
-        
-        function clearForm() {
-            if (confirm('Are you sure you want to clear all fields?')) {
-                document.getElementById('linkGenerator').reset();
-                document.getElementById('resultSection').style.display = 'none';
-                currentGeneratedUrl = '';
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+            // Get signature data
+            document.getElementById('signature').value = signaturePad.toDataURL();
+            
+            // Show loading
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('successMessage').style.display = 'none';
+            document.getElementById('errorMessage').style.display = 'none';
+            
+            // Prepare form data
+            const formData = new FormData(this);
+            formData.append('submissionDate', new Date().toLocaleString());
+            formData.append('formType', 'ACORD 35 Cancellation');
+            
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.text();
+                
+                if (result.includes('Success') || response.ok) {
+                    // Show success message
+                    document.getElementById('successMessage').style.display = 'block';
+                    document.getElementById('cancellationForm').style.display = 'none';
+                    
+                    // Scroll to top
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    throw new Error('Submission failed');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('submitBtn').disabled = false;
+            } finally {
+                document.getElementById('loading').style.display = 'none';
             }
-        }
-        
-        // Set default values
-        document.addEventListener('DOMContentLoaded', function() {
-            // Set today's date as default for cancellation date
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('cancelDate').value = today;
         });
     </script>
 </body>
