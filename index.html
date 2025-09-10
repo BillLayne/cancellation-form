@@ -437,6 +437,10 @@
                         <option value="Other">Other</option>
                     </select>
                 </div>
+                <div class="field-row" id="otherCompanyRow" style="display: none;">
+                    <span class="field-label">Specify Company: <span class="required-mark">*</span></span>
+                    <input type="text" class="field-input" id="other-company-input" placeholder="Enter insurance company name">
+                </div>
                 <div class="field-row">
                     <span class="field-label">Policy Type: <span class="required-mark">*</span></span>
                     <select class="field-input" id="display-policyType" required>
@@ -692,6 +696,36 @@
         
         // Setup handlers for manual entry mode
         function setupManualEntryHandlers() {
+            // Handle "Other" company selection
+            const companySelect = document.getElementById('display-company');
+            const otherCompanyRow = document.getElementById('otherCompanyRow');
+            const otherCompanyInput = document.getElementById('other-company-input');
+            const companyHidden = document.getElementById('company');
+            
+            if (companySelect && otherCompanyRow && otherCompanyInput) {
+                companySelect.addEventListener('change', function() {
+                    if (this.value === 'Other') {
+                        otherCompanyRow.style.display = 'flex';
+                        otherCompanyInput.setAttribute('required', 'required');
+                        // Clear the hidden field until user types the company name
+                        companyHidden.value = '';
+                    } else {
+                        otherCompanyRow.style.display = 'none';
+                        otherCompanyInput.removeAttribute('required');
+                        otherCompanyInput.value = '';
+                        // Set the hidden field to the selected value
+                        companyHidden.value = this.value;
+                    }
+                });
+                
+                // When user types in the other company field, update the hidden field
+                otherCompanyInput.addEventListener('input', function() {
+                    if (companySelect.value === 'Other') {
+                        companyHidden.value = this.value;
+                    }
+                });
+            }
+            
             // Sync display fields with hidden fields
             const syncFields = [
                 { display: 'display-policyNumber', hidden: 'policyNumber' },
@@ -712,6 +746,11 @@
                 const hiddenField = document.getElementById(hidden);
                 
                 if (displayField && hiddenField) {
+                    // Skip company field as we handle it separately above
+                    if (display === 'display-company') {
+                        return;
+                    }
+                    
                     // Initial sync
                     if (!hiddenField.value && displayField.value) {
                         hiddenField.value = displayField.value;
@@ -779,6 +818,15 @@
                 return;
             }
             
+            // Validate "Other" company field if selected
+            const companySelect = document.getElementById('display-company');
+            const otherCompanyInput = document.getElementById('other-company-input');
+            if (companySelect.value === 'Other' && !otherCompanyInput.value.trim()) {
+                alert('Please specify the insurance company name.');
+                otherCompanyInput.focus();
+                return;
+            }
+            
             // Sync all fields one more time before submission
             const syncBeforeSubmit = [
                 { display: 'display-policyNumber', hidden: 'policyNumber' },
@@ -786,7 +834,6 @@
                 { display: 'display-insuredAddress', hidden: 'insuredAddress' },
                 { display: 'display-insuredPhone', hidden: 'insuredPhone' },
                 { display: 'display-insuredEmail', hidden: 'insuredEmail' },
-                { display: 'display-company', hidden: 'company' },
                 { display: 'display-policyType', hidden: 'policyType' },
                 { display: 'display-cancelDate', hidden: 'cancelDate' },
                 { display: 'display-cancelTime', hidden: 'cancelTime' },
@@ -794,10 +841,18 @@
                 { display: 'display-notes', hidden: 'notes' }
             ];
             
+            // Handle company field specially
+            const companyHidden = document.getElementById('company');
+            if (companySelect.value === 'Other') {
+                companyHidden.value = otherCompanyInput.value;
+            } else {
+                companyHidden.value = companySelect.value;
+            }
+            
             syncBeforeSubmit.forEach(({ display, hidden }) => {
                 const displayField = document.getElementById(display);
                 const hiddenField = document.getElementById(hidden);
-                if (displayField && hiddenField) {
+                if (displayField && hiddenField && display !== 'display-company') {
                     hiddenField.value = displayField.value;
                 }
             });
