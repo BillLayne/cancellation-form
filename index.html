@@ -107,6 +107,27 @@
             border: 1px solid #dee2e6;
         }
         
+        .field-input {
+            flex: 1;
+            font-size: 14px;
+            color: #212529;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 5px;
+            border: 1px solid #dee2e6;
+            font-family: inherit;
+        }
+        
+        .field-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        select.field-input {
+            cursor: pointer;
+        }
+        
         .warning-box {
             background: #fff3cd;
             border: 2px solid #ffc107;
@@ -306,6 +327,18 @@
             animation: slideDown 0.5s ease-out;
         }
         
+        .manual-entry-notice {
+            background: #17a2b8;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+            display: none;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            animation: slideDown 0.5s ease-out;
+        }
+        
         @keyframes slideDown {
             from {
                 opacity: 0;
@@ -320,6 +353,11 @@
         /* Hidden form fields for data storage */
         .hidden-fields {
             display: none;
+        }
+        
+        .required-mark {
+            color: #dc3545;
+            font-weight: bold;
         }
         
         @media (max-width: 600px) {
@@ -351,7 +389,11 @@
         
         <form id="cancellationForm" class="form-container">
             <div class="autofill-notice" id="autofillNotice">
-                ✔ Your cancellation information has been loaded
+                ✓ Your cancellation information has been loaded
+            </div>
+            
+            <div class="manual-entry-notice" id="manualNotice">
+                ℹ Please fill in all required fields to complete your cancellation request
             </div>
             
             <!-- Producer Information (Pre-filled) -->
@@ -375,20 +417,54 @@
             <div class="section">
                 <div class="section-title">Policy to be Cancelled</div>
                 <div class="field-row">
-                    <span class="field-label">Policy Number:</span>
-                    <span class="field-value" id="display-policyNumber">Loading...</span>
+                    <span class="field-label">Policy Number: <span class="required-mark">*</span></span>
+                    <input type="text" class="field-input" id="display-policyNumber" placeholder="Enter policy number" required>
                 </div>
                 <div class="field-row">
-                    <span class="field-label">Insured Name:</span>
-                    <span class="field-value" id="display-insuredName">Loading...</span>
+                    <span class="field-label">Insured Name: <span class="required-mark">*</span></span>
+                    <input type="text" class="field-input" id="display-insuredName" placeholder="Enter insured name" required>
                 </div>
                 <div class="field-row">
-                    <span class="field-label">Insurance Company:</span>
-                    <span class="field-value" id="display-company">Loading...</span>
+                    <span class="field-label">Insurance Company: <span class="required-mark">*</span></span>
+                    <select class="field-input" id="display-company" required>
+                        <option value="">Select company...</option>
+                        <option value="Nationwide">Nationwide</option>
+                        <option value="Progressive">Progressive</option>
+                        <option value="National General">National General</option>
+                        <option value="Alamance">Alamance</option>
+                        <option value="Travelers">Travelers</option>
+                        <option value="Foremost">Foremost</option>
+                        <option value="Other">Other</option>
+                    </select>
                 </div>
                 <div class="field-row">
-                    <span class="field-label">Policy Type:</span>
-                    <span class="field-value" id="display-policyType">Loading...</span>
+                    <span class="field-label">Policy Type: <span class="required-mark">*</span></span>
+                    <select class="field-input" id="display-policyType" required>
+                        <option value="">Select type...</option>
+                        <option value="Auto">Auto</option>
+                        <option value="Home">Home</option>
+                        <option value="Life">Life</option>
+                        <option value="Business">Business</option>
+                        <option value="Umbrella">Umbrella</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Customer Contact Information -->
+            <div class="section" id="contactSection">
+                <div class="section-title">Contact Information</div>
+                <div class="field-row">
+                    <span class="field-label">Address:</span>
+                    <input type="text" class="field-input" id="display-insuredAddress" placeholder="Enter address (optional)">
+                </div>
+                <div class="field-row">
+                    <span class="field-label">Phone:</span>
+                    <input type="tel" class="field-input" id="display-insuredPhone" placeholder="Enter phone (optional)">
+                </div>
+                <div class="field-row">
+                    <span class="field-label">Email: <span class="required-mark">*</span></span>
+                    <input type="email" class="field-input" id="display-insuredEmail" placeholder="Enter email" required>
                 </div>
             </div>
             
@@ -396,20 +472,33 @@
             <div class="section">
                 <div class="section-title">Cancellation Details</div>
                 <div class="field-row">
-                    <span class="field-label">Cancellation Date:</span>
-                    <span class="field-value" id="display-cancelDate">Loading...</span>
+                    <span class="field-label">Cancellation Date: <span class="required-mark">*</span></span>
+                    <input type="date" class="field-input" id="display-cancelDate" required>
                 </div>
                 <div class="field-row">
-                    <span class="field-label">Cancellation Time:</span>
-                    <span class="field-value" id="display-cancelTime">Loading...</span>
+                    <span class="field-label">Cancellation Time: <span class="required-mark">*</span></span>
+                    <select class="field-input" id="display-cancelTime" required>
+                        <option value="">Select time...</option>
+                        <option value="12:01 AM">12:01 AM</option>
+                        <option value="11:59 PM">11:59 PM</option>
+                    </select>
                 </div>
                 <div class="field-row">
-                    <span class="field-label">Reason:</span>
-                    <span class="field-value" id="display-reason">Loading...</span>
+                    <span class="field-label">Reason: <span class="required-mark">*</span></span>
+                    <select class="field-input" id="display-reason" required>
+                        <option value="">Select reason...</option>
+                        <option value="Sold Vehicle">Sold Vehicle</option>
+                        <option value="Moved Out of State">Moved Out of State</option>
+                        <option value="Found Better Rate">Found Better Rate</option>
+                        <option value="No Longer Need Coverage">No Longer Need Coverage</option>
+                        <option value="Financial Hardship">Financial Hardship</option>
+                        <option value="Dissatisfied with Service">Dissatisfied with Service</option>
+                        <option value="Other">Other</option>
+                    </select>
                 </div>
-                <div class="field-row" id="refundRow" style="display: none;">
-                    <span class="field-label">Refund Amount:</span>
-                    <span class="field-value" id="display-refund">$0.00</span>
+                <div class="field-row">
+                    <span class="field-label">Additional Notes:</span>
+                    <textarea class="field-input" id="display-notes" rows="3" placeholder="Optional - provide any additional details"></textarea>
                 </div>
             </div>
             
@@ -502,6 +591,7 @@
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyUsQN44g7sdU1YbNk2yhb0t-ZLzDfxHMHiaHQnu_A_IIMp6nbTY0peexiQ2XJQYtJ9/exec';
         
         let signaturePad;
+        let isAutofilled = false;
         
         // Function to get URL parameters
         function getUrlParameters() {
@@ -515,19 +605,12 @@
         
         // Function to format date for display
         function formatDate(dateStr) {
-            if (!dateStr) return 'N/A';
+            if (!dateStr) return '';
             const date = new Date(dateStr + 'T12:00:00');
-            return date.toLocaleDateString('en-US', { 
-                month: 'numeric', 
-                day: 'numeric', 
-                year: 'numeric' 
-            });
-        }
-        
-        // Function to format time for display
-        function formatTime(timeStr) {
-            if (!timeStr) return 'N/A';
-            return timeStr;
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
         }
         
         // Auto-fill form from URL parameters
@@ -535,77 +618,67 @@
             const params = getUrlParameters();
             let fieldsAutoFilled = false;
             
-            // Map URL parameters to both hidden fields and display elements
+            // Check if we have any parameters
+            if (Object.keys(params).length === 0) {
+                // No parameters - show manual entry notice
+                document.getElementById('manualNotice').style.display = 'block';
+                setupManualEntryHandlers();
+                return;
+            }
+            
+            // We have parameters - use autofill mode
+            isAutofilled = true;
+            
+            // Map URL parameters to fields
             const fieldMapping = {
-                'policyNumber': { hidden: 'policyNumber', display: 'display-policyNumber' },
-                'insuredName': { hidden: 'insuredName', display: 'display-insuredName' },
-                'insuredAddress': { hidden: 'insuredAddress', display: null },
-                'insuredPhone': { hidden: 'insuredPhone', display: null },
-                'insuredEmail': { hidden: 'insuredEmail', display: null },
-                'company': { hidden: 'company', display: 'display-company' },
-                'insuranceCompany': { hidden: 'company', display: 'display-company' },
-                'policyType': { hidden: 'policyType', display: 'display-policyType' },
-                'effectiveDate': { hidden: 'effectiveDate', display: null },
-                'expirationDate': { hidden: 'expirationDate', display: null },
-                'cancelDate': { hidden: 'cancelDate', display: 'display-cancelDate' },
-                'cancellationDate': { hidden: 'cancelDate', display: 'display-cancelDate' },
-                'cancelTime': { hidden: 'cancelTime', display: 'display-cancelTime' },
-                'cancellationTime': { hidden: 'cancelTime', display: 'display-cancelTime' },
-                'reason': { hidden: 'reason', display: 'display-reason' },
-                'refundAmount': { hidden: 'refundAmount', display: 'display-refund' },
-                'refund': { hidden: 'refundAmount', display: 'display-refund' },
-                'notes': { hidden: 'notes', display: null } // Notes are hidden from customer
+                'policyNumber': 'display-policyNumber',
+                'insuredName': 'display-insuredName',
+                'insuredAddress': 'display-insuredAddress',
+                'insuredPhone': 'display-insuredPhone',
+                'insuredEmail': 'display-insuredEmail',
+                'company': 'display-company',
+                'insuranceCompany': 'display-company',
+                'policyType': 'display-policyType',
+                'cancelDate': 'display-cancelDate',
+                'cancellationDate': 'display-cancelDate',
+                'cancelTime': 'display-cancelTime',
+                'cancellationTime': 'display-cancelTime',
+                'reason': 'display-reason',
+                'notes': 'display-notes'
             };
             
             // Process each parameter
-            for (const [urlParam, fields] of Object.entries(fieldMapping)) {
+            for (const [urlParam, fieldId] of Object.entries(fieldMapping)) {
                 if (params[urlParam]) {
-                    // Set hidden field value
-                    if (fields.hidden) {
-                        const hiddenField = document.getElementById(fields.hidden);
-                        if (hiddenField) {
-                            hiddenField.value = params[urlParam];
-                            fieldsAutoFilled = true;
+                    const field = document.getElementById(fieldId);
+                    if (field) {
+                        if (urlParam.includes('Date')) {
+                            field.value = formatDate(params[urlParam]);
+                        } else {
+                            field.value = params[urlParam];
                         }
-                    }
-                    
-                    // Set display value
-                    if (fields.display) {
-                        const displayElement = document.getElementById(fields.display);
-                        if (displayElement) {
-                            if (urlParam.includes('Date')) {
-                                displayElement.textContent = formatDate(params[urlParam]);
-                            } else if (urlParam.includes('Time')) {
-                                displayElement.textContent = formatTime(params[urlParam]);
-                            } else if (urlParam.includes('refund') || urlParam.includes('Amount')) {
-                                const amount = params[urlParam].replace('$', '');
-                                displayElement.textContent = '$' + parseFloat(amount).toFixed(2);
-                                // Show refund row if there's a refund
-                                if (parseFloat(amount) > 0) {
-                                    document.getElementById('refundRow').style.display = 'flex';
-                                }
-                            } else {
-                                displayElement.textContent = params[urlParam];
-                            }
-                        }
+                        
+                        // Make field read-only if it was autofilled
+                        field.setAttribute('readonly', true);
+                        field.style.backgroundColor = '#f0f0f0';
+                        fieldsAutoFilled = true;
                     }
                 }
             }
             
-            // Handle special case for cancel date display
-            if (params.cancelDate || params.cancellationDate) {
-                const dateParam = params.cancelDate || params.cancellationDate;
-                const displayDate = document.getElementById('display-cancelDate');
-                if (displayDate) {
-                    displayDate.textContent = formatDate(dateParam);
+            // Store hidden field values for autofilled data
+            for (const [key, value] of Object.entries(params)) {
+                const hiddenField = document.getElementById(key);
+                if (hiddenField) {
+                    hiddenField.value = value;
                 }
             }
             
             // Show notification if fields were auto-filled
             if (fieldsAutoFilled) {
-                const notice = document.getElementById('autofillNotice');
-                notice.style.display = 'block';
+                document.getElementById('autofillNotice').style.display = 'block';
                 setTimeout(() => {
+                    const notice = document.getElementById('autofillNotice');
                     notice.style.opacity = '0';
                     setTimeout(() => {
                         notice.style.display = 'none';
@@ -614,12 +687,54 @@
                 }, 3000);
             }
             
-            // Update any empty display fields
-            document.querySelectorAll('.field-value').forEach(element => {
-                if (element.textContent === 'Loading...') {
-                    element.textContent = 'Not provided';
+            setupManualEntryHandlers();
+        }
+        
+        // Setup handlers for manual entry mode
+        function setupManualEntryHandlers() {
+            // Sync display fields with hidden fields
+            const syncFields = [
+                { display: 'display-policyNumber', hidden: 'policyNumber' },
+                { display: 'display-insuredName', hidden: 'insuredName' },
+                { display: 'display-insuredAddress', hidden: 'insuredAddress' },
+                { display: 'display-insuredPhone', hidden: 'insuredPhone' },
+                { display: 'display-insuredEmail', hidden: 'insuredEmail' },
+                { display: 'display-company', hidden: 'company' },
+                { display: 'display-policyType', hidden: 'policyType' },
+                { display: 'display-cancelDate', hidden: 'cancelDate' },
+                { display: 'display-cancelTime', hidden: 'cancelTime' },
+                { display: 'display-reason', hidden: 'reason' },
+                { display: 'display-notes', hidden: 'notes' }
+            ];
+            
+            syncFields.forEach(({ display, hidden }) => {
+                const displayField = document.getElementById(display);
+                const hiddenField = document.getElementById(hidden);
+                
+                if (displayField && hiddenField) {
+                    // Initial sync
+                    if (!hiddenField.value && displayField.value) {
+                        hiddenField.value = displayField.value;
+                    }
+                    
+                    // Add change listener
+                    displayField.addEventListener('change', function() {
+                        hiddenField.value = this.value;
+                    });
+                    
+                    displayField.addEventListener('input', function() {
+                        hiddenField.value = this.value;
+                    });
                 }
             });
+            
+            // Set default date to today if not set
+            const cancelDateField = document.getElementById('display-cancelDate');
+            if (cancelDateField && !cancelDateField.value) {
+                const today = new Date();
+                const formattedDate = today.toISOString().split('T')[0];
+                cancelDateField.setAttribute('min', formattedDate);
+            }
         }
         
         // Initialize signature pad
@@ -664,10 +779,35 @@
                 return;
             }
             
+            // Sync all fields one more time before submission
+            const syncBeforeSubmit = [
+                { display: 'display-policyNumber', hidden: 'policyNumber' },
+                { display: 'display-insuredName', hidden: 'insuredName' },
+                { display: 'display-insuredAddress', hidden: 'insuredAddress' },
+                { display: 'display-insuredPhone', hidden: 'insuredPhone' },
+                { display: 'display-insuredEmail', hidden: 'insuredEmail' },
+                { display: 'display-company', hidden: 'company' },
+                { display: 'display-policyType', hidden: 'policyType' },
+                { display: 'display-cancelDate', hidden: 'cancelDate' },
+                { display: 'display-cancelTime', hidden: 'cancelTime' },
+                { display: 'display-reason', hidden: 'reason' },
+                { display: 'display-notes', hidden: 'notes' }
+            ];
+            
+            syncBeforeSubmit.forEach(({ display, hidden }) => {
+                const displayField = document.getElementById(display);
+                const hiddenField = document.getElementById(hidden);
+                if (displayField && hiddenField) {
+                    hiddenField.value = displayField.value;
+                }
+            });
+            
             // Confirm cancellation
+            const policyNumber = document.getElementById('policyNumber').value;
+            const cancelDate = document.getElementById('display-cancelDate').value;
             const confirmMsg = `Are you sure you want to cancel this policy?\n\n` +
-                             `Policy: ${document.getElementById('policyNumber').value}\n` +
-                             `Cancellation Date: ${document.getElementById('display-cancelDate').textContent}\n\n` +
+                             `Policy: ${policyNumber}\n` +
+                             `Cancellation Date: ${cancelDate}\n\n` +
                              `This action cannot be undone and coverage will end.`;
             
             if (!confirm(confirmMsg)) {
@@ -687,6 +827,7 @@
             const formData = new FormData(this);
             formData.append('submissionDate', new Date().toLocaleString());
             formData.append('formType', 'ACORD 35 Cancellation');
+            formData.append('entryMode', isAutofilled ? 'Autofilled' : 'Manual');
             
             try {
                 const response = await fetch(SCRIPT_URL, {
