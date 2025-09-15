@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACORD 35 Cancellation Link Generator - Bill Layne Insurance</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            min-height: 100vh;
+            padding: 20px 10px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .system-badge {
+            display: inline-block;
+            background: #dc3545;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        .form-container {
+            padding: 25px 20px;
+        }
+        
+        .section-title {
+            background: #f8f9fa;
+            padding: 10px 15px;
+            margin: 20px -20px 15px -20px;
+            font-weight: 600;
+            color: #495057;
+            border-left: 4px solid #dc3545;
+        }
+        
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+        
+        label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 5px;
+        }
+        
+        input, select, textarea {
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .button-group {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-generate {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+        }
+        
+        .btn-generate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220,53,69,0.3);
+        }
+        
+        .btn-clear {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-clear:hover {
+            background: #5a6268;
+        }
+        
+        #resultSection {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 2px solid #28a745;
+        }
+        
+        .result-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #28a745;
+            margin-bottom: 15px;
+        }
+        
+        .url-display {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            word-break: break-all;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            border: 1px solid #ddd;
+            margin-bottom: 15px;
+        }
+        
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        
+        .btn-action {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-copy {
+            background: #007bff;
+            color: white;
+        }
+        
+        .btn-copy:hover {
+            background: #0056b3;
+        }
+        
+        .btn-email {
+            background: #2196F3;
+            color: white;
+        }
+        
+        .btn-email:hover {
+            background: #0b7dda;
+        }
+        
+        .btn-text {
+            background: #ffc107;
+            color: #212529;
+        }
+        
+        .btn-text:hover {
+            background: #e0a800;
+        }
+        
+        .text-template {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 1px solid #ffc107;
+            white-space: pre-wrap;
+        }
+        
+        .copy-status {
+            display: none;
+            color: #28a745;
+            font-weight: 600;
+            text-align: center;
+            margin-top: 10px;
+        }
+        
+        .instructions {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .instructions h4 {
+            color: #856404;
+            margin-bottom: 8px;
+        }
+        
+        .instructions ol {
+            margin-left: 20px;
+            color: #856404;
+            font-size: 14px;
+        }
+        
+        .instructions li {
+            margin-bottom: 5px;
+        }
+        
+        .warning {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        
+        .notes-info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-radius: 6px;
+            padding: 10px;
+            margin-top: 5px;
+            font-size: 12px;
+            color: #0c5460;
+        }
+        
+        @media (max-width: 600px) {
+            .row {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+            
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📄 ACORD 35 Cancellation Link Generator</h1>
+            <p>Bill Layne Insurance Agency - Staff Tool</p>
+            <span class="system-badge">⚠️ CANCELLATION SYSTEM</span>
+        </div>
+        
+        <div class="form-container">
+            <div class="instructions">
+                <h4>📌 Instructions:</h4>
+                <ol>
+                    <li>Fill in all customer and policy information</li>
+                    <li>Double-check cancellation date and time</li>
+                    <li>Add any special notes (optional)</li>
+                    <li>Click "Generate Link"</li>
+                    <li>Send link to customer for signature</li>
+                    <li class="warning">⚠️ This creates a cancellation request!</li>
+                </ol>
+            </div>
+            
+            <form id="linkGenerator">
+                <div class="section-title">Customer Information</div>
+                
+                <div class="row">
+                    <div class="form-group full-width">
+                        <label>Insured Name *</label>
+                        <input type="text" id="insuredName" required>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="form-group full-width">
+                        <label>Address</label>
+                        <input type="text" id="insuredAddress">
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="tel" id="insuredPhone">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="insuredEmail">
+                    </div>
+                </div>
+                
+                <div class="section-title">Policy Information</div>
+                
+                <div class="row">
+                    <div class="form-group">
+                        <label>Policy Number *</label>
+                        <input type="text" id="policyNumber" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Insurance Company *</label>
+                        <select id="company" required>
+                            <option value="">Select Company...</option>
+                            <option value="Progressive">Progressive</option>
+                            <option value="Nationwide">Nationwide</option>
+                            <option value="National General">National General</option>
+                            <option value="Alamance Farmers">Alamance Farmers</option>
+                            <option value="Travelers">Travelers</option>
+                            <option value="Foremost">Foremost</option>
+                            <option value="NC Grange">NC Grange</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="form-group">
+                        <label>Policy Type *</label>
+                        <select id="policyType" required>
+                            <option value="">Select Type...</option>
+                            <option value="Auto">Auto</option>
+                            <option value="Home">Home</option>
+                            <option value="Renters">Renters</option>
+                            <option value="Motorcycle">Motorcycle</option>
+                            <option value="RV">RV</option>
+                            <option value="Boat">Boat</option>
+                            <option value="Commercial">Commercial</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Effective Date</label>
+                        <input type="date" id="effectiveDate">
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="form-group">
+                        <label>Expiration Date</label>
+                        <input type="date" id="expirationDate">
+                    </div>
+                </div>
+                
+                <div class="section-title">Cancellation Details</div>
+                
+                <div class="row">
+                    <div class="form-group">
+                        <label>Cancellation Date *</label>
+                        <input type="date" id="cancelDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Cancellation Time</label>
+                        <select id="cancelTime">
+                            <option value="12:01 AM">12:01 AM</option>
+                            <option value="12:01 PM" selected>12:01 PM</option>
+                            <option value="11:59 PM">11:59 PM</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="form-group full-width">
+                        <label>Reason for Cancellation *</label>
+                        <select id="reason" required>
+                            <option value="">Select Reason...</option>
+                            <option value="Insured Request">Insured Request</option>
+                            <option value="Non-Payment">Non-Payment</option>
+                            <option value="Rewritten">Rewritten with Another Carrier</option>
+                            <option value="Not Taken">Coverage Not Taken</option>
+                            <option value="Sold Property">Sold Property</option>
+                            <option value="Sold Vehicle">Sold Vehicle</option>
+                            <option value="No Longer Need">No Longer Need Coverage</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="section-title">Special Notes (Optional)</div>
+                
+                <div class="row">
+                    <div class="form-group full-width">
+                        <label>Staff Notes / Special Instructions</label>
+                        <textarea id="notes" placeholder="Add any special notes or instructions here (e.g., pending refund check, follow-up required, etc.)"></textarea>
+                        <div class="notes-info">
+                            ℹ️ These notes will appear on the PDF and in the Google Sheet but will NOT be visible to the customer
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <button type="button" class="btn btn-generate" onclick="generateLink()">
+                        🔗 Generate Cancellation Link
+                    </button>
+                    <button type="button" class="btn btn-clear" onclick="clearForm()">
+                        🔄 Clear Form
+                    </button>
+                </div>
+            </form>
+            
+            <div id="resultSection">
+                <div class="result-title">✅ Cancellation Link Generated!</div>
+                <div class="url-display" id="generatedUrl"></div>
+                
+                <div class="action-buttons">
+                    <button class="btn-action btn-copy" onclick="copyLink()">
+                        📋 Copy Link
+                    </button>
+                    <button class="btn-action btn-email" onclick="emailToCustomer()">
+                        📧 Email Customer
+                    </button>
+                    <button class="btn-action btn-text" onclick="sendToAgencyMatrix()">
+                        📱 Text Customer
+                    </button>
+                </div>
+                
+                <div class="text-template" id="textTemplate" style="display: none;">
+                    <strong>📱 Text Message Template:</strong><br><br>
+                    <span id="textMessage"></span>
+                    <br><br>
+                    <button class="btn-action btn-copy" style="width: 100%; margin-bottom: 10px;" onclick="copyTextMessage()">
+                        📋 Copy Text Message
+                    </button>
+                </div>
+                
+                <div class="text-template" id="emailTemplate" style="display: none; margin-top: 15px;">
+                    <strong>📧 Email Template:</strong><br><br>
+                    <span id="emailMessage"></span>
+                    <br><br>
+                    <button class="btn-action btn-copy" style="width: 100%;" onclick="copyEmailMessage()">
+                        📋 Copy Email Template
+                    </button>
+                </div>
+                
+                <div class="copy-status" id="copyStatus"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentGeneratedUrl = '';
+        
+        function generateLink() {
+            // Get form values
+            const insuredName = document.getElementById('insuredName').value;
+            const policyNumber = document.getElementById('policyNumber').value;
+            const company = document.getElementById('company').value;
+            const policyType = document.getElementById('policyType').value;
+            const cancelDate = document.getElementById('cancelDate').value;
+            const reason = document.getElementById('reason').value;
+            
+            // Validate required fields
+            if (!insuredName || !policyNumber || !company || !policyType || !cancelDate || !reason) {
+                alert('Please fill in all required fields marked with *');
+                return;
+            }
+            
+            // Build URL parameters
+            const params = new URLSearchParams({
+                insuredName: insuredName,
+                insuredAddress: document.getElementById('insuredAddress').value || '',
+                insuredPhone: document.getElementById('insuredPhone').value || '',
+                insuredEmail: document.getElementById('insuredEmail').value || '',
+                policyNumber: policyNumber,
+                company: company,
+                policyType: policyType,
+                effectiveDate: document.getElementById('effectiveDate').value || '',
+                expirationDate: document.getElementById('expirationDate').value || '',
+                cancelDate: cancelDate,
+                cancelTime: document.getElementById('cancelTime').value || '12:01 PM',
+                reason: reason,
+                notes: document.getElementById('notes').value || ''
+            });
+            
+            // Generate the URL
+            const baseUrl = 'https://billlayne.github.io/cancellation-form/';
+            currentGeneratedUrl = baseUrl + '?' + params.toString();
+            
+            // Display result
+            document.getElementById('generatedUrl').textContent = currentGeneratedUrl;
+            document.getElementById('resultSection').style.display = 'block';
+            
+            // Generate text message
+            const phone = document.getElementById('insuredPhone').value || 'No phone';
+            const textMsg = `Hi ${insuredName.split(' ')[0]},\n\nPer your request, here's the link to sign your ${policyType} policy cancellation form (Policy: ${policyNumber}).\n\nCancellation Date: ${formatDate(cancelDate)} at ${document.getElementById('cancelTime').value}\n\nPlease review and sign:\n${currentGeneratedUrl}\n\nThank you,\nBill Layne Insurance Agency\n336-835-1993`;
+            
+            // Generate email template
+            const emailMsg = `Subject: Action Required - Sign Cancellation Request for Policy ${policyNumber}\n\nDear ${insuredName},\n\nPer your request to cancel your ${policyType} policy, please complete the electronic cancellation form.\n\nPolicy Details:\n• Policy Number: ${policyNumber}\n• Insurance Company: ${company}\n• Cancellation Date: ${formatDate(cancelDate)}\n• Cancellation Time: ${document.getElementById('cancelTime').value}\n• Reason: ${reason}\n\nPlease click the link below to review and sign your cancellation request:\n\n${currentGeneratedUrl}\n\nIMPORTANT: Your coverage will terminate on the date and time shown above. Please ensure you have replacement coverage if needed.\n\nIf you have any questions or wish to discuss alternatives, please call us at 336-835-1993.\n\nThank you,\nBill Layne Insurance Agency\n1283 N Bridge St, Elkin NC 28621\nSave@BillLayneInsurance.com`;
+            
+            document.getElementById('textMessage').textContent = textMsg;
+            document.getElementById('emailMessage').textContent = emailMsg;
+            document.getElementById('textTemplate').style.display = 'block';
+            document.getElementById('emailTemplate').style.display = 'block';
+            
+            // Scroll to results
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function formatDate(dateString) {
+            const date = new Date(dateString + 'T00:00:00');
+            return date.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' });
+        }
+        
+        function copyLink() {
+            navigator.clipboard.writeText(currentGeneratedUrl).then(function() {
+                showCopyStatus('✔ Link copied to clipboard!');
+            }).catch(function(err) {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = currentGeneratedUrl;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showCopyStatus('✔ Link copied to clipboard!');
+            });
+        }
+        
+        function emailToCustomer() {
+            const insuredName = document.getElementById('insuredName').value;
+            const insuredEmail = document.getElementById('insuredEmail').value;
+            const policyNumber = document.getElementById('policyNumber').value;
+            const policyType = document.getElementById('policyType').value;
+            const cancelDate = document.getElementById('cancelDate').value;
+            const cancelTime = document.getElementById('cancelTime').value;
+            const reason = document.getElementById('reason').value;
+            const company = document.getElementById('company').value;
+            
+            if (!insuredEmail) {
+                alert('Please enter customer email address first');
+                document.getElementById('insuredEmail').focus();
+                return;
+            }
+            
+            // Create email subject
+            const subject = `Action Required - Sign Cancellation Request for Policy ${policyNumber}`;
+            
+            // Create email body
+            const body = `Dear ${insuredName},
+
+Per your request to cancel your ${policyType} policy, please complete the electronic cancellation form.
+
+Policy Details:
+• Policy Number: ${policyNumber}
+• Insurance Company: ${company}
+• Cancellation Date: ${formatDate(cancelDate)}
+• Cancellation Time: ${cancelTime}
+• Reason: ${reason}
+
+Please click the link below to review and sign your cancellation request:
+
+${currentGeneratedUrl}
+
+IMPORTANT: Your coverage will terminate on the date and time shown above. Please ensure you have replacement coverage if needed.
+
+If you have any questions or wish to discuss alternatives, please call us at 336-835-1993.
+
+Thank you,
+Bill Layne Insurance Agency
+1283 N Bridge St, Elkin NC 28621
+Save@BillLayneInsurance.com`;
+            
+            // Copy the email content to clipboard
+            const emailContent = `To: ${insuredEmail}\nSubject: ${subject}\n\n${body}`;
+            navigator.clipboard.writeText(emailContent).then(function() {
+                showCopyStatus('✔ Email copied! Opening Gmail...');
+            }).catch(function(err) {
+                // Fallback if clipboard fails
+                const textArea = document.createElement('textarea');
+                textArea.value = emailContent;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showCopyStatus('✔ Email copied! Opening Gmail...');
+            });
+            
+            // Open Gmail compose in new tab
+            const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(insuredEmail)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.open(gmailUrl, '_blank');
+        }
+        
+        function copyTextMessage() {
+            const text = document.getElementById('textMessage').textContent;
+            navigator.clipboard.writeText(text).then(function() {
+                showCopyStatus('✔ Text message copied!');
+            }).catch(function(err) {
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showCopyStatus('✔ Text message copied!');
+            });
+        }
+        
+        function copyEmailMessage() {
+            const email = document.getElementById('emailMessage').textContent;
+            navigator.clipboard.writeText(email).then(function() {
+                showCopyStatus('✔ Email template copied!');
+            }).catch(function(err) {
+                const textArea = document.createElement('textarea');
+                textArea.value = email;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showCopyStatus('✔ Email template copied!');
+            });
+        }
+        
+        function sendToAgencyMatrix() {
+            const phone = document.getElementById('insuredPhone').value;
+            
+            if (!phone) {
+                alert('Please enter a phone number to use Agency Matrix');
+                document.getElementById('insuredPhone').focus();
+                return;
+            }
+            
+            const phoneDigits = phone.replace(/\D/g, '');
+            
+            if (phoneDigits.length < 10) {
+                alert('Please enter a complete 10-digit phone number');
+                return;
+            }
+            
+            const textMessage = document.getElementById('textMessage').textContent;
+            
+            navigator.clipboard.writeText(textMessage).then(function() {
+                showCopyStatus('✔ Text copied! Opening Agency Matrix - paste the message there');
+                setTimeout(() => {
+                    const agencyMatrixUrl = `https://agents.agencymatrix.com/#/customer/search?selection=Phone&query=${phoneDigits}`;
+                    window.open(agencyMatrixUrl, '_blank');
+                }, 1000);
+            }).catch(function(err) {
+                alert('Please copy the text message manually, then click OK to open Agency Matrix');
+                const agencyMatrixUrl = `https://agents.agencymatrix.com/#/customer/search?selection=Phone&query=${phoneDigits}`;
+                window.open(agencyMatrixUrl, '_blank');
+            });
+        }
+        
+        function showCopyStatus(message = '✔ Link copied to clipboard!') {
+            const status = document.getElementById('copyStatus');
+            status.textContent = message;
+            status.style.display = 'block';
+            setTimeout(() => {
+                status.style.display = 'none';
+            }, 3000);
+        }
+        
+        function clearForm() {
+            if (confirm('Are you sure you want to clear all fields?')) {
+                document.getElementById('linkGenerator').reset();
+                document.getElementById('resultSection').style.display = 'none';
+                currentGeneratedUrl = '';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+        
+        // Set default values
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set today's date as default for cancellation date
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('cancelDate').value = today;
+            
+            // Auto-format phone number
+            document.getElementById('insuredPhone').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 0) {
+                    if (value.length <= 3) {
+                        value = '(' + value;
+                    } else if (value.length <= 6) {
+                        value = '(' + value.slice(0, 3) + ') ' + value.slice(3);
+                    } else {
+                        value = '(' + value.slice(0, 3) + ') ' + value.slice(3, 6) + '-' + value.slice(6, 10);
+                    }
+                }
+                e.target.value = value;
+            });
+        });
+    </script>
+</body>
+</html>
