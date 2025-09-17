@@ -261,30 +261,78 @@
             transform: none;
         }
         
-        .success-message,
-        .error-message {
-            padding: 15px;
-            border-radius: 10px;
-            margin: 20px 0;
-            text-align: center;
-            font-weight: 600;
+        /* Enhanced Loading Modal */
+        .loading-overlay {
             display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
         }
         
-        .success-message {
-            background: #28a745;
-            color: white;
-        }
-        
-        .error-message {
-            background: #dc3545;
-            color: white;
-        }
-        
-        .loading {
-            display: none;
+        .loading-modal {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 400px;
+            width: 90%;
             text-align: center;
-            padding: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.3s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .loading-icon {
+            font-size: 48px;
+            color: #667eea;
+            margin-bottom: 20px;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+        
+        .loading-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2a5298;
+            margin-bottom: 15px;
+        }
+        
+        .loading-message {
+            font-size: 16px;
+            color: #495057;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        
+        .loading-warning {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 14px;
+            color: #856404;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
         .spinner {
@@ -294,7 +342,7 @@
             width: 40px;
             height: 40px;
             animation: spin 1s linear infinite;
-            margin: 0 auto;
+            margin: 20px auto;
         }
         
         @keyframes spin {
@@ -302,17 +350,158 @@
             100% { transform: rotate(360deg); }
         }
         
-        .footer {
-            background: #f8f9fa;
-            padding: 20px;
-            text-align: center;
-            border-top: 1px solid #dee2e6;
+        /* Success Modal */
+        .success-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
         }
         
-        .footer p {
-            color: #6c757d;
+        .success-modal {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: bounceIn 0.5s ease-out;
+        }
+        
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.95); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: #28a745;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 40px;
+            animation: checkmark 0.8s ease-out;
+        }
+        
+        @keyframes checkmark {
+            0% { transform: scale(0) rotate(-45deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+        
+        .success-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+        
+        .confirmation-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            color: white;
+        }
+        
+        .confirmation-label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+        
+        .confirmation-number {
+            font-size: 32px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .confirmation-note {
             font-size: 12px;
-            line-height: 1.5;
+            opacity: 0.9;
+            margin-top: 10px;
+        }
+        
+        .success-details {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        .success-details h4 {
+            color: #2a5298;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #dee2e6;
+            font-size: 14px;
+        }
+        
+        .detail-label {
+            color: #6c757d;
+            font-weight: 600;
+        }
+        
+        .detail-value {
+            color: #212529;
+        }
+        
+        .success-actions {
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        .btn-print {
+            background: #6c757d;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-print:hover {
+            background: #5a6268;
+        }
+        
+        .btn-close {
+            background: #28a745;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-close:hover {
+            background: #218838;
         }
         
         .autofill-notice {
@@ -360,6 +549,30 @@
             font-weight: bold;
         }
         
+        .error-message {
+            background: #dc3545;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+        
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #dee2e6;
+        }
+        
+        .footer p {
+            color: #6c757d;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+        
         @media (max-width: 600px) {
             .field-row {
                 flex-direction: column;
@@ -371,6 +584,14 @@
             
             .header h1 {
                 font-size: 20px;
+            }
+            
+            .success-actions {
+                flex-direction: column;
+            }
+            
+            .btn-print, .btn-close {
+                width: 100%;
             }
         }
     </style>
@@ -558,19 +779,11 @@
                 <input type="hidden" id="refundAmount" name="refundAmount">
                 <input type="hidden" id="notes" name="notes">
                 <input type="hidden" id="signature" name="signature">
-            </div>
-            
-            <div class="success-message" id="successMessage">
-                ✅ Your cancellation request has been successfully submitted!
+                <input type="hidden" id="confirmationNumber" name="confirmationNumber">
             </div>
             
             <div class="error-message" id="errorMessage">
                 ❌ There was an error submitting your request. Please try again.
-            </div>
-            
-            <div class="loading" id="loading">
-                <div class="spinner"></div>
-                <p style="margin-top: 10px;">Submitting your cancellation request...</p>
             </div>
             
             <button type="submit" class="btn btn-submit" id="submitBtn">
@@ -589,6 +802,65 @@
         </div>
     </div>
 
+    <!-- Enhanced Loading Modal -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-modal">
+            <div class="loading-icon">📄</div>
+            <div class="loading-title">Processing Your Request</div>
+            <div class="loading-message">
+                Your cancellation request is being submitted to our secure system.
+            </div>
+            <div class="spinner"></div>
+            <div class="loading-warning">
+                <span>⚠️</span>
+                <span>Please do not close this window or refresh the page while we process your request.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="success-overlay" id="successOverlay">
+        <div class="success-modal">
+            <div class="success-icon">✓</div>
+            <div class="success-title">Request Submitted Successfully!</div>
+            
+            <div class="confirmation-box">
+                <div class="confirmation-label">Your Confirmation Number</div>
+                <div class="confirmation-number" id="confirmationDisplay">CANCEL-123456</div>
+                <div class="confirmation-note">Please save this number for your records</div>
+            </div>
+            
+            <div class="success-details">
+                <h4>Cancellation Summary</h4>
+                <div class="detail-row">
+                    <span class="detail-label">Policy Number:</span>
+                    <span class="detail-value" id="successPolicyNumber">-</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Insured Name:</span>
+                    <span class="detail-value" id="successInsuredName">-</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Cancellation Date:</span>
+                    <span class="detail-value" id="successCancelDate">-</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Submitted On:</span>
+                    <span class="detail-value" id="successSubmitDate">-</span>
+                </div>
+            </div>
+            
+            <p style="font-size: 14px; color: #6c757d; margin: 20px 0;">
+                A confirmation email has been sent to your registered email address with complete details and a PDF copy of this cancellation request.
+            </p>
+            
+            <div class="success-actions">
+                <button class="btn-print" onclick="printConfirmation()">Print Confirmation</button>
+                <button class="btn-close" onclick="closeSuccessModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
     <script>
         // YOUR GOOGLE APPS SCRIPT URL
@@ -596,6 +868,17 @@
         
         let signaturePad;
         let isAutofilled = false;
+        let currentConfirmationNumber = '';
+        
+        // Function to generate confirmation number
+        function generateConfirmationNumber() {
+            const date = new Date();
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+            return `CANCEL-${year}${month}${day}-${random}`;
+        }
         
         // Function to get URL parameters
         function getUrlParameters() {
@@ -615,6 +898,17 @@
             const month = String(date.getMonth() + 1).padStart(2, '0');
             const day = String(date.getDate()).padStart(2, '0');
             return `${year}-${month}-${day}`;
+        }
+        
+        // Function to format date for success display
+        function formatDisplayDate(dateStr) {
+            if (!dateStr) return '-';
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('en-US', { 
+                month: 'long', 
+                day: 'numeric', 
+                year: 'numeric' 
+            });
         }
         
         // Auto-fill form from URL parameters
@@ -707,18 +1001,15 @@
                     if (this.value === 'Other') {
                         otherCompanyRow.style.display = 'flex';
                         otherCompanyInput.setAttribute('required', 'required');
-                        // Clear the hidden field until user types the company name
                         companyHidden.value = '';
                     } else {
                         otherCompanyRow.style.display = 'none';
                         otherCompanyInput.removeAttribute('required');
                         otherCompanyInput.value = '';
-                        // Set the hidden field to the selected value
                         companyHidden.value = this.value;
                     }
                 });
                 
-                // When user types in the other company field, update the hidden field
                 otherCompanyInput.addEventListener('input', function() {
                     if (companySelect.value === 'Other') {
                         companyHidden.value = this.value;
@@ -746,17 +1037,14 @@
                 const hiddenField = document.getElementById(hidden);
                 
                 if (displayField && hiddenField) {
-                    // Skip company field as we handle it separately above
                     if (display === 'display-company') {
                         return;
                     }
                     
-                    // Initial sync
                     if (!hiddenField.value && displayField.value) {
                         hiddenField.value = displayField.value;
                     }
                     
-                    // Add change listener
                     displayField.addEventListener('change', function() {
                         hiddenField.value = this.value;
                     });
@@ -778,17 +1066,14 @@
         
         // Initialize signature pad
         document.addEventListener('DOMContentLoaded', function() {
-            // Auto-fill form from URL parameters
             autoFillForm();
             
-            // Initialize signature pad
             const canvas = document.getElementById('signature-pad');
             signaturePad = new SignaturePad(canvas, {
                 backgroundColor: 'rgb(255, 255, 255)',
                 penColor: 'rgb(0, 0, 0)'
             });
             
-            // Resize canvas to proper size
             resizeCanvas();
             window.addEventListener('resize', resizeCanvas);
         });
@@ -806,6 +1091,43 @@
         
         function clearSignature() {
             signaturePad.clear();
+        }
+        
+        // Function to show loading modal
+        function showLoadingModal() {
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.style.display = 'flex';
+        }
+        
+        // Function to hide loading modal
+        function hideLoadingModal() {
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.style.display = 'none';
+        }
+        
+        // Function to show success modal
+        function showSuccessModal(confirmationNum, policyNum, insuredName, cancelDate) {
+            const overlay = document.getElementById('successOverlay');
+            
+            document.getElementById('confirmationDisplay').textContent = confirmationNum;
+            document.getElementById('successPolicyNumber').textContent = policyNum;
+            document.getElementById('successInsuredName').textContent = insuredName;
+            document.getElementById('successCancelDate').textContent = formatDisplayDate(cancelDate);
+            document.getElementById('successSubmitDate').textContent = formatDisplayDate(new Date());
+            
+            overlay.style.display = 'flex';
+        }
+        
+        // Function to close success modal
+        function closeSuccessModal() {
+            const overlay = document.getElementById('successOverlay');
+            overlay.style.display = 'none';
+            window.location.reload();
+        }
+        
+        // Function to print confirmation
+        function printConfirmation() {
+            window.print();
         }
         
         // Handle form submission
@@ -827,6 +1149,10 @@
                 return;
             }
             
+            // Generate confirmation number
+            currentConfirmationNumber = generateConfirmationNumber();
+            document.getElementById('confirmationNumber').value = currentConfirmationNumber;
+            
             // Sync all fields one more time before submission
             const syncBeforeSubmit = [
                 { display: 'display-policyNumber', hidden: 'policyNumber' },
@@ -841,7 +1167,6 @@
                 { display: 'display-notes', hidden: 'notes' }
             ];
             
-            // Handle company field specially
             const companyHidden = document.getElementById('company');
             if (companySelect.value === 'Other') {
                 companyHidden.value = otherCompanyInput.value;
@@ -857,12 +1182,15 @@
                 }
             });
             
-            // Confirm cancellation
+            // Get values for confirmation modal
             const policyNumber = document.getElementById('policyNumber').value;
-            const cancelDate = document.getElementById('display-cancelDate').value;
+            const insuredName = document.getElementById('insuredName').value;
+            const cancelDate = document.getElementById('cancelDate').value;
+            
+            // Confirm cancellation
             const confirmMsg = `Are you sure you want to cancel this policy?\n\n` +
                              `Policy: ${policyNumber}\n` +
-                             `Cancellation Date: ${cancelDate}\n\n` +
+                             `Cancellation Date: ${formatDisplayDate(cancelDate)}\n\n` +
                              `This action cannot be undone and coverage will end.`;
             
             if (!confirm(confirmMsg)) {
@@ -872,10 +1200,9 @@
             // Get signature data
             document.getElementById('signature').value = signaturePad.toDataURL();
             
-            // Show loading
-            document.getElementById('loading').style.display = 'block';
+            // Show loading modal
+            showLoadingModal();
             document.getElementById('submitBtn').disabled = true;
-            document.getElementById('successMessage').style.display = 'none';
             document.getElementById('errorMessage').style.display = 'none';
             
             // Prepare form data
@@ -883,6 +1210,7 @@
             formData.append('submissionDate', new Date().toLocaleString());
             formData.append('formType', 'ACORD 35 Cancellation');
             formData.append('entryMode', isAutofilled ? 'Autofilled' : 'Manual');
+            formData.append('confirmationNumber', currentConfirmationNumber);
             
             try {
                 const response = await fetch(SCRIPT_URL, {
@@ -893,21 +1221,24 @@
                 const result = await response.text();
                 
                 if (result.includes('Success') || response.ok) {
-                    // Show success message
-                    document.getElementById('successMessage').style.display = 'block';
-                    document.getElementById('cancellationForm').style.display = 'none';
+                    // Hide loading modal
+                    hideLoadingModal();
                     
-                    // Scroll to top
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    // Show success modal with confirmation number
+                    showSuccessModal(
+                        currentConfirmationNumber,
+                        policyNumber,
+                        insuredName,
+                        cancelDate
+                    );
                 } else {
                     throw new Error('Submission failed');
                 }
             } catch (error) {
                 console.error('Error:', error);
+                hideLoadingModal();
                 document.getElementById('errorMessage').style.display = 'block';
                 document.getElementById('submitBtn').disabled = false;
-            } finally {
-                document.getElementById('loading').style.display = 'none';
             }
         });
     </script>
