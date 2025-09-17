@@ -159,6 +159,37 @@
             margin-bottom: 5px;
         }
         
+        /* Legal Acknowledgments Section */
+        .legal-acknowledgments-section {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f0f4ff;
+            border-radius: 10px;
+            border: 2px solid #667eea;
+        }
+        
+        .legal-checkbox-group {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: start;
+            gap: 10px;
+        }
+        
+        .legal-checkbox-group input[type="checkbox"] {
+            margin-top: 3px;
+            min-width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        .legal-checkbox-group label {
+            flex: 1;
+            font-size: 14px;
+            color: #495057;
+            cursor: pointer;
+            line-height: 1.5;
+        }
+        
         .signature-section {
             margin: 30px 0;
             padding: 20px;
@@ -560,6 +591,13 @@
             display: none;
         }
         
+        .witness-section {
+            background: #f0f4ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
         .footer {
             background: #f8f9fa;
             padding: 20px;
@@ -704,8 +742,8 @@
                     <span class="field-label">Cancellation Time: <span class="required-mark">*</span></span>
                     <select class="field-input" id="display-cancelTime" required>
                         <option value="">Select time...</option>
-                        <option value="12:01 AM">12:01 AM</option>
-                        <option value="11:59 PM">11:59 PM</option>
+                        <option value="12:01 AM">12:01 AM (Start of Day)</option>
+                        <option value="11:59 PM">11:59 PM (End of Day)</option>
                     </select>
                 </div>
                 <div class="field-row">
@@ -735,7 +773,100 @@
                     <li>No claims will be covered after the cancellation date</li>
                     <li>You may be without insurance coverage</li>
                     <li>Any refund will be calculated per policy terms</li>
+                    <li id="dmvWarning" style="display: none;"><strong>The NC DMV will be notified of this auto insurance cancellation</strong></li>
                 </ul>
+            </div>
+            
+            <!-- Legal Acknowledgments Section -->
+            <div class="legal-acknowledgments-section">
+                <div class="section-title">LEGAL ACKNOWLEDGMENTS & CERTIFICATIONS</div>
+                
+                <!-- Identity Verification -->
+                <div class="legal-checkbox-group">
+                    <input type="checkbox" id="identityVerification" required>
+                    <label for="identityVerification">
+                        I certify under penalty of perjury that I am the named insured or legally authorized 
+                        to cancel this policy. False statements may result in criminal prosecution.
+                    </label>
+                </div>
+                
+                <!-- Financial Responsibility -->
+                <div class="legal-checkbox-group">
+                    <input type="checkbox" id="financialResponsibility" required>
+                    <label for="financialResponsibility">
+                        I understand I am financially responsible for any claims, damages, or losses that 
+                        occur after the cancellation effective date and time listed above.
+                    </label>
+                </div>
+                
+                <!-- DMV Notification (for auto) -->
+                <div class="legal-checkbox-group" id="dmvNotification" style="display: none;">
+                    <input type="checkbox" id="dmvAcknowledgment">
+                    <label for="dmvAcknowledgment">
+                        I understand the North Carolina DMV will be notified of this auto insurance 
+                        cancellation and I may face license/registration suspension without replacement coverage.
+                        (N.C.G.S. § 20-309: Driving without insurance is a Class 1 misdemeanor)
+                    </label>
+                </div>
+                
+                <!-- Mortgagee Notification (for property) -->
+                <div class="legal-checkbox-group" id="mortgageeNotification" style="display: none;">
+                    <input type="checkbox" id="mortgageeAcknowledgment">
+                    <label for="mortgageeAcknowledgment">
+                        I acknowledge my mortgage company will be notified and I may be in violation 
+                        of my mortgage agreement without replacement coverage.
+                    </label>
+                </div>
+                
+                <!-- Electronic Signature Consent -->
+                <div class="legal-checkbox-group">
+                    <input type="checkbox" id="electronicSignatureConsent" required>
+                    <label for="electronicSignatureConsent">
+                        I consent to electronic signature and agree it has the same legal effect as a 
+                        handwritten signature per the NC Uniform Electronic Transactions Act (N.C.G.S. § 66-311 et seq.).
+                    </label>
+                </div>
+                
+                <!-- Data Accuracy -->
+                <div class="legal-checkbox-group">
+                    <input type="checkbox" id="dataAccuracy" required>
+                    <label for="dataAccuracy">
+                        I certify all information provided is true and accurate. I understand providing 
+                        false information may void this cancellation request and any associated refunds.
+                    </label>
+                </div>
+                
+                <!-- Final Confirmation -->
+                <div class="legal-checkbox-group">
+                    <input type="checkbox" id="finalConfirmation" required>
+                    <label for="finalConfirmation">
+                        I UNDERSTAND THIS CANCELLATION IS FINAL once processed and I am voluntarily 
+                        terminating my insurance coverage with full knowledge of the consequences.
+                    </label>
+                </div>
+            </div>
+            
+            <!-- Witness Section (Optional) -->
+            <div class="witness-section">
+                <div class="field-row">
+                    <input type="checkbox" id="witnessCheckbox" onchange="toggleWitnessFields()">
+                    <label for="witnessCheckbox">A witness is present for this cancellation</label>
+                </div>
+                
+                <div id="witnessFields" style="display: none; margin-top: 15px;">
+                    <div class="field-row">
+                        <span class="field-label">Witness Name:</span>
+                        <input type="text" class="field-input" id="witnessName" placeholder="Full legal name">
+                    </div>
+                    <div class="field-row">
+                        <span class="field-label">Witness Phone:</span>
+                        <input type="tel" class="field-input" id="witnessPhone" placeholder="(XXX) XXX-XXXX">
+                    </div>
+                    <div class="field-row">
+                        <span class="field-label">Witness Email:</span>
+                        <input type="email" class="field-input" id="witnessEmail" placeholder="witness@email.com">
+                    </div>
+                </div>
             </div>
             
             <!-- Signature Section -->
@@ -780,6 +911,26 @@
                 <input type="hidden" id="notes" name="notes">
                 <input type="hidden" id="signature" name="signature">
                 <input type="hidden" id="confirmationNumber" name="confirmationNumber">
+                
+                <!-- Metadata fields for tracking -->
+                <input type="hidden" id="ipAddress" name="ipAddress">
+                <input type="hidden" id="sessionId" name="sessionId">
+                <input type="hidden" id="deviceInfo" name="deviceInfo">
+                <input type="hidden" id="signatureMetadata" name="signatureMetadata">
+                <input type="hidden" id="signatureDateTime" name="signatureDateTime">
+                <input type="hidden" id="signatureTime" name="signatureTime">
+                <input type="hidden" id="browserFingerprint" name="browserFingerprint">
+                <input type="hidden" id="submissionMethod" name="submissionMethod" value="Online Portal">
+                
+                <!-- Legal acknowledgment tracking -->
+                <input type="hidden" id="identityVerificationValue" name="identityVerification">
+                <input type="hidden" id="financialResponsibilityValue" name="financialResponsibility">
+                <input type="hidden" id="electronicSignatureConsentValue" name="electronicSignatureConsent">
+                <input type="hidden" id="dataAccuracyValue" name="dataAccuracy">
+                <input type="hidden" id="finalConfirmationValue" name="finalConfirmation">
+                <input type="hidden" id="dmvAcknowledgmentValue" name="dmvAcknowledgment">
+                <input type="hidden" id="mortgageeAcknowledgmentValue" name="mortgageeAcknowledgment">
+                <input type="hidden" id="witnessPresent" name="witnessPresent">
             </div>
             
             <div class="error-message" id="errorMessage">
@@ -861,16 +1012,129 @@
         </div>
     </div>
 
+    <!-- Signature Pad Library -->
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+    
+    <!-- Main Application Script -->
     <script>
-        // YOUR GOOGLE APPS SCRIPT URL
+        // ============================================
+        // CONFIGURATION
+        // ============================================
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyUsQN44g7sdU1YbNk2yhb0t-ZLzDfxHMHiaHQnu_A_IIMp6nbTY0peexiQ2XJQYtJ9/exec';
         
         let signaturePad;
         let isAutofilled = false;
         let currentConfirmationNumber = '';
+        let currentSessionId = '';
+        let capturedIPAddress = '';
         
-        // Function to generate confirmation number
+        // ============================================
+        // METADATA CAPTURE FUNCTIONS
+        // ============================================
+        
+        // Generate unique session ID
+        function generateSessionId() {
+            const timestamp = Date.now();
+            const random = Math.random().toString(36).substring(2, 9);
+            return `SESSION-${timestamp}-${random}`;
+        }
+        
+        // Get IP address from external service
+        async function getIPAddress() {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                return data.ip;
+            } catch (error) {
+                console.error('Primary IP service failed, trying backup...');
+                try {
+                    const response2 = await fetch('https://ipapi.co/json/');
+                    const data2 = await response2.json();
+                    return data2.ip;
+                } catch (error2) {
+                    console.error('All IP services failed');
+                    return 'Unable to capture';
+                }
+            }
+        }
+        
+        // Capture device information
+        function getDeviceInfo() {
+            const userAgent = navigator.userAgent;
+            let os = 'Unknown OS';
+            let browser = 'Unknown Browser';
+            let device = 'Desktop';
+            
+            // Detect OS
+            if (userAgent.indexOf('Windows NT 10.0') > -1) os = 'Windows 10';
+            else if (userAgent.indexOf('Windows NT 11.0') > -1) os = 'Windows 11';
+            else if (userAgent.indexOf('Mac OS X') > -1) os = 'Mac OS X';
+            else if (userAgent.indexOf('Android') > -1) os = 'Android';
+            else if (userAgent.indexOf('iPhone') > -1) os = 'iOS';
+            else if (userAgent.indexOf('Linux') > -1) os = 'Linux';
+            
+            // Detect Browser
+            if (userAgent.indexOf('Chrome') > -1 && userAgent.indexOf('Edg') === -1) browser = 'Chrome';
+            else if (userAgent.indexOf('Safari') > -1 && userAgent.indexOf('Chrome') === -1) browser = 'Safari';
+            else if (userAgent.indexOf('Firefox') > -1) browser = 'Firefox';
+            else if (userAgent.indexOf('Edg') > -1) browser = 'Edge';
+            
+            // Detect Device Type
+            if (/Mobile|Android|iPhone/i.test(userAgent)) {
+                device = /Tablet|iPad/i.test(userAgent) ? 'Tablet' : 'Mobile';
+            }
+            
+            return `${device} - ${os} - ${browser}`;
+        }
+        
+        // Generate browser fingerprint
+        function generateBrowserFingerprint() {
+            const data = [
+                navigator.userAgent,
+                navigator.language,
+                screen.width + 'x' + screen.height,
+                screen.colorDepth,
+                new Date().getTimezoneOffset(),
+                navigator.hardwareConcurrency || 0
+            ].join('|');
+            
+            let hash = 0;
+            for (let i = 0; i < data.length; i++) {
+                hash = ((hash << 5) - hash) + data.charCodeAt(i);
+                hash = hash & hash;
+            }
+            
+            return 'FP-' + Math.abs(hash).toString(36).toUpperCase();
+        }
+        
+        // Capture comprehensive metadata
+        function captureMetadata() {
+            const now = new Date();
+            return {
+                sessionId: currentSessionId,
+                signatureTime: now.toLocaleTimeString('en-US', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: true,
+                    timeZoneName: 'short'
+                }),
+                signatureDate: now.toLocaleDateString('en-US'),
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                userAgent: navigator.userAgent,
+                screenResolution: `${screen.width}x${screen.height}`,
+                colorDepth: screen.colorDepth,
+                language: navigator.language,
+                platform: navigator.platform,
+                formVersion: 'v2.0.0',
+                entryMode: isAutofilled ? 'Autofilled' : 'Manual'
+            };
+        }
+        
+        // ============================================
+        // CONFIRMATION NUMBER GENERATION
+        // ============================================
+        
         function generateConfirmationNumber() {
             const date = new Date();
             const year = date.getFullYear();
@@ -880,7 +1144,10 @@
             return `CANCEL-${year}${month}${day}-${random}`;
         }
         
-        // Function to get URL parameters
+        // ============================================
+        // URL PARAMETER HANDLING
+        // ============================================
+        
         function getUrlParameters() {
             const params = new URLSearchParams(window.location.search);
             const paramObject = {};
@@ -890,7 +1157,6 @@
             return paramObject;
         }
         
-        // Function to format date for display
         function formatDate(dateStr) {
             if (!dateStr) return '';
             const date = new Date(dateStr + 'T12:00:00');
@@ -900,7 +1166,6 @@
             return `${year}-${month}-${day}`;
         }
         
-        // Function to format date for success display
         function formatDisplayDate(dateStr) {
             if (!dateStr) return '-';
             const date = new Date(dateStr);
@@ -911,23 +1176,22 @@
             });
         }
         
-        // Auto-fill form from URL parameters
+        // ============================================
+        // FORM AUTO-FILL
+        // ============================================
+        
         function autoFillForm() {
             const params = getUrlParameters();
             let fieldsAutoFilled = false;
             
-            // Check if we have any parameters
             if (Object.keys(params).length === 0) {
-                // No parameters - show manual entry notice
                 document.getElementById('manualNotice').style.display = 'block';
                 setupManualEntryHandlers();
                 return;
             }
             
-            // We have parameters - use autofill mode
             isAutofilled = true;
             
-            // Map URL parameters to fields
             const fieldMapping = {
                 'policyNumber': 'display-policyNumber',
                 'insuredName': 'display-insuredName',
@@ -945,7 +1209,6 @@
                 'notes': 'display-notes'
             };
             
-            // Process each parameter
             for (const [urlParam, fieldId] of Object.entries(fieldMapping)) {
                 if (params[urlParam]) {
                     const field = document.getElementById(fieldId);
@@ -956,7 +1219,6 @@
                             field.value = params[urlParam];
                         }
                         
-                        // Make field read-only if it was autofilled
                         field.setAttribute('readonly', true);
                         field.style.backgroundColor = '#f0f0f0';
                         fieldsAutoFilled = true;
@@ -964,7 +1226,6 @@
                 }
             }
             
-            // Store hidden field values for autofilled data
             for (const [key, value] of Object.entries(params)) {
                 const hiddenField = document.getElementById(key);
                 if (hiddenField) {
@@ -972,7 +1233,6 @@
                 }
             }
             
-            // Show notification if fields were auto-filled
             if (fieldsAutoFilled) {
                 document.getElementById('autofillNotice').style.display = 'block';
                 setTimeout(() => {
@@ -988,7 +1248,10 @@
             setupManualEntryHandlers();
         }
         
-        // Setup handlers for manual entry mode
+        // ============================================
+        // MANUAL ENTRY HANDLERS
+        // ============================================
+        
         function setupManualEntryHandlers() {
             // Handle "Other" company selection
             const companySelect = document.getElementById('display-company');
@@ -1016,6 +1279,39 @@
                     }
                 });
             }
+            
+            // Show/hide DMV and Mortgagee notifications based on policy type
+            const policyTypeSelect = document.getElementById('display-policyType');
+            policyTypeSelect.addEventListener('change', function() {
+                const policyType = this.value;
+                
+                // DMV notification for auto policies
+                const dmvNotification = document.getElementById('dmvNotification');
+                const dmvWarning = document.getElementById('dmvWarning');
+                const dmvCheckbox = document.getElementById('dmvAcknowledgment');
+                
+                if (policyType === 'Auto') {
+                    dmvNotification.style.display = 'flex';
+                    dmvWarning.style.display = 'list-item';
+                    dmvCheckbox.setAttribute('required', 'required');
+                } else {
+                    dmvNotification.style.display = 'none';
+                    dmvWarning.style.display = 'none';
+                    dmvCheckbox.removeAttribute('required');
+                }
+                
+                // Mortgagee notification for home policies
+                const mortgageeNotification = document.getElementById('mortgageeNotification');
+                const mortgageeCheckbox = document.getElementById('mortgageeAcknowledgment');
+                
+                if (policyType === 'Home') {
+                    mortgageeNotification.style.display = 'flex';
+                    mortgageeCheckbox.setAttribute('required', 'required');
+                } else {
+                    mortgageeNotification.style.display = 'none';
+                    mortgageeCheckbox.removeAttribute('required');
+                }
+            });
             
             // Sync display fields with hidden fields
             const syncFields = [
@@ -1055,7 +1351,7 @@
                 }
             });
             
-            // Set default date to today if not set
+            // Set minimum date to today
             const cancelDateField = document.getElementById('display-cancelDate');
             if (cancelDateField && !cancelDateField.value) {
                 const today = new Date();
@@ -1064,19 +1360,24 @@
             }
         }
         
-        // Initialize signature pad
-        document.addEventListener('DOMContentLoaded', function() {
-            autoFillForm();
+        // ============================================
+        // WITNESS FIELD TOGGLE
+        // ============================================
+        
+        function toggleWitnessFields() {
+            const witnessFields = document.getElementById('witnessFields');
+            const checkbox = document.getElementById('witnessCheckbox');
+            witnessFields.style.display = checkbox.checked ? 'block' : 'none';
             
-            const canvas = document.getElementById('signature-pad');
-            signaturePad = new SignaturePad(canvas, {
-                backgroundColor: 'rgb(255, 255, 255)',
-                penColor: 'rgb(0, 0, 0)'
+            const witnessInputs = witnessFields.querySelectorAll('input');
+            witnessInputs.forEach(input => {
+                input.required = checkbox.checked;
             });
-            
-            resizeCanvas();
-            window.addEventListener('resize', resizeCanvas);
-        });
+        }
+        
+        // ============================================
+        // SIGNATURE PAD FUNCTIONS
+        // ============================================
         
         function resizeCanvas() {
             const canvas = document.getElementById('signature-pad');
@@ -1093,19 +1394,20 @@
             signaturePad.clear();
         }
         
-        // Function to show loading modal
+        // ============================================
+        // MODAL FUNCTIONS
+        // ============================================
+        
         function showLoadingModal() {
             const overlay = document.getElementById('loadingOverlay');
             overlay.style.display = 'flex';
         }
         
-        // Function to hide loading modal
         function hideLoadingModal() {
             const overlay = document.getElementById('loadingOverlay');
             overlay.style.display = 'none';
         }
         
-        // Function to show success modal
         function showSuccessModal(confirmationNum, policyNum, insuredName, cancelDate) {
             const overlay = document.getElementById('successOverlay');
             
@@ -1118,19 +1420,65 @@
             overlay.style.display = 'flex';
         }
         
-        // Function to close success modal
         function closeSuccessModal() {
             const overlay = document.getElementById('successOverlay');
             overlay.style.display = 'none';
             window.location.reload();
         }
         
-        // Function to print confirmation
         function printConfirmation() {
             window.print();
         }
         
-        // Handle form submission
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('Initializing cancellation form...');
+            
+            // Generate and store session ID
+            currentSessionId = generateSessionId();
+            document.getElementById('sessionId').value = currentSessionId;
+            console.log('Session ID generated:', currentSessionId);
+            
+            // Capture IP address in background
+            getIPAddress().then(ip => {
+                capturedIPAddress = ip;
+                document.getElementById('ipAddress').value = ip;
+                console.log('IP Address captured:', ip);
+            });
+            
+            // Capture device info
+            const deviceInfo = getDeviceInfo();
+            document.getElementById('deviceInfo').value = deviceInfo;
+            console.log('Device info:', deviceInfo);
+            
+            // Generate browser fingerprint
+            const fingerprint = generateBrowserFingerprint();
+            document.getElementById('browserFingerprint').value = fingerprint;
+            console.log('Browser fingerprint:', fingerprint);
+            
+            // Auto-fill form from URL parameters
+            autoFillForm();
+            
+            // Initialize signature pad
+            const canvas = document.getElementById('signature-pad');
+            signaturePad = new SignaturePad(canvas, {
+                backgroundColor: 'rgb(255, 255, 255)',
+                penColor: 'rgb(0, 0, 0)'
+            });
+            
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            
+            console.log('Form initialization complete');
+        });
+        
+        // ============================================
+        // FORM SUBMISSION
+        // ============================================
+        
         document.getElementById('cancellationForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -1149,11 +1497,56 @@
                 return;
             }
             
+            // Validate all required checkboxes
+            const requiredCheckboxes = [
+                'identityVerification',
+                'financialResponsibility',
+                'electronicSignatureConsent',
+                'dataAccuracy',
+                'finalConfirmation'
+            ];
+            
+            for (const checkboxId of requiredCheckboxes) {
+                const checkbox = document.getElementById(checkboxId);
+                if (!checkbox.checked) {
+                    alert('Please acknowledge all required legal statements before submitting.');
+                    checkbox.focus();
+                    return;
+                }
+            }
+            
+            // Validate DMV acknowledgment for auto policies
+            const policyType = document.getElementById('display-policyType').value;
+            if (policyType === 'Auto') {
+                const dmvCheckbox = document.getElementById('dmvAcknowledgment');
+                if (!dmvCheckbox.checked) {
+                    alert('Please acknowledge the DMV notification for auto insurance cancellation.');
+                    dmvCheckbox.focus();
+                    return;
+                }
+            }
+            
+            // Validate mortgagee acknowledgment for home policies
+            if (policyType === 'Home') {
+                const mortgageeCheckbox = document.getElementById('mortgageeAcknowledgment');
+                if (!mortgageeCheckbox.checked) {
+                    alert('Please acknowledge the mortgagee notification for home insurance cancellation.');
+                    mortgageeCheckbox.focus();
+                    return;
+                }
+            }
+            
             // Generate confirmation number
             currentConfirmationNumber = generateConfirmationNumber();
             document.getElementById('confirmationNumber').value = currentConfirmationNumber;
             
-            // Sync all fields one more time before submission
+            // Capture metadata
+            const metadata = captureMetadata();
+            document.getElementById('signatureMetadata').value = JSON.stringify(metadata);
+            document.getElementById('signatureDateTime').value = `${metadata.signatureDate} ${metadata.signatureTime}`;
+            document.getElementById('signatureTime').value = metadata.signatureTime;
+            
+            // Sync all fields before submission
             const syncBeforeSubmit = [
                 { display: 'display-policyNumber', hidden: 'policyNumber' },
                 { display: 'display-insuredName', hidden: 'insuredName' },
@@ -1181,6 +1574,24 @@
                     hiddenField.value = displayField.value;
                 }
             });
+            
+            // Store checkbox values
+            document.getElementById('identityVerificationValue').value = 
+                document.getElementById('identityVerification').checked ? 'true' : 'false';
+            document.getElementById('financialResponsibilityValue').value = 
+                document.getElementById('financialResponsibility').checked ? 'true' : 'false';
+            document.getElementById('electronicSignatureConsentValue').value = 
+                document.getElementById('electronicSignatureConsent').checked ? 'true' : 'false';
+            document.getElementById('dataAccuracyValue').value = 
+                document.getElementById('dataAccuracy').checked ? 'true' : 'false';
+            document.getElementById('finalConfirmationValue').value = 
+                document.getElementById('finalConfirmation').checked ? 'true' : 'false';
+            document.getElementById('dmvAcknowledgmentValue').value = 
+                document.getElementById('dmvAcknowledgment').checked ? 'true' : 'false';
+            document.getElementById('mortgageeAcknowledgmentValue').value = 
+                document.getElementById('mortgageeAcknowledgment').checked ? 'true' : 'false';
+            document.getElementById('witnessPresent').value = 
+                document.getElementById('witnessCheckbox').checked ? 'true' : 'false';
             
             // Get values for confirmation modal
             const policyNumber = document.getElementById('policyNumber').value;
@@ -1212,6 +1623,10 @@
             formData.append('entryMode', isAutofilled ? 'Autofilled' : 'Manual');
             formData.append('confirmationNumber', currentConfirmationNumber);
             
+            // Log submission for debugging
+            console.log('Submitting cancellation with confirmation number:', currentConfirmationNumber);
+            console.log('Metadata:', metadata);
+            
             try {
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
@@ -1219,6 +1634,7 @@
                 });
                 
                 const result = await response.text();
+                console.log('Server response:', result);
                 
                 if (result.includes('Success') || response.ok) {
                     // Hide loading modal
