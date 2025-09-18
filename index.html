@@ -1586,14 +1586,22 @@
             const insuredName = document.getElementById('insuredName').value;
             const cancelDate = document.getElementById('cancelDate').value;
             
-            // Confirm cancellation - use properly formatted date
-            let confirmCancelDate = cancelDate;
-            if (cancelDate && cancelDate.match(/^\d{4}-\d{2}-\d{2}$/)) {
-                confirmCancelDate = cancelDate + 'T12:00:00';
+            // Format the date properly for display in confirmation
+            let displayCancelDate = 'Not specified';
+            if (cancelDate) {
+                // Parse the date string and create a proper date
+                const [year, month, day] = cancelDate.split('-');
+                displayCancelDate = new Date(year, month - 1, day).toLocaleDateString('en-US', {
+                    month: 'long',
+                    day: 'numeric', 
+                    year: 'numeric'
+                });
             }
+            
+            // Confirm cancellation - use properly formatted date
             const confirmMsg = `Are you sure you want to cancel this policy?\n\n` +
                              `Policy: ${policyNumber}\n` +
-                             `Cancellation Date: ${formatDisplayDate(confirmCancelDate)}\n\n` +
+                             `Cancellation Date: ${displayCancelDate}\n\n` +
                              `This action cannot be undone and coverage will end.`;
             
             if (!confirm(confirmMsg)) {
