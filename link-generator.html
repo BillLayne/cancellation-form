@@ -401,13 +401,6 @@
                         <label>Cancellation Date *</label>
                         <input type="date" id="cancelDate" required>
                     </div>
-                    <div class="form-group">
-                        <label>Cancellation Time</label>
-                        <select id="cancelTime">
-                            <option value="12:01 AM (Start of Day)" selected>12:01 AM (Start of Day)</option>
-                            <option value="11:59 PM (End of Day)">11:59 PM (End of Day)</option>
-                        </select>
-                    </div>
                 </div>
                 
                 <div class="row">
@@ -517,7 +510,7 @@
                 effectiveDate: document.getElementById('effectiveDate').value || '',
                 expirationDate: document.getElementById('expirationDate').value || '',
                 cancelDate: cancelDate,
-                cancelTime: document.getElementById('cancelTime').value || '12:01 AM (Start of Day)',
+                cancelTime: '12:01 AM (Start of Day)',
                 reason: reason,
                 notes: document.getElementById('notes').value || ''
             });
@@ -532,10 +525,10 @@
             
             // Generate text message
             const phone = document.getElementById('insuredPhone').value || 'No phone';
-            const textMsg = `Hi ${insuredName.split(' ')[0]},\n\nPer your request, here's the link to sign your ${policyType} policy cancellation form (Policy: ${policyNumber}).\n\nCancellation Date: ${formatDate(cancelDate)} at ${document.getElementById('cancelTime').value}\n\nPlease review and sign:\n${currentGeneratedUrl}\n\nThank you,\nBill Layne Insurance Agency\n336-835-1993`;
+            const textMsg = `Hi ${insuredName.split(' ')[0]},\n\nPer your request, here's the link to sign your ${policyType} policy cancellation form (Policy: ${policyNumber}).\n\nCancellation Date: ${formatDate(cancelDate)} at 12:01 AM (Start of Day)\n\nPlease review and sign:\n${currentGeneratedUrl}\n\nThank you,\nBill Layne Insurance Agency\n336-835-1993`;
             
             // Generate email template
-            const emailMsg = `Subject: Action Required - Sign Cancellation Request for Policy ${policyNumber}\n\nDear ${insuredName},\n\nPer your request to cancel your ${policyType} policy, please complete the electronic cancellation form.\n\nPolicy Details:\n• Policy Number: ${policyNumber}\n• Insurance Company: ${company}\n• Cancellation Date: ${formatDate(cancelDate)}\n• Cancellation Time: ${document.getElementById('cancelTime').value}\n• Reason: ${reason}\n\nPlease click the link below to review and sign your cancellation request:\n\n${currentGeneratedUrl}\n\nIMPORTANT: Your coverage will terminate on the date and time shown above. Please ensure you have replacement coverage if needed.\n\nIf you have any questions or wish to discuss alternatives, please call us at 336-835-1993.\n\nThank you,\nBill Layne Insurance Agency\n1283 N Bridge St, Elkin NC 28621\nSave@BillLayneInsurance.com`;
+            const emailMsg = `Subject: Action Required - Sign Cancellation Request for Policy ${policyNumber}\n\nDear ${insuredName},\n\nPer your request to cancel your ${policyType} policy, please complete the electronic cancellation form.\n\nPolicy Details:\n• Policy Number: ${policyNumber}\n• Insurance Company: ${company}\n• Cancellation Date: ${formatDate(cancelDate)}\n• Cancellation Time: 12:01 AM (Start of Day)\n• Reason: ${reason}\n\nPlease click the link below to review and sign your cancellation request:\n\n${currentGeneratedUrl}\n\nIMPORTANT: Your coverage will terminate on the date and time shown above. Please ensure you have replacement coverage if needed.\n\nIf you have any questions or wish to discuss alternatives, please call us at 336-835-1993.\n\nThank you,\nBill Layne Insurance Agency\n1283 N Bridge St, Elkin NC 28621\nSave@BillLayneInsurance.com`;
             
             document.getElementById('textMessage').textContent = textMsg;
             document.getElementById('emailMessage').textContent = emailMsg;
@@ -572,7 +565,6 @@
             const policyNumber = document.getElementById('policyNumber').value;
             const policyType = document.getElementById('policyType').value;
             const cancelDate = document.getElementById('cancelDate').value;
-            const cancelTime = document.getElementById('cancelTime').value;
             const reason = document.getElementById('reason').value;
             const company = document.getElementById('company').value;
             
@@ -594,7 +586,7 @@ Policy Details:
 • Policy Number: ${policyNumber}
 • Insurance Company: ${company}
 • Cancellation Date: ${formatDate(cancelDate)}
-• Cancellation Time: ${cancelTime}
+• Cancellation Time: 12:01 AM (Start of Day)
 • Reason: ${reason}
 
 Please click the link below to review and sign your cancellation request:
