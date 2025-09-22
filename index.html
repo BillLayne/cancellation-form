@@ -679,6 +679,7 @@
                 <div class="field-row">
                     <span class="field-label">Insurance Company: <span class="required-mark">*</span></span>
                     <select class="field-input" id="display-company" required>
+                        <option value="">Select company...</option>
                         <option value="Nationwide">Nationwide</option>
                         <option value="Progressive">Progressive</option>
                         <option value="National General">National General</option>
@@ -733,13 +734,15 @@
                 <div class="field-row">
                     <span class="field-label">Cancellation Time: <span class="required-mark">*</span></span>
                     <select class="field-input" id="display-cancelTime" required>
-                        <option value="12:01 AM (Start of Day)" selected>12:01 AM (Start of Day)</option>
-                        <option value="11:59 PM (End of Day)">11:59 PM (End of Day)</option>
+                        <option value="">Select time...</option>
+                        <option value="12:01 AM">12:01 AM (Start of Day)</option>
+                        <option value="11:59 PM">11:59 PM (End of Day)</option>
                     </select>
                 </div>
                 <div class="field-row">
                     <span class="field-label">Reason: <span class="required-mark">*</span></span>
                     <select class="field-input" id="display-reason" required>
+                        <option value="">Select reason...</option>
                         <option value="Sold Vehicle">Sold Vehicle</option>
                         <option value="Moved Out of State">Moved Out of State</option>
                         <option value="Found Better Rate">Found Better Rate</option>
@@ -806,6 +809,15 @@
                         I understand the North Carolina DMV will be notified of this auto insurance 
                         cancellation and I may face license/registration suspension without replacement coverage.
                         (N.C.G.S. § 20-309: Driving without insurance is a Class 1 misdemeanor)
+                    </label>
+                </div>
+                
+                <!-- Mortgagee Notification (for property) -->
+                <div class="legal-checkbox-group" id="mortgageeNotification" style="display: none;">
+                    <input type="checkbox" id="mortgageeAcknowledgment">
+                    <label for="mortgageeAcknowledgment">
+                        I acknowledge my mortgage company will be notified and I may be in violation 
+                        of my mortgage agreement without replacement coverage.
                     </label>
                 </div>
                 
@@ -897,6 +909,7 @@
                 <input type="hidden" id="dataAccuracyValue" name="dataAccuracy">
                 <input type="hidden" id="finalConfirmationValue" name="finalConfirmation">
                 <input type="hidden" id="dmvAcknowledgmentValue" name="dmvAcknowledgment">
+                <input type="hidden" id="mortgageeAcknowledgmentValue" name="mortgageeAcknowledgment">
                 <input type="hidden" id="witnessPresent" name="witnessPresent" value="false">
             </div>
             
@@ -1255,7 +1268,7 @@
                 });
             }
             
-            // Show/hide DMV notifications based on policy type
+            // Show/hide DMV and Mortgagee notifications based on policy type
             const policyTypeSelect = document.getElementById('display-policyType');
             policyTypeSelect.addEventListener('change', function() {
                 const policyType = this.value;
@@ -1268,12 +1281,23 @@
                 if (policyType === 'Auto') {
                     dmvNotification.style.display = 'flex';
                     dmvWarning.style.display = 'list-item';
-                    // DMV acknowledgment is now optional
-                    dmvCheckbox.removeAttribute('required');
+                    dmvCheckbox.setAttribute('required', 'required');
                 } else {
                     dmvNotification.style.display = 'none';
                     dmvWarning.style.display = 'none';
                     dmvCheckbox.removeAttribute('required');
+                }
+                
+                // Mortgagee notification for home policies
+                const mortgageeNotification = document.getElementById('mortgageeNotification');
+                const mortgageeCheckbox = document.getElementById('mortgageeAcknowledgment');
+                
+                if (policyType === 'Home') {
+                    mortgageeNotification.style.display = 'flex';
+                    mortgageeCheckbox.setAttribute('required', 'required');
+                } else {
+                    mortgageeNotification.style.display = 'none';
+                    mortgageeCheckbox.removeAttribute('required');
                 }
             });
             
@@ -1481,8 +1505,26 @@
                 }
             }
             
-            // DMV acknowledgment is now optional for auto policies
-            // Removed validation that was blocking submission
+            // Validate DMV acknowledgment for auto policies
+            const policyType = document.getElementById('display-policyType').value;
+            if (policyType === 'Auto') {
+                const dmvCheckbox = document.getElementById('dmvAcknowledgment');
+                if (!dmvCheckbox.checked) {
+                    alert('Please acknowledge the DMV notification for auto insurance cancellation.');
+                    dmvCheckbox.focus();
+                    return;
+                }
+            }
+            
+            // Validate mortgagee acknowledgment for home policies
+            if (policyType === 'Home') {
+                const mortgageeCheckbox = document.getElementById('mortgageeAcknowledgment');
+                if (!mortgageeCheckbox.checked) {
+                    alert('Please acknowledge the mortgagee notification for home insurance cancellation.');
+                    mortgageeCheckbox.focus();
+                    return;
+                }
+            }
             
             // Generate confirmation number
             currentConfirmationNumber = generateConfirmationNumber();
@@ -1536,6 +1578,8 @@
                 document.getElementById('finalConfirmation').checked ? 'true' : 'false';
             document.getElementById('dmvAcknowledgmentValue').value = 
                 document.getElementById('dmvAcknowledgment').checked ? 'true' : 'false';
+            document.getElementById('mortgageeAcknowledgmentValue').value = 
+                document.getElementById('mortgageeAcknowledgment').checked ? 'true' : 'false';
             
             // Get values for confirmation modal
             const policyNumber = document.getElementById('policyNumber').value;
