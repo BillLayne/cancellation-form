@@ -1268,7 +1268,8 @@
                 if (policyType === 'Auto') {
                     dmvNotification.style.display = 'flex';
                     dmvWarning.style.display = 'list-item';
-                    dmvCheckbox.setAttribute('required', 'required');
+                    // DMV acknowledgment is now optional
+                    dmvCheckbox.removeAttribute('required');
                 } else {
                     dmvNotification.style.display = 'none';
                     dmvWarning.style.display = 'none';
@@ -1480,16 +1481,8 @@
                 }
             }
             
-            // Validate DMV acknowledgment for auto policies
-            const policyType = document.getElementById('display-policyType').value;
-            if (policyType === 'Auto') {
-                const dmvCheckbox = document.getElementById('dmvAcknowledgment');
-                if (!dmvCheckbox.checked) {
-                    alert('Please acknowledge the DMV notification for auto insurance cancellation.');
-                    dmvCheckbox.focus();
-                    return;
-                }
-            }
+            // DMV acknowledgment is now optional for auto policies
+            // Removed validation that was blocking submission
             
             // Generate confirmation number
             currentConfirmationNumber = generateConfirmationNumber();
