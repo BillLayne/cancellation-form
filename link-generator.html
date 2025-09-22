@@ -404,9 +404,8 @@
                     <div class="form-group">
                         <label>Cancellation Time</label>
                         <select id="cancelTime">
-                            <option value="12:01 AM">12:01 AM</option>
-                            <option value="12:01 PM" selected>12:01 PM</option>
-                            <option value="11:59 PM">11:59 PM</option>
+                            <option value="12:01 AM (Start of Day)" selected>12:01 AM (Start of Day)</option>
+                            <option value="11:59 PM (End of Day)">11:59 PM (End of Day)</option>
                         </select>
                     </div>
                 </div>
@@ -416,13 +415,12 @@
                         <label>Reason for Cancellation *</label>
                         <select id="reason" required>
                             <option value="">Select Reason...</option>
-                            <option value="Insured Request">Insured Request</option>
-                            <option value="Non-Payment">Non-Payment</option>
-                            <option value="Rewritten">Rewritten with Another Carrier</option>
-                            <option value="Not Taken">Coverage Not Taken</option>
-                            <option value="Sold Property">Sold Property</option>
-                            <option value="Sold Vehicle">Sold Vehicle</option>
-                            <option value="No Longer Need">No Longer Need Coverage</option>
+                            <option value="Sold Vehicle" selected>Sold Vehicle</option>
+                            <option value="Moved Out of State">Moved Out of State</option>
+                            <option value="Found Better Rate">Found Better Rate</option>
+                            <option value="No Longer Need Coverage">No Longer Need Coverage</option>
+                            <option value="Financial Hardship">Financial Hardship</option>
+                            <option value="Dissatisfied with Service">Dissatisfied with Service</option>
                             <option value="Other">Other</option>
                         </select>
                     </div>
@@ -519,7 +517,7 @@
                 effectiveDate: document.getElementById('effectiveDate').value || '',
                 expirationDate: document.getElementById('expirationDate').value || '',
                 cancelDate: cancelDate,
-                cancelTime: document.getElementById('cancelTime').value || '12:01 PM',
+                cancelTime: document.getElementById('cancelTime').value || '12:01 AM (Start of Day)',
                 reason: reason,
                 notes: document.getElementById('notes').value || ''
             });
