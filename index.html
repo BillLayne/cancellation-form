@@ -799,11 +799,11 @@
                     </label>
                 </div>
                 
-                <!-- DMV Notification (for auto) -->
+                <!-- DMV Notification (for auto) - OPTIONAL NOW -->
                 <div class="legal-checkbox-group" id="dmvNotification" style="display: none;">
                     <input type="checkbox" id="dmvAcknowledgment">
                     <label for="dmvAcknowledgment">
-                        I understand the North Carolina DMV will be notified of this auto insurance 
+                        <em>(Optional)</em> I understand the North Carolina DMV will be notified of this auto insurance 
                         cancellation and I may face license/registration suspension without replacement coverage.
                         (N.C.G.S. § 20-309: Driving without insurance is a Class 1 misdemeanor)
                     </label>
@@ -1268,11 +1268,10 @@
                 if (policyType === 'Auto') {
                     dmvNotification.style.display = 'flex';
                     dmvWarning.style.display = 'list-item';
-                    dmvCheckbox.setAttribute('required', 'required');
+                    // DMV checkbox is now optional - not required
                 } else {
                     dmvNotification.style.display = 'none';
                     dmvWarning.style.display = 'none';
-                    dmvCheckbox.removeAttribute('required');
                 }
             });
             
@@ -1462,7 +1461,7 @@
                 return;
             }
             
-            // Validate all required checkboxes
+            // Validate all required checkboxes (but NOT DMV for auto anymore)
             const requiredCheckboxes = [
                 'identityVerification',
                 'financialResponsibility',
@@ -1480,16 +1479,7 @@
                 }
             }
             
-            // Validate DMV acknowledgment for auto policies
-            const policyType = document.getElementById('display-policyType').value;
-            if (policyType === 'Auto') {
-                const dmvCheckbox = document.getElementById('dmvAcknowledgment');
-                if (!dmvCheckbox.checked) {
-                    alert('Please acknowledge the DMV notification for auto insurance cancellation.');
-                    dmvCheckbox.focus();
-                    return;
-                }
-            }
+            // DMV acknowledgment is now OPTIONAL - no validation needed
             
             // Generate confirmation number
             currentConfirmationNumber = generateConfirmationNumber();
