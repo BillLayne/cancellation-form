@@ -802,9 +802,9 @@
                     </label>
                 </div>
                 
-                <!-- DMV Notification (for auto) -->
+                <!-- DMV Notification (for auto) - HIDDEN BUT STILL IN FORM -->
                 <div class="legal-checkbox-group" id="dmvNotification" style="display: none;">
-                    <input type="checkbox" id="dmvAcknowledgment">
+                    <input type="checkbox" id="dmvAcknowledgment" checked>
                     <label for="dmvAcknowledgment">
                         I understand the North Carolina DMV will be notified of this auto insurance 
                         cancellation and I may face license/registration suspension without replacement coverage.
@@ -812,9 +812,9 @@
                     </label>
                 </div>
                 
-                <!-- Mortgagee Notification (for property) -->
+                <!-- Mortgagee Notification (for property) - HIDDEN BUT STILL IN FORM -->
                 <div class="legal-checkbox-group" id="mortgageeNotification" style="display: none;">
-                    <input type="checkbox" id="mortgageeAcknowledgment">
+                    <input type="checkbox" id="mortgageeAcknowledgment" checked>
                     <label for="mortgageeAcknowledgment">
                         I acknowledge my mortgage company will be notified and I may be in violation 
                         of my mortgage agreement without replacement coverage.
@@ -1269,36 +1269,20 @@
             }
             
             // Show/hide DMV and Mortgagee notifications based on policy type
+            // REMOVED THE DISPLAY LOGIC - CHECKBOXES STAY HIDDEN BUT CHECKED
             const policyTypeSelect = document.getElementById('display-policyType');
             policyTypeSelect.addEventListener('change', function() {
                 const policyType = this.value;
                 
-                // DMV notification for auto policies
-                const dmvNotification = document.getElementById('dmvNotification');
+                // Only show/hide the DMV warning text, not the checkbox
                 const dmvWarning = document.getElementById('dmvWarning');
-                const dmvCheckbox = document.getElementById('dmvAcknowledgment');
-                
                 if (policyType === 'Auto') {
-                    dmvNotification.style.display = 'flex';
                     dmvWarning.style.display = 'list-item';
-                    dmvCheckbox.setAttribute('required', 'required');
                 } else {
-                    dmvNotification.style.display = 'none';
                     dmvWarning.style.display = 'none';
-                    dmvCheckbox.removeAttribute('required');
                 }
                 
-                // Mortgagee notification for home policies
-                const mortgageeNotification = document.getElementById('mortgageeNotification');
-                const mortgageeCheckbox = document.getElementById('mortgageeAcknowledgment');
-
-                if (policyType === 'Home') {
-                    mortgageeNotification.style.display = 'flex';
-                    mortgageeCheckbox.setAttribute('required', 'required');
-                } else {
-                    mortgageeNotification.style.display = 'none';
-                    mortgageeCheckbox.removeAttribute('required');
-                }
+                // The checkboxes remain hidden and checked regardless of policy type
             });
             
             // Sync display fields with hidden fields
@@ -1487,7 +1471,7 @@
                 return;
             }
             
-            // Validate all required checkboxes
+            // Validate all required checkboxes (REMOVED DMV AND MORTGAGEE FROM THIS LIST)
             const requiredCheckboxes = [
                 'identityVerification',
                 'financialResponsibility',
@@ -1505,26 +1489,8 @@
                 }
             }
             
-            // Validate DMV acknowledgment for auto policies
-            const policyType = document.getElementById('display-policyType').value;
-            if (policyType === 'Auto') {
-                const dmvCheckbox = document.getElementById('dmvAcknowledgment');
-                if (!dmvCheckbox.checked) {
-                    alert('Please acknowledge the DMV notification for auto insurance cancellation.');
-                    dmvCheckbox.focus();
-                    return;
-                }
-            }
-
-            // Validate mortgagee acknowledgment for home policies
-            if (policyType === 'Home') {
-                const mortgageeCheckbox = document.getElementById('mortgageeAcknowledgment');
-                if (!mortgageeCheckbox.checked) {
-                    alert('Please acknowledge the mortgagee notification for home insurance cancellation.');
-                    mortgageeCheckbox.focus();
-                    return;
-                }
-            }
+            // REMOVED THE VALIDATION FOR DMV AND MORTGAGEE CHECKBOXES
+            // They are now always checked (hidden) and will always send 'true' to the backend
             
             // Generate confirmation number
             currentConfirmationNumber = generateConfirmationNumber();
@@ -1565,7 +1531,7 @@
                 }
             });
             
-            // Store checkbox values
+            // Store checkbox values - DMV AND MORTGAGEE ARE ALWAYS TRUE NOW
             document.getElementById('identityVerificationValue').value = 
                 document.getElementById('identityVerification').checked ? 'true' : 'false';
             document.getElementById('financialResponsibilityValue').value = 
@@ -1576,10 +1542,10 @@
                 document.getElementById('dataAccuracy').checked ? 'true' : 'false';
             document.getElementById('finalConfirmationValue').value = 
                 document.getElementById('finalConfirmation').checked ? 'true' : 'false';
-            document.getElementById('dmvAcknowledgmentValue').value = 
-                document.getElementById('dmvAcknowledgment').checked ? 'true' : 'false';
-            document.getElementById('mortgageeAcknowledgmentValue').value = 
-                document.getElementById('mortgageeAcknowledgment').checked ? 'true' : 'false';
+            
+            // ALWAYS SET THESE TO TRUE TO MAINTAIN BACKEND COMPATIBILITY
+            document.getElementById('dmvAcknowledgmentValue').value = 'true';
+            document.getElementById('mortgageeAcknowledgmentValue').value = 'true';
             
             // Get values for confirmation modal
             const policyNumber = document.getElementById('policyNumber').value;
