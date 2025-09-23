@@ -1323,17 +1323,14 @@
                 }
             });
             
-            // Set minimum date to today
-            const cancelDateField = document.getElementById('display-cancelDate');
-            if (cancelDateField && !cancelDateField.value) {
-                const today = new Date();
-                // Use local date string to avoid timezone issues
-                const year = today.getFullYear();
-                const month = String(today.getMonth() + 1).padStart(2, '0');
-                const day = String(today.getDate()).padStart(2, '0');
-                const formattedDate = `${year}-${month}-${day}`;
-                cancelDateField.setAttribute('min', formattedDate);
-            }
+        // Allow any date to be selected (past or future)
+        // No minimum date restriction since customers may need to backdate cancellations
+        const cancelDateField = document.getElementById('display-cancelDate');
+        // Optional: You could set a reasonable minimum date far in the past if needed
+        // For example, to prevent dates before 2020:
+        // if (cancelDateField && !cancelDateField.value) {
+         //     cancelDateField.setAttribute('min', '2020-01-01');
+         // }
         }
         
         // ============================================
