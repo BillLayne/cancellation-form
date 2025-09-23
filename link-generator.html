@@ -208,11 +208,20 @@
         }
         
         .btn-text {
+            background: #25D366;
+            color: white;
+        }
+        
+        .btn-text:hover {
+            background: #128C7E;
+        }
+        
+        .btn-agencymatrix {
             background: #ffc107;
             color: #212529;
         }
         
-        .btn-text:hover {
+        .btn-agencymatrix:hover {
             background: #e0a800;
         }
         
@@ -282,6 +291,118 @@
             display: none;
         }
         
+        /* SMS Modal Styles */
+        .sms-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .sms-modal-content {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        
+        .sms-modal-header {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2a5298;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .sms-phone-input {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .sms-message-preview {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.5;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .sms-modal-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .btn-send-sms {
+            background: #25D366;
+            color: white;
+        }
+        
+        .btn-send-sms:hover {
+            background: #128C7E;
+        }
+        
+        .btn-cancel-sms {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-cancel-sms:hover {
+            background: #5a6268;
+        }
+        
+        .sms-status {
+            display: none;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .sms-status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .sms-status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .sms-loader {
+            display: none;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #25D366;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 10px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
         @media (max-width: 600px) {
             .row {
                 grid-template-columns: 1fr;
@@ -321,7 +442,7 @@
                     <li>Double-check cancellation date and time</li>
                     <li>Add any special notes (optional)</li>
                     <li>Click "Generate Link"</li>
-                    <li>Send link to customer for signature</li>
+                    <li>Send link to customer via Email or SMS</li>
                     <li class="warning">⚠️ This creates a cancellation request!</li>
                 </ol>
             </div>
@@ -471,10 +592,14 @@
                     <button class="btn-action btn-email" onclick="emailToCustomer()">
                         📧 Email Customer
                     </button>
-                    <button class="btn-action btn-text" onclick="sendToAgencyMatrix()">
+                    <button class="btn-action btn-text" onclick="openSMSModal()">
                         📱 Text Customer
                     </button>
                 </div>
+                
+                <button class="btn-action btn-agencymatrix" style="width: 100%; margin-top: 10px;" onclick="sendToAgencyMatrix()">
+                    💬 Send via Agency Matrix
+                </button>
                 
                 <button class="btn-action" style="width: 100%; margin-top: 10px; background: #17a2b8; color: white;" onclick="testLink()">
                     🔍 Test Link (Opens in New Tab)
@@ -503,8 +628,47 @@
         </div>
     </div>
     
+    <!-- SMS Modal -->
+    <div class="sms-modal" id="smsModal">
+        <div class="sms-modal-content">
+            <div class="sms-modal-header">📱 Send Cancellation Link via SMS</div>
+            
+            <label for="smsPhoneNumber" style="font-weight: 600; margin-bottom: 5px; display: block;">
+                Phone Number:
+            </label>
+            <input type="tel" 
+                   id="smsPhoneNumber" 
+                   class="sms-phone-input" 
+                   placeholder="(336) 555-1234"
+                   maxlength="14">
+            
+            <label style="font-weight: 600; margin-bottom: 5px; display: block;">
+                Message Preview:
+            </label>
+            <div class="sms-message-preview" id="smsPreview">
+                Loading message...
+            </div>
+            
+            <div class="sms-loader" id="smsLoader"></div>
+            <div class="sms-status" id="smsStatus"></div>
+            
+            <div class="sms-modal-buttons">
+                <button class="btn btn-send-sms" onclick="sendSMS()">
+                    📤 Send SMS
+                </button>
+                <button class="btn btn-cancel-sms" onclick="closeSMSModal()">
+                    ✖️ Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+    
     <script>
+        // YOUR GOOGLE APPS SCRIPT URL
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyUsQN44g7sdU1YbNk2yhb0t-ZLzDfxHMHiaHQnu_A_IIMp6nbTY0peexiQ2XJQYtJ9/exec';
+        
         let currentGeneratedUrl = '';
+        let currentSMSMessage = '';
         
         function generateLink() {
             // Get form values
@@ -553,32 +717,129 @@
             document.getElementById('testNotice').style.display = 'block';
             
             // Generate text message
-            const phone = document.getElementById('insuredPhone').value || 'No phone';
-            const textMsg = `Hi ${insuredName.split(' ')[0]},\n\nPer your request, here's the link to sign your ${policyType} policy cancellation form (Policy: ${policyNumber}).\n\nCancellation Date: ${formatDate(cancelDate)} at ${cancelTime}\n\nPlease review and sign:\n${currentGeneratedUrl}\n\nThank you,\nBill Layne Insurance Agency\n336-835-1993`;
+            const firstName = insuredName.split(' ')[0];
+            currentSMSMessage = `Hi ${firstName}, Per your request, here's the link to sign your ${policyType} policy cancellation form (Policy: ${policyNumber}). ` +
+                               `Cancellation Date: ${formatDate(cancelDate)} at ${cancelTime}. ` +
+                               `Please review and sign: ${currentGeneratedUrl} ` +
+                               `Thank you, Bill Layne Insurance 336-835-1993`;
             
             // Generate email template
             const emailMsg = `Subject: Action Required - Sign Cancellation Request for Policy ${policyNumber}\n\nDear ${insuredName},\n\nPer your request to cancel your ${policyType} policy, please complete the electronic cancellation form.\n\nPolicy Details:\n• Policy Number: ${policyNumber}\n• Insurance Company: ${company}\n• Cancellation Date: ${formatDate(cancelDate)}\n• Cancellation Time: ${cancelTime}\n• Reason: ${reason}\n\nPlease click the link below to review and sign your cancellation request:\n\n${currentGeneratedUrl}\n\nIMPORTANT: Your coverage will terminate on the date and time shown above. Please ensure you have replacement coverage if needed.\n\nIf you have any questions or wish to discuss alternatives, please call us at 336-835-1993.\n\nThank you,\nBill Layne Insurance Agency\n1283 N Bridge St, Elkin NC 28621\nSave@BillLayneInsurance.com`;
             
-            document.getElementById('textMessage').textContent = textMsg;
+            document.getElementById('textMessage').textContent = currentSMSMessage;
             document.getElementById('emailMessage').textContent = emailMsg;
             document.getElementById('textTemplate').style.display = 'block';
             document.getElementById('emailTemplate').style.display = 'block';
             
             // Scroll to results
             document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
-            
-            // Log the generated parameters for debugging
-            console.log('Generated URL Parameters:', {
-                company: company,
-                cancelDate: cancelDate,
-                cancelTime: cancelTime,
-                policyType: policyType
-            });
         }
         
         function formatDate(dateString) {
             const date = new Date(dateString + 'T00:00:00');
             return date.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' });
+        }
+        
+        function openSMSModal() {
+            const phone = document.getElementById('insuredPhone').value;
+            
+            if (!currentGeneratedUrl) {
+                alert('Please generate a link first');
+                return;
+            }
+            
+            // Set up modal
+            document.getElementById('smsModal').style.display = 'flex';
+            document.getElementById('smsPhoneNumber').value = phone || '';
+            document.getElementById('smsPreview').textContent = currentSMSMessage;
+            document.getElementById('smsStatus').style.display = 'none';
+            document.getElementById('smsLoader').style.display = 'none';
+            
+            // If phone was in the form, auto-format it
+            if (phone) {
+                formatPhoneNumber(document.getElementById('smsPhoneNumber'));
+            }
+        }
+        
+        function closeSMSModal() {
+            document.getElementById('smsModal').style.display = 'none';
+            document.getElementById('smsStatus').style.display = 'none';
+        }
+        
+        async function sendSMS() {
+            const phoneInput = document.getElementById('smsPhoneNumber');
+            const phone = phoneInput.value.replace(/\D/g, '');
+            
+            if (phone.length !== 10) {
+                showSMSStatus('Please enter a valid 10-digit phone number', 'error');
+                phoneInput.focus();
+                return;
+            }
+            
+            if (!confirm(`Send cancellation link SMS to ${phoneInput.value}?`)) {
+                return;
+            }
+            
+            // Show loader
+            document.getElementById('smsLoader').style.display = 'block';
+            document.getElementById('smsStatus').style.display = 'none';
+            
+            try {
+                // Prepare the data
+                const formData = new FormData();
+                formData.append('action', 'send_cancellation_sms');
+                formData.append('to', phone);
+                formData.append('message', currentSMSMessage);
+                formData.append('customerName', document.getElementById('insuredName').value);
+                formData.append('policyNumber', document.getElementById('policyNumber').value);
+                
+                // Send to Google Apps Script
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                // Hide loader
+                document.getElementById('smsLoader').style.display = 'none';
+                
+                if (result.success) {
+                    showSMSStatus('✅ SMS sent successfully!', 'success');
+                    setTimeout(() => {
+                        closeSMSModal();
+                        showCopyStatus('✅ SMS sent to customer!');
+                    }, 2000);
+                } else {
+                    showSMSStatus('Failed to send SMS: ' + (result.error || 'Unknown error'), 'error');
+                }
+                
+            } catch (error) {
+                console.error('SMS Error:', error);
+                document.getElementById('smsLoader').style.display = 'none';
+                showSMSStatus('Failed to send SMS. Please try again.', 'error');
+            }
+        }
+        
+        function showSMSStatus(message, type) {
+            const statusDiv = document.getElementById('smsStatus');
+            statusDiv.textContent = message;
+            statusDiv.className = 'sms-status ' + type;
+            statusDiv.style.display = 'block';
+        }
+        
+        function formatPhoneNumber(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value.length > 0) {
+                if (value.length <= 3) {
+                    value = '(' + value;
+                } else if (value.length <= 6) {
+                    value = '(' + value.slice(0, 3) + ') ' + value.slice(3);
+                } else {
+                    value = '(' + value.slice(0, 3) + ') ' + value.slice(3, 6) + '-' + value.slice(6, 10);
+                }
+            }
+            input.value = value;
         }
         
         function testLink() {
@@ -715,7 +976,7 @@ Save@BillLayneInsurance.com`;
                 return;
             }
             
-            const textMessage = document.getElementById('textMessage').textContent;
+            const textMessage = currentSMSMessage;
             
             navigator.clipboard.writeText(textMessage).then(function() {
                 showCopyStatus('✔ Text copied! Opening Agency Matrix - paste the message there');
@@ -745,6 +1006,7 @@ Save@BillLayneInsurance.com`;
                 document.getElementById('resultSection').style.display = 'none';
                 document.getElementById('testNotice').style.display = 'none';
                 currentGeneratedUrl = '';
+                currentSMSMessage = '';
                 window.scrollTo({ top: 0, behavior: 'smooth' });
                 
                 // Reset to today's date after clearing
@@ -759,19 +1021,13 @@ Save@BillLayneInsurance.com`;
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('cancelDate').value = today;
             
-            // Auto-format phone number
+            // Auto-format phone numbers
             document.getElementById('insuredPhone').addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\D/g, '');
-                if (value.length > 0) {
-                    if (value.length <= 3) {
-                        value = '(' + value;
-                    } else if (value.length <= 6) {
-                        value = '(' + value.slice(0, 3) + ') ' + value.slice(3);
-                    } else {
-                        value = '(' + value.slice(0, 3) + ') ' + value.slice(3, 6) + '-' + value.slice(6, 10);
-                    }
-                }
-                e.target.value = value;
+                formatPhoneNumber(e.target);
+            });
+            
+            document.getElementById('smsPhoneNumber').addEventListener('input', function(e) {
+                formatPhoneNumber(e.target);
             });
         });
     </script>
