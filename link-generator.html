@@ -644,64 +644,72 @@
         }
         
         async function sendSMS() {
-            const phone = document.getElementById('insuredPhone').value;
-            const insuredName = document.getElementById('insuredName').value;
+    const phone = document.getElementById('insuredPhone').value;
+    const insuredName = document.getElementById('insuredName').value;
+    
+    if (!phone) {
+        alert('Please enter a phone number to send text message');
+        document.getElementById('insuredPhone').focus();
+        return;
+    }
+    
+    const phoneDigits = phone.replace(/\D/g, '');
+    
+    if (phoneDigits.length < 10) {
+        alert('Please enter a complete 10-digit phone number');
+        return;
+    }
+    
+    // Show loading state
+    const smsButton = document.getElementById('smsButton');
+    const originalButtonText = smsButton.textContent;
+    smsButton.textContent = '📤 Sending...';
+    smsButton.disabled = true;
+    
+    // Hide previous status messages
+    document.getElementById('smsSuccess').style.display = 'none';
+    document.getElementById('smsError').style.display = 'none';
+    
+    try {
+        // Send SMS via Google Apps Script using POST method
+        const formData = new FormData();
+        formData.append('action', 'sendSMS');
+        formData.append('to', phoneDigits);
+        formData.append('name', insuredName);
+        formData.append('message', currentTextMessage);
+        
+        const response = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: formData
+        });
+        
+        const result = await response.json();
+        
+        if (result.status === 'Success') {
+            // Show success message
+            document.getElementById('smsSuccessMessage').textContent = 
+                `Text message sent to ${insuredName.split(' ')[0]} at ${phone}`;
+            document.getElementById('smsSuccess').style.display = 'block';
             
-            if (!phone) {
-                alert('Please enter a phone number to send text message');
-                document.getElementById('insuredPhone').focus();
-                return;
-            }
-            
-            const phoneDigits = phone.replace(/\D/g, '');
-            
-            if (phoneDigits.length < 10) {
-                alert('Please enter a complete 10-digit phone number');
-                return;
-            }
-            
-            // Show loading state
-            const smsButton = document.getElementById('smsButton');
-            const originalButtonText = smsButton.textContent;
-            smsButton.textContent = '📤 Sending...';
-            smsButton.disabled = true;
-            
-            // Hide previous status messages
-            document.getElementById('smsSuccess').style.display = 'none';
-            document.getElementById('smsError').style.display = 'none';
-            
-            try {
-                // Send SMS via Google Apps Script
-                const smsUrl = `${SCRIPT_URL}?action=sendSMS&to=${encodeURIComponent(phoneDigits)}&name=${encodeURIComponent(insuredName)}&message=${encodeURIComponent(currentTextMessage)}`;
-                
-                const response = await fetch(smsUrl);
-                const result = await response.json();
-                
-                if (result.status === 'Success') {
-                    // Show success message
-                    document.getElementById('smsSuccessMessage').textContent = 
-                        `Text message sent to ${insuredName.split(' ')[0]} at ${phone}`;
-                    document.getElementById('smsSuccess').style.display = 'block';
-                    
-                    showCopyStatus(`✔ SMS sent successfully!`);
-                } else {
-                    // Show error message
-                    document.getElementById('smsErrorMessage').textContent = 
-                        result.message || 'SMS service temporarily unavailable';
-                    document.getElementById('smsError').style.display = 'block';
-                }
-            } catch (error) {
-                console.error('Error sending SMS:', error);
-                // Show error message
-                document.getElementById('smsErrorMessage').textContent = 
-                    'Error sending text message. You can copy the message and use Agency Matrix instead.';
-                document.getElementById('smsError').style.display = 'block';
-            } finally {
-                // Restore button state
-                smsButton.textContent = originalButtonText;
-                smsButton.disabled = false;
-            }
+            showCopyStatus(`✔ SMS sent successfully!`);
+        } else {
+            // Show error message
+            document.getElementById('smsErrorMessage').textContent = 
+                result.message || 'SMS service temporarily unavailable';
+            document.getElementById('smsError').style.display = 'block';
         }
+    } catch (error) {
+        console.error('Error sending SMS:', error);
+        // Show error message
+        document.getElementById('smsErrorMessage').textContent = 
+            'Error sending text message. You can copy the message and use Agency Matrix instead.';
+        document.getElementById('smsError').style.display = 'block';
+    } finally {
+        // Restore button state
+        smsButton.textContent = originalButtonText;
+        smsButton.disabled = false;
+    }
+}
         
         async function fallbackToAgencyMatrix() {
             const phone = document.getElementById('insuredPhone').value;
