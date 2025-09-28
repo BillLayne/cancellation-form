@@ -4,7 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Policy Cancellation Request - Bill Layne Insurance</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-dark: #1a5f7a;
+            --primary: #457b9d;
+            --accent: #a8dadc;
+            --light: #f8f9fa;
+            --text-dark: #2c3e50;
+            --radius: 12px;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+            --shadow-lg: 0 20px 60px rgba(0,0,0,0.15);
+        }
+        
         * {
             margin: 0;
             padding: 0;
@@ -12,8 +26,8 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
             min-height: 100vh;
             padding: 20px 10px;
         }
@@ -22,13 +36,13 @@
             max-width: 700px;
             margin: 0 auto;
             background: white;
-            border-radius: 10px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
             overflow: hidden;
         }
         
         .acord-header {
-            background: #f8f9fa;
+            background: var(--light);
             padding: 15px 20px;
             border-bottom: 2px solid #dee2e6;
             text-align: center;
@@ -47,7 +61,7 @@
         }
         
         .header {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
             color: white;
             padding: 25px 20px;
             text-align: center;
@@ -56,6 +70,7 @@
         .header h1 {
             font-size: 22px;
             margin-bottom: 10px;
+            font-weight: 600;
         }
         
         .header p {
@@ -70,15 +85,16 @@
         .section {
             margin-bottom: 25px;
             padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            border-left: 4px solid #667eea;
+            background: var(--light);
+            border-radius: var(--radius);
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s ease;
         }
         
         .section-title {
             font-size: 16px;
             font-weight: 600;
-            color: #2a5298;
+            color: var(--primary-dark);
             margin-bottom: 15px;
             text-transform: uppercase;
         }
@@ -92,7 +108,7 @@
         
         .field-label {
             font-weight: 600;
-            color: #495057;
+            color: var(--text-dark);
             font-size: 13px;
             min-width: 140px;
         }
@@ -101,9 +117,9 @@
             flex: 1;
             font-size: 14px;
             color: #212529;
-            padding: 8px 12px;
+            padding: 10px 12px;
             background: white;
-            border-radius: 5px;
+            border-radius: var(--radius);
             border: 1px solid #dee2e6;
         }
         
@@ -111,17 +127,19 @@
             flex: 1;
             font-size: 14px;
             color: #212529;
-            padding: 8px 12px;
+            padding: 10px 12px;
             background: white;
-            border-radius: 5px;
+            border-radius: var(--radius);
             border: 1px solid #dee2e6;
             font-family: inherit;
+            min-height: 44px;
+            transition: all 0.3s ease;
         }
         
         .field-input:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(69, 123, 157, 0.1);
         }
         
         select.field-input {
@@ -131,9 +149,10 @@
         .warning-box {
             background: #fff3cd;
             border: 2px solid #ffc107;
-            border-radius: 8px;
+            border-radius: var(--radius);
             padding: 15px;
             margin: 20px 0;
+            transition: all 0.3s ease;
         }
         
         .warning-box h3 {
@@ -163,9 +182,10 @@
         .legal-acknowledgments-section {
             margin: 30px 0;
             padding: 20px;
-            background: #f0f4ff;
-            border-radius: 10px;
-            border: 2px solid #667eea;
+            background: linear-gradient(135deg, #f0f4ff 0%, var(--accent) 100%);
+            border-radius: var(--radius);
+            border: 2px solid var(--primary);
+            transition: all 0.3s ease;
         }
         
         .legal-checkbox-group {
@@ -173,19 +193,22 @@
             display: flex;
             align-items: start;
             gap: 10px;
+            transition: background-color 0.3s ease;
+            padding: 8px;
+            border-radius: 8px;
         }
         
         .legal-checkbox-group input[type="checkbox"] {
             margin-top: 3px;
-            min-width: 18px;
-            height: 18px;
+            min-width: 20px;
+            height: 20px;
             cursor: pointer;
         }
         
         .legal-checkbox-group label {
             flex: 1;
             font-size: 14px;
-            color: #495057;
+            color: var(--text-dark);
             cursor: pointer;
             line-height: 1.5;
         }
@@ -193,32 +216,33 @@
         .signature-section {
             margin: 30px 0;
             padding: 20px;
-            background: #f0f4ff;
-            border-radius: 10px;
-            border: 2px solid #667eea;
+            background: linear-gradient(135deg, #f0f4ff 0%, var(--accent) 100%);
+            border-radius: var(--radius);
+            border: 2px solid var(--primary);
+            transition: all 0.3s ease;
         }
         
         .signature-title {
             font-size: 16px;
             font-weight: 600;
-            color: #2a5298;
+            color: var(--primary-dark);
             margin-bottom: 15px;
             text-align: center;
         }
         
         .legal-text {
             font-size: 13px;
-            color: #495057;
+            color: var(--text-dark);
             line-height: 1.6;
             margin-bottom: 20px;
             padding: 15px;
             background: white;
-            border-radius: 5px;
+            border-radius: var(--radius);
         }
         
         #signature-pad {
             border: 2px dashed #dee2e6;
-            border-radius: 8px;
+            border-radius: var(--radius);
             display: block;
             width: 100%;
             height: 180px;
@@ -236,7 +260,7 @@
         
         .signature-label label {
             font-weight: 600;
-            color: #333;
+            color: var(--text-dark);
             font-size: 14px;
         }
         
@@ -254,12 +278,35 @@
         .btn {
             padding: 12px 25px;
             border: none;
-            border-radius: 8px;
+            border-radius: var(--radius);
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
             text-align: center;
+            font-family: inherit;
+        }
+        
+        .btn-undo {
+            background: #ffc107;
+            color: #333;
+            flex: 1;
+        }
+        
+        .btn-undo:hover {
+            background: #ffb300;
+            transform: translateY(-2px);
+        }
+        
+        .btn-type {
+            background: #17a2b8;
+            color: white;
+            flex: 1;
+        }
+        
+        .btn-type:hover {
+            background: #138496;
+            transform: translateY(-2px);
         }
         
         .btn-clear {
@@ -270,6 +317,7 @@
         
         .btn-clear:hover {
             background: #c82333;
+            transform: translateY(-2px);
         }
         
         .btn-submit {
@@ -279,6 +327,7 @@
             margin-top: 20px;
             font-size: 18px;
             padding: 15px;
+            box-shadow: var(--shadow);
         }
         
         .btn-submit:hover {
@@ -290,6 +339,212 @@
             background: #6c757d;
             cursor: not-allowed;
             transform: none;
+        }
+        
+        /* Mobile-optimized footer navigation */
+        .mobile-footer-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 2px solid var(--primary-dark);
+            padding: 10px;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+        
+        @media (max-width: 600px) {
+            .mobile-footer-nav { 
+                display: block; 
+            }
+            
+            body { 
+                padding-bottom: 120px; 
+            }
+            
+            .field-row {
+                flex-direction: column;
+            }
+            
+            .field-label {
+                margin-bottom: 5px;
+            }
+            
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            /* Larger touch targets for mobile */
+            input, select, textarea {
+                min-height: 44px;
+                font-size: 16px !important; /* Prevents zoom on iOS */
+                padding: 12px !important;
+            }
+            
+            .legal-checkbox-group input[type="checkbox"] {
+                min-width: 24px;
+                min-height: 24px;
+            }
+            
+            .success-actions {
+                flex-direction: column;
+            }
+            
+            .btn-print, .btn-close {
+                width: 100%;
+            }
+        }
+        
+        .step-indicators {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 10px;
+            gap: 5px;
+        }
+        
+        .step {
+            flex: 1;
+            padding: 8px 5px;
+            border-radius: 20px;
+            font-size: 11px;
+            background: var(--light);
+            text-align: center;
+            transition: all 0.3s;
+            font-weight: 600;
+            border: 2px solid transparent;
+        }
+        
+        .step.active {
+            background: var(--primary-dark);
+            color: white;
+            transform: scale(1.05);
+            border-color: var(--primary);
+        }
+        
+        .step.completed {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-continue {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-continue:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(26, 95, 122, 0.3);
+        }
+        
+        /* Auto-save indicators */
+        .save-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            z-index: 9999;
+            transition: opacity 0.3s;
+            box-shadow: var(--shadow);
+        }
+        
+        .restore-notification {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            animation: slideDown 0.5s;
+            box-shadow: var(--shadow);
+        }
+        
+        .restore-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .restore-actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .btn-restore, .btn-discard {
+            padding: 8px 20px;
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-restore {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-restore:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+        
+        .btn-discard {
+            background: white;
+            color: var(--primary-dark);
+        }
+        
+        .btn-discard:hover {
+            background: var(--light);
+            transform: translateY(-2px);
+        }
+        
+        /* Notification styles */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: var(--radius);
+            font-weight: 600;
+            z-index: 10000;
+            transition: opacity 0.3s;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .notification-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .notification-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
         
         /* Enhanced Loading Modal */
@@ -308,12 +563,12 @@
         
         .loading-modal {
             background: white;
-            border-radius: 15px;
+            border-radius: var(--radius);
             padding: 40px;
             max-width: 400px;
             width: 90%;
             text-align: center;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            box-shadow: var(--shadow-lg);
             animation: slideUp 0.3s ease-out;
         }
         
@@ -330,7 +585,7 @@
         
         .loading-icon {
             font-size: 48px;
-            color: #667eea;
+            color: var(--primary);
             margin-bottom: 20px;
             animation: pulse 1.5s infinite;
         }
@@ -343,13 +598,13 @@
         .loading-title {
             font-size: 24px;
             font-weight: bold;
-            color: #2a5298;
+            color: var(--primary-dark);
             margin-bottom: 15px;
         }
         
         .loading-message {
             font-size: 16px;
-            color: #495057;
+            color: var(--text-dark);
             line-height: 1.5;
             margin-bottom: 20px;
         }
@@ -357,7 +612,7 @@
         .loading-warning {
             background: #fff3cd;
             border: 1px solid #ffc107;
-            border-radius: 8px;
+            border-radius: var(--radius);
             padding: 10px;
             font-size: 14px;
             color: #856404;
@@ -368,7 +623,7 @@
         
         .spinner {
             border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
+            border-top: 3px solid var(--primary);
             border-radius: 50%;
             width: 40px;
             height: 40px;
@@ -397,12 +652,12 @@
         
         .success-modal {
             background: white;
-            border-radius: 15px;
+            border-radius: var(--radius);
             padding: 40px;
             max-width: 500px;
             width: 90%;
             text-align: center;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            box-shadow: var(--shadow-lg);
             animation: bounceIn 0.5s ease-out;
         }
         
@@ -440,8 +695,8 @@
         }
         
         .confirmation-box {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            border-radius: var(--radius);
             padding: 20px;
             margin: 20px 0;
             color: white;
@@ -468,15 +723,15 @@
         }
         
         .success-details {
-            background: #f8f9fa;
-            border-radius: 10px;
+            background: var(--light);
+            border-radius: var(--radius);
             padding: 20px;
             margin: 20px 0;
             text-align: left;
         }
         
         .success-details h4 {
-            color: #2a5298;
+            color: var(--primary-dark);
             font-size: 16px;
             margin-bottom: 15px;
         }
@@ -510,7 +765,7 @@
             color: white;
             padding: 12px 25px;
             border: none;
-            border-radius: 8px;
+            border-radius: var(--radius);
             font-size: 16px;
             cursor: pointer;
             transition: all 0.3s;
@@ -525,7 +780,7 @@
             color: white;
             padding: 12px 25px;
             border: none;
-            border-radius: 8px;
+            border-radius: var(--radius);
             font-size: 16px;
             cursor: pointer;
             transition: all 0.3s;
@@ -543,7 +798,7 @@
             font-size: 14px;
             display: none;
             margin-bottom: 20px;
-            border-radius: 8px;
+            border-radius: var(--radius);
             animation: slideDown 0.5s ease-out;
         }
         
@@ -555,19 +810,8 @@
             font-size: 14px;
             display: none;
             margin-bottom: 20px;
-            border-radius: 8px;
+            border-radius: var(--radius);
             animation: slideDown 0.5s ease-out;
-        }
-        
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
         
         /* Hidden form fields for data storage */
@@ -584,7 +828,7 @@
             background: #dc3545;
             color: white;
             padding: 15px;
-            border-radius: 10px;
+            border-radius: var(--radius);
             margin: 20px 0;
             text-align: center;
             font-weight: 600;
@@ -592,7 +836,7 @@
         }
         
         .footer {
-            background: #f8f9fa;
+            background: var(--light);
             padding: 20px;
             text-align: center;
             border-top: 1px solid #dee2e6;
@@ -602,28 +846,6 @@
             color: #6c757d;
             font-size: 12px;
             line-height: 1.5;
-        }
-        
-        @media (max-width: 600px) {
-            .field-row {
-                flex-direction: column;
-            }
-            
-            .field-label {
-                margin-bottom: 5px;
-            }
-            
-            .header h1 {
-                font-size: 20px;
-            }
-            
-            .success-actions {
-                flex-direction: column;
-            }
-            
-            .btn-print, .btn-close {
-                width: 100%;
-            }
         }
     </style>
 </head>
@@ -649,7 +871,7 @@
             </div>
             
             <!-- Producer Information (Pre-filled) -->
-            <div class="section">
+            <div class="section" data-step="1">
                 <div class="section-title">Producer Information</div>
                 <div class="field-row">
                     <span class="field-label">Agency:</span>
@@ -666,7 +888,7 @@
             </div>
             
             <!-- Policy Information -->
-            <div class="section">
+            <div class="section" data-step="1">
                 <div class="section-title">Policy to be Cancelled</div>
                 <div class="field-row">
                     <span class="field-label">Policy Number: <span class="required-mark">*</span></span>
@@ -708,7 +930,7 @@
             </div>
             
             <!-- Customer Contact Information -->
-            <div class="section" id="contactSection">
+            <div class="section" id="contactSection" data-step="2">
                 <div class="section-title">Contact Information</div>
                 <div class="field-row">
                     <span class="field-label">Address:</span>
@@ -725,7 +947,7 @@
             </div>
             
             <!-- Cancellation Details -->
-            <div class="section">
+            <div class="section" data-step="2">
                 <div class="section-title">Cancellation Details</div>
                 <div class="field-row">
                     <span class="field-label">Cancellation Date: <span class="required-mark">*</span></span>
@@ -759,7 +981,7 @@
             </div>
             
             <!-- Warning Box with New Legal Language -->
-            <div class="warning-box">
+            <div class="warning-box" data-step="3">
                 <h3><span class="warning-icon">⚠️</span>Important Notice</h3>
                 <ul>
                     <li>Coverage will terminate on the date and time shown above</li>
@@ -781,7 +1003,7 @@
             </div>
             
             <!-- Legal Acknowledgments Section -->
-            <div class="legal-acknowledgments-section">
+            <div class="legal-acknowledgments-section" data-step="3">
                 <div class="section-title">LEGAL ACKNOWLEDGMENTS & CERTIFICATIONS</div>
                 
                 <!-- Identity Verification -->
@@ -850,7 +1072,7 @@
             </div>
             
             <!-- Signature Section -->
-            <div class="signature-section">
+            <div class="signature-section" data-step="4">
                 <div class="signature-title">ELECTRONIC SIGNATURE REQUIRED</div>
                 
                 <div class="legal-text">
@@ -869,7 +1091,9 @@
                 </div>
                 <canvas id="signature-pad"></canvas>
                 <div class="signature-buttons">
-                    <button type="button" class="btn btn-clear" onclick="clearSignature()">Clear Signature</button>
+                    <button type="button" class="btn btn-undo" id="undoBtn">↶ Undo</button>
+                    <button type="button" class="btn btn-type" id="typeBtn">⌨ Type Name</button>
+                    <button type="button" class="btn btn-clear" id="clearBtn">Clear All</button>
                 </div>
             </div>
             
@@ -931,6 +1155,17 @@
                 336-835-1993 | Docs@BillLayneInsurance.com
             </p>
         </div>
+    </div>
+
+    <!-- Mobile Footer Navigation -->
+    <div class="mobile-footer-nav">
+        <div class="step-indicators">
+            <span class="step active" data-step="1">Info</span>
+            <span class="step" data-step="2">Details</span>
+            <span class="step" data-step="3">Legal</span>
+            <span class="step" data-step="4">Sign</span>
+        </div>
+        <button class="btn-continue" onclick="nextStep()">Continue</button>
     </div>
 
     <!-- Enhanced Loading Modal -->
@@ -1002,11 +1237,451 @@
         // ============================================
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwMdTHpwHOhl2DhP_kiWGwxhXbi2UmPIlqxGSiSZYHX_zkbxWCyq_OyykrNzjbtFi9j/exec';
         
-        let signaturePad;
+        let enhancedSignature = null;
+        let formAutoSave = null;
         let isAutofilled = false;
         let currentConfirmationNumber = '';
         let currentSessionId = '';
         let capturedIPAddress = '';
+        let currentStep = 1;
+        const totalSteps = 4;
+        
+        // ============================================
+        // ENHANCED SIGNATURE PAD CLASS
+        // ============================================
+        class EnhancedSignaturePad {
+            constructor() {
+                this.canvas = document.getElementById('signature-pad');
+                this.signaturePad = null;
+                this.signatureHistory = [];
+                this.historyStep = -1;
+                this.typedSignature = '';
+                this.init();
+            }
+            
+            init() {
+                // Initialize SignaturePad with mobile-optimized settings
+                this.signaturePad = new SignaturePad(this.canvas, {
+                    backgroundColor: 'rgb(255, 255, 255)',
+                    penColor: 'rgb(0, 0, 50)',
+                    minWidth: 1,
+                    maxWidth: 3,
+                    throttle: 0, // No throttling for smoother mobile experience
+                    minDistance: 2,
+                    velocityFilterWeight: 0.7
+                });
+                
+                // Add event listeners
+                this.signaturePad.addEventListener('beginStroke', () => {
+                    this.saveState();
+                });
+                
+                this.signaturePad.addEventListener('endStroke', () => {
+                    this.saveState();
+                });
+                
+                // Add touch event optimization for mobile
+                this.canvas.addEventListener('touchstart', (e) => {
+                    e.preventDefault(); // Prevent scrolling while signing
+                }, { passive: false });
+                
+                // Add button event listeners
+                document.getElementById('undoBtn').addEventListener('click', () => this.undo());
+                document.getElementById('typeBtn').addEventListener('click', () => this.typeSignature());
+                document.getElementById('clearBtn').addEventListener('click', () => this.clear());
+                
+                this.resizeCanvas();
+                window.addEventListener('resize', () => this.resizeCanvas());
+            }
+            
+            resizeCanvas() {
+                const ratio = Math.max(window.devicePixelRatio || 1, 1);
+                this.canvas.width = this.canvas.offsetWidth * ratio;
+                this.canvas.height = this.canvas.offsetHeight * ratio;
+                this.canvas.getContext('2d').scale(ratio, ratio);
+                
+                // Restore signature if it exists
+                if (this.signatureHistory.length > 0 && this.historyStep >= 0) {
+                    this.restoreSignature(this.signatureHistory[this.historyStep]);
+                }
+            }
+            
+            saveState() {
+                this.historyStep++;
+                if (this.historyStep < this.signatureHistory.length) {
+                    this.signatureHistory.length = this.historyStep;
+                }
+                this.signatureHistory.push(this.signaturePad.toDataURL());
+            }
+            
+            undo() {
+                if (this.historyStep > 0) {
+                    this.historyStep--;
+                    this.restoreSignature(this.signatureHistory[this.historyStep]);
+                } else if (this.historyStep === 0) {
+                    this.clear();
+                }
+            }
+            
+            restoreSignature(dataUrl) {
+                const img = new Image();
+                img.src = dataUrl;
+                img.onload = () => {
+                    const ctx = this.canvas.getContext('2d');
+                    ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                    ctx.drawImage(img, 0, 0);
+                };
+            }
+            
+            clear() {
+                this.signaturePad.clear();
+                this.signatureHistory = [];
+                this.historyStep = -1;
+                this.typedSignature = '';
+            }
+            
+            typeSignature() {
+                const name = prompt("Type your full legal name (this will serve as your electronic signature):");
+                if (name && name.trim()) {
+                    this.typedSignature = name.trim();
+                    const ctx = this.canvas.getContext('2d');
+                    
+                    // Clear canvas and draw typed signature
+                    this.clear();
+                    ctx.font = 'italic 30px "Brush Script MT", cursive';
+                    ctx.fillStyle = '#000033';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(name, this.canvas.width / 2, this.canvas.height / 2);
+                    
+                    this.saveState();
+                    return true;
+                }
+                return false;
+            }
+            
+            isEmpty() {
+                return this.signaturePad.isEmpty() && !this.typedSignature;
+            }
+            
+            getSignatureData() {
+                return {
+                    image: this.signaturePad.toDataURL(),
+                    svg: this.signaturePad.toDataURL('image/svg+xml'),
+                    typed: this.typedSignature,
+                    timestamp: new Date().toISOString(),
+                    isEmpty: this.isEmpty()
+                };
+            }
+            
+            toDataURL() {
+                return this.signaturePad.toDataURL();
+            }
+        }
+        
+        // ============================================
+        // AUTO-SAVE CLASS
+        // ============================================
+        class FormAutoSave {
+            constructor() {
+                this.storageKey = 'cancellationFormDraft';
+                this.autoSaveInterval = 30000; // 30 seconds
+                this.init();
+            }
+            
+            init() {
+                // Check for existing draft on load
+                this.checkForDraft();
+                
+                // Set up auto-save
+                this.startAutoSave();
+                
+                // Save on significant events
+                this.attachEventListeners();
+            }
+            
+            getFormData() {
+                const formData = {
+                    // Basic fields
+                    policyNumber: document.getElementById('display-policyNumber')?.value || '',
+                    insuredName: document.getElementById('display-insuredName')?.value || '',
+                    insuredAddress: document.getElementById('display-insuredAddress')?.value || '',
+                    insuredPhone: document.getElementById('display-insuredPhone')?.value || '',
+                    insuredEmail: document.getElementById('display-insuredEmail')?.value || '',
+                    company: document.getElementById('display-company')?.value || '',
+                    policyType: document.getElementById('display-policyType')?.value || '',
+                    cancelDate: document.getElementById('display-cancelDate')?.value || '',
+                    cancelTime: document.getElementById('display-cancelTime')?.value || '',
+                    reason: document.getElementById('display-reason')?.value || '',
+                    notes: document.getElementById('display-notes')?.value || '',
+                    
+                    // Checkboxes
+                    identityVerification: document.getElementById('identityVerification')?.checked || false,
+                    financialResponsibility: document.getElementById('financialResponsibility')?.checked || false,
+                    electronicSignatureConsent: document.getElementById('electronicSignatureConsent')?.checked || false,
+                    dataAccuracy: document.getElementById('dataAccuracy')?.checked || false,
+                    finalConfirmation: document.getElementById('finalConfirmation')?.checked || false,
+                    
+                    // Metadata
+                    timestamp: new Date().toISOString(),
+                    currentStep: currentStep,
+                    isAutofilled: isAutofilled
+                };
+                
+                return formData;
+            }
+            
+            save() {
+                try {
+                    const data = this.getFormData();
+                    localStorage.setItem(this.storageKey, JSON.stringify(data));
+                    this.showSaveIndicator();
+                    return true;
+                } catch (e) {
+                    console.error('Failed to save form:', e);
+                    return false;
+                }
+            }
+            
+            restore(data) {
+                // Restore form fields
+                Object.keys(data).forEach(key => {
+                    const field = document.getElementById('display-' + key) || document.getElementById(key);
+                    if (field) {
+                        if (field.type === 'checkbox') {
+                            field.checked = data[key];
+                        } else {
+                            field.value = data[key];
+                        }
+                    }
+                });
+                
+                // Restore step if on mobile
+                if (window.innerWidth <= 600 && data.currentStep) {
+                    showStep(data.currentStep);
+                }
+            }
+            
+            checkForDraft() {
+                const savedData = localStorage.getItem(this.storageKey);
+                if (savedData) {
+                    try {
+                        const data = JSON.parse(savedData);
+                        const age = Date.now() - new Date(data.timestamp).getTime();
+                        
+                        // Only offer to restore if less than 24 hours old
+                        if (age < 86400000) {
+                            const timeAgo = this.formatTimeAgo(age);
+                            
+                            // Create restore notification
+                            const notification = document.createElement('div');
+                            notification.className = 'restore-notification';
+                            notification.innerHTML = `
+                                <div class="restore-content">
+                                    <p>📝 Found a saved draft from ${timeAgo}</p>
+                                    <div class="restore-actions">
+                                        <button onclick="formAutoSave.restoreDraft()" class="btn-restore">Resume</button>
+                                        <button onclick="formAutoSave.discardDraft()" class="btn-discard">Start Fresh</button>
+                                    </div>
+                                </div>
+                            `;
+                            
+                            document.body.insertBefore(notification, document.body.firstChild);
+                            
+                            // Store data for potential restoration
+                            this.pendingData = data;
+                        }
+                    } catch (e) {
+                        console.error('Failed to parse saved draft:', e);
+                        localStorage.removeItem(this.storageKey);
+                    }
+                }
+            }
+            
+            restoreDraft() {
+                if (this.pendingData) {
+                    this.restore(this.pendingData);
+                    document.querySelector('.restore-notification')?.remove();
+                    
+                    // Show success message
+                    this.showNotification('✅ Draft restored successfully!', 'success');
+                }
+            }
+            
+            discardDraft() {
+                localStorage.removeItem(this.storageKey);
+                document.querySelector('.restore-notification')?.remove();
+                this.pendingData = null;
+            }
+            
+            formatTimeAgo(ms) {
+                const seconds = Math.floor(ms / 1000);
+                const minutes = Math.floor(seconds / 60);
+                const hours = Math.floor(minutes / 60);
+                
+                if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+                if (minutes > 0) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+                return 'just now';
+            }
+            
+            startAutoSave() {
+                // Clear any existing interval
+                if (this.interval) clearInterval(this.interval);
+                
+                // Set up new interval
+                this.interval = setInterval(() => {
+                    if (!document.getElementById('successOverlay').style.display || 
+                        document.getElementById('successOverlay').style.display === 'none') {
+                        this.save();
+                    }
+                }, this.autoSaveInterval);
+            }
+            
+            attachEventListeners() {
+                // Save on blur for all inputs
+                document.querySelectorAll('input, select, textarea').forEach(field => {
+                    field.addEventListener('blur', () => this.save());
+                });
+                
+                // Save on checkbox changes
+                document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.addEventListener('change', () => this.save());
+                });
+            }
+            
+            showSaveIndicator() {
+                // Remove existing indicator
+                const existing = document.querySelector('.save-indicator');
+                if (existing) existing.remove();
+                
+                // Create new indicator
+                const indicator = document.createElement('div');
+                indicator.className = 'save-indicator';
+                indicator.innerHTML = '✓ Saved';
+                document.body.appendChild(indicator);
+                
+                // Fade out after 2 seconds
+                setTimeout(() => {
+                    indicator.style.opacity = '0';
+                    setTimeout(() => indicator.remove(), 300);
+                }, 2000);
+            }
+            
+            showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = `notification notification-${type}`;
+                notification.textContent = message;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
+            }
+        }
+        
+        // ============================================
+        // STEP NAVIGATION FUNCTIONS
+        // ============================================
+        function initializeStepNavigation() {
+            // Show only current step on mobile
+            if (window.innerWidth <= 600) {
+                showStep(1);
+            }
+        }
+        
+        function showStep(step) {
+            // Get all sections and their steps
+            const sections = document.querySelectorAll('.section, .warning-box, .legal-acknowledgments-section, .signature-section');
+            
+            sections.forEach(el => {
+                const elStep = parseInt(el.getAttribute('data-step'));
+                if (elStep === step || window.innerWidth > 600) {
+                    el.style.display = elStep === step || window.innerWidth > 600 ? 'block' : 'none';
+                } else {
+                    el.style.display = 'none';
+                }
+            });
+            
+            // Hide submit button on mobile until last step
+            if (window.innerWidth <= 600) {
+                document.getElementById('submitBtn').style.display = step === totalSteps ? 'block' : 'none';
+            }
+            
+            // Update step indicators
+            document.querySelectorAll('.step').forEach((indicator, index) => {
+                if (index + 1 < step) {
+                    indicator.classList.add('completed');
+                    indicator.classList.remove('active');
+                } else if (index + 1 === step) {
+                    indicator.classList.add('active');
+                    indicator.classList.remove('completed');
+                } else {
+                    indicator.classList.remove('active', 'completed');
+                }
+            });
+            
+            // Update button text
+            const continueBtn = document.querySelector('.btn-continue');
+            if (continueBtn) {
+                continueBtn.textContent = step === totalSteps ? 'Submit' : 'Continue';
+            }
+            
+            currentStep = step;
+            
+            // Scroll to top on step change
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        function nextStep() {
+            if (currentStep === totalSteps) {
+                // Submit form
+                document.getElementById('cancellationForm').dispatchEvent(new Event('submit'));
+            } else {
+                // Validate current step before proceeding
+                if (validateStep(currentStep)) {
+                    showStep(currentStep + 1);
+                    // Save after step change
+                    if (formAutoSave) formAutoSave.save();
+                }
+            }
+        }
+        
+        function validateStep(step) {
+            let isValid = true;
+            const requiredFields = {
+                1: ['display-policyNumber', 'display-insuredName', 'display-company', 'display-policyType'],
+                2: ['display-cancelDate', 'display-cancelTime', 'display-reason'],
+                3: ['identityVerification', 'financialResponsibility', 'electronicSignatureConsent', 'dataAccuracy', 'finalConfirmation'],
+                4: []
+            };
+            
+            if (requiredFields[step]) {
+                requiredFields[step].forEach(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    if (field) {
+                        if (field.type === 'checkbox' && !field.checked) {
+                            isValid = false;
+                            field.parentElement.style.backgroundColor = '#ffe6e6';
+                            setTimeout(() => {
+                                field.parentElement.style.backgroundColor = '';
+                            }, 3000);
+                        } else if (field.type !== 'checkbox' && !field.value) {
+                            isValid = false;
+                            field.style.borderColor = '#dc3545';
+                            setTimeout(() => {
+                                field.style.borderColor = '';
+                            }, 3000);
+                        }
+                    }
+                });
+            }
+            
+            if (!isValid) {
+                alert('Please complete all required fields before continuing.');
+            }
+            
+            return isValid;
+        }
         
         // ============================================
         // METADATA CAPTURE FUNCTIONS
@@ -1106,7 +1781,7 @@
                 colorDepth: screen.colorDepth,
                 language: navigator.language,
                 platform: navigator.platform,
-                formVersion: 'v2.0.0',
+                formVersion: 'v3.0.0',
                 entryMode: isAutofilled ? 'Autofilled' : 'Manual'
             };
         }
@@ -1268,8 +1943,7 @@
                 });
             }
             
-            // Show/hide DMV and Mortgagee notifications based on policy type
-            // REMOVED THE DISPLAY LOGIC - CHECKBOXES STAY HIDDEN BUT CHECKED
+            // Show/hide DMV warning based on policy type
             const policyTypeSelect = document.getElementById('display-policyType');
             policyTypeSelect.addEventListener('change', function() {
                 const policyType = this.value;
@@ -1281,8 +1955,6 @@
                 } else {
                     dmvWarning.style.display = 'none';
                 }
-                
-                // The checkboxes remain hidden and checked regardless of policy type
             });
             
             // Sync display fields with hidden fields
@@ -1322,34 +1994,6 @@
                     });
                 }
             });
-            
-        // Allow any date to be selected (past or future)
-        // No minimum date restriction since customers may need to backdate cancellations
-        const cancelDateField = document.getElementById('display-cancelDate');
-        // Optional: You could set a reasonable minimum date far in the past if needed
-        // For example, to prevent dates before 2020:
-        // if (cancelDateField && !cancelDateField.value) {
-         //     cancelDateField.setAttribute('min', '2020-01-01');
-         // }
-        }
-        
-        // ============================================
-        // SIGNATURE PAD FUNCTIONS
-        // ============================================
-        
-        function resizeCanvas() {
-            const canvas = document.getElementById('signature-pad');
-            const ratio = Math.max(window.devicePixelRatio || 1, 1);
-            canvas.width = canvas.offsetWidth * ratio;
-            canvas.height = canvas.offsetHeight * ratio;
-            canvas.getContext('2d').scale(ratio, ratio);
-            if (signaturePad) {
-                signaturePad.clear();
-            }
-        }
-        
-        function clearSignature() {
-            signaturePad.clear();
         }
         
         // ============================================
@@ -1389,6 +2033,11 @@
             });
             
             overlay.style.display = 'flex';
+            
+            // Clear the auto-save after successful submission
+            if (formAutoSave) {
+                localStorage.removeItem(formAutoSave.storageKey);
+            }
         }
         
         function closeSuccessModal() {
@@ -1406,7 +2055,16 @@
         // ============================================
         
         document.addEventListener('DOMContentLoaded', async function() {
-            console.log('Initializing cancellation form...');
+            console.log('Initializing enhanced cancellation form...');
+            
+            // Initialize step navigation for mobile
+            initializeStepNavigation();
+            
+            // Initialize enhanced signature pad
+            enhancedSignature = new EnhancedSignaturePad();
+            
+            // Initialize auto-save
+            formAutoSave = new FormAutoSave();
             
             // Generate and store session ID
             currentSessionId = generateSessionId();
@@ -1433,16 +2091,6 @@
             // Auto-fill form from URL parameters
             autoFillForm();
             
-            // Initialize signature pad
-            const canvas = document.getElementById('signature-pad');
-            signaturePad = new SignaturePad(canvas, {
-                backgroundColor: 'rgb(255, 255, 255)',
-                penColor: 'rgb(0, 0, 0)'
-            });
-            
-            resizeCanvas();
-            window.addEventListener('resize', resizeCanvas);
-            
             console.log('Form initialization complete');
         });
         
@@ -1454,8 +2102,11 @@
             e.preventDefault();
             
             // Validate signature
-            if (signaturePad.isEmpty()) {
+            if (enhancedSignature.isEmpty()) {
                 alert('Please provide your signature before submitting the cancellation request.');
+                if (window.innerWidth <= 600) {
+                    showStep(4);
+                }
                 return;
             }
             
@@ -1468,7 +2119,7 @@
                 return;
             }
             
-            // Validate all required checkboxes (REMOVED DMV AND MORTGAGEE FROM THIS LIST)
+            // Validate all required checkboxes
             const requiredCheckboxes = [
                 'identityVerification',
                 'financialResponsibility',
@@ -1481,13 +2132,13 @@
                 const checkbox = document.getElementById(checkboxId);
                 if (!checkbox.checked) {
                     alert('Please acknowledge all required legal statements before submitting.');
+                    if (window.innerWidth <= 600) {
+                        showStep(3);
+                    }
                     checkbox.focus();
                     return;
                 }
             }
-            
-            // REMOVED THE VALIDATION FOR DMV AND MORTGAGEE CHECKBOXES
-            // They are now always checked (hidden) and will always send 'true' to the backend
             
             // Generate confirmation number
             currentConfirmationNumber = generateConfirmationNumber();
@@ -1528,7 +2179,7 @@
                 }
             });
             
-            // Store checkbox values - DMV AND MORTGAGEE ARE ALWAYS TRUE NOW
+            // Store checkbox values
             document.getElementById('identityVerificationValue').value = 
                 document.getElementById('identityVerification').checked ? 'true' : 'false';
             document.getElementById('financialResponsibilityValue').value = 
@@ -1571,8 +2222,9 @@
                 return;
             }
             
-            // Get signature data
-            document.getElementById('signature').value = signaturePad.toDataURL();
+            // Get signature data with enhanced metadata
+            const signatureData = enhancedSignature.getSignatureData();
+            document.getElementById('signature').value = signatureData.image;
             
             // Show loading modal
             showLoadingModal();
@@ -1585,10 +2237,12 @@
             formData.append('formType', 'ACORD 35 Cancellation');
             formData.append('entryMode', isAutofilled ? 'Autofilled' : 'Manual');
             formData.append('confirmationNumber', currentConfirmationNumber);
+            formData.append('typedSignature', signatureData.typed || '');
             
             // Log submission for debugging
             console.log('Submitting cancellation with confirmation number:', currentConfirmationNumber);
             console.log('Metadata:', metadata);
+            console.log('Signature data:', signatureData);
             
             try {
                 const response = await fetch(SCRIPT_URL, {
