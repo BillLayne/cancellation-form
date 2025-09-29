@@ -3,8 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ACORD 35 Cancellation Link Generator - Bill Layne Insurance</title>
+    <title>Cancellation Link Generator - Bill Layne Insurance</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-dark: #1a5f7a;
+            --primary: #457b9d;
+            --primary-light: #6b9bb8;
+            --accent: #a8dadc;
+            --accent-light: #c8e6e8;
+            --danger: #dc3545;
+            --success: #28a745;
+            --warning: #ffc107;
+            --info: #17a2b8;
+            --light: #f8f9fa;
+            --gray-100: #f8f9fa;
+            --gray-200: #e9ecef;
+            --gray-300: #dee2e6;
+            --gray-400: #ced4da;
+            --gray-500: #adb5bd;
+            --gray-600: #6c757d;
+            --gray-700: #495057;
+            --gray-800: #343a40;
+            --gray-900: #212529;
+            --text-dark: #2c3e50;
+            --radius: 16px;
+            --radius-sm: 8px;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.04);
+            --shadow: 0 4px 6px rgba(0,0,0,0.07);
+            --shadow-md: 0 8px 16px rgba(0,0,0,0.08);
+            --shadow-lg: 0 16px 32px rgba(0,0,0,0.1);
+            --shadow-xl: 0 24px 48px rgba(0,0,0,0.12);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
         * {
             margin: 0;
             padding: 0;
@@ -12,84 +46,242 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
-            padding: 20px 10px;
+            padding: 40px 20px;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+        
+        /* Animated background pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 80%, var(--accent) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, var(--primary-light) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, var(--accent-light) 0%, transparent 50%);
+            opacity: 0.1;
+            z-index: -1;
+            animation: float 20s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
         }
         
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border-radius: var(--radius);
             overflow: hidden;
+            box-shadow: var(--shadow-xl);
+            animation: slideUp 0.5s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         .header {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
             color: white;
-            padding: 25px 20px;
+            padding: 40px 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 30s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 1;
             text-align: center;
         }
         
+        .header-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
         .header h1 {
-            font-size: 24px;
-            margin-bottom: 10px;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
         }
         
         .header p {
-            font-size: 14px;
-            opacity: 0.9;
+            font-size: 16px;
+            opacity: 0.95;
+            font-weight: 400;
         }
         
-        .system-badge {
-            display: inline-block;
-            background: #dc3545;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            margin-top: 10px;
+        .badges {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 20px;
         }
         
-        .sms-status {
-            display: inline-block;
-            background: #28a745;
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
             color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            margin-top: 10px;
-            margin-left: 10px;
+            padding: 8px 16px;
+            border-radius: 24px;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: var(--transition);
+        }
+        
+        .badge:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .badge-danger {
+            background: var(--danger);
+            border-color: var(--danger);
+        }
+        
+        .badge-success {
+            background: var(--success);
+            border-color: var(--success);
         }
         
         .form-container {
-            padding: 25px 20px;
+            padding: 32px;
+        }
+        
+        .instructions {
+            background: linear-gradient(135deg, var(--gray-100), white);
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .instructions::before {
+            content: '📌';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 80px;
+            opacity: 0.1;
+        }
+        
+        .instructions h4 {
+            color: var(--primary-dark);
+            margin-bottom: 12px;
+            font-size: 18px;
+            font-weight: 700;
+        }
+        
+        .instructions ol {
+            margin-left: 24px;
+            color: var(--gray-700);
+            font-size: 14px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            padding-left: 8px;
+        }
+        
+        .instructions .warning {
+            color: var(--danger);
+            font-weight: 600;
+            background: rgba(220, 53, 69, 0.1);
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 4px;
+        }
+        
+        .section {
+            margin-bottom: 32px;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--gray-200);
+        }
+        
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+            box-shadow: var(--shadow-md);
         }
         
         .section-title {
-            background: #f8f9fa;
-            padding: 10px 15px;
-            margin: 20px -20px 15px -20px;
-            font-weight: 600;
-            color: #495057;
-            border-left: 4px solid #dc3545;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-dark);
+            letter-spacing: -0.3px;
         }
         
-        .row {
+        .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 15px;
+            gap: 20px;
+            margin-bottom: 20px;
         }
         
         .form-group {
-            display: flex;
-            flex-direction: column;
+            position: relative;
         }
         
         .form-group.full-width {
@@ -97,132 +289,279 @@
         }
         
         label {
-            font-size: 13px;
+            display: block;
+            font-size: 14px;
             font-weight: 600;
-            color: #495057;
-            margin-bottom: 5px;
+            color: var(--gray-700);
+            margin-bottom: 8px;
+            transition: var(--transition);
+        }
+        
+        label .required {
+            color: var(--danger);
+            font-weight: 700;
         }
         
         input, select, textarea {
-            padding: 10px 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: all 0.3s ease;
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            font-size: 15px;
+            font-family: inherit;
+            transition: var(--transition);
+            background: white;
+        }
+        
+        input:hover, select:hover, textarea:hover {
+            border-color: var(--gray-300);
         }
         
         input:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: #007bff;
-            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(69, 123, 157, 0.1);
+            transform: translateY(-1px);
+        }
+        
+        input::placeholder, textarea::placeholder {
+            color: var(--gray-500);
+            font-size: 14px;
+        }
+        
+        select {
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236c757d' d='M6 9L2 5h8z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
+            appearance: none;
         }
         
         textarea {
             resize: vertical;
-            min-height: 100px;
+            min-height: 120px;
+            font-family: inherit;
+            line-height: 1.5;
+        }
+        
+        .notes-info {
+            background: linear-gradient(135deg, var(--info), var(--primary));
+            color: white;
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+            margin-top: 8px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .notes-info::before {
+            content: 'ℹ️';
+            font-size: 18px;
         }
         
         .button-group {
-            margin-top: 30px;
             display: grid;
             grid-template-columns: 2fr 1fr;
-            gap: 10px;
+            gap: 16px;
+            margin-top: 40px;
         }
         
         .btn {
-            padding: 12px 20px;
+            padding: 14px 24px;
             border: none;
-            border-radius: 8px;
-            font-size: 14px;
+            border-radius: var(--radius-sm);
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: var(--transition);
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.5s, height 0.5s;
+        }
+        
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
         }
         
         .btn-generate {
-            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
             color: white;
+            box-shadow: var(--shadow-md);
         }
         
         .btn-generate:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(220,53,69,0.3);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
         }
         
         .btn-clear {
-            background: #6c757d;
+            background: var(--gray-600);
             color: white;
         }
         
         .btn-clear:hover {
-            background: #5a6268;
+            background: var(--gray-700);
+            transform: translateY(-2px);
         }
         
         #resultSection {
             display: none;
-            margin-top: 30px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            border: 2px solid #28a745;
+            margin-top: 40px;
+            padding: 24px;
+            background: linear-gradient(135deg, #f0fff4, #ffffff);
+            border-radius: var(--radius);
+            border: 2px solid var(--success);
+            animation: slideIn 0.4s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .result-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .result-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            animation: bounceIn 0.5s;
+        }
+        
+        @keyframes bounceIn {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
         }
         
         .result-title {
-            font-size: 18px;
-            font-weight: bold;
-            color: #28a745;
-            margin-bottom: 15px;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--success);
         }
         
         .url-display {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            word-break: break-all;
+            background: var(--gray-900);
+            color: #00ff00;
+            padding: 16px;
+            border-radius: var(--radius-sm);
             font-family: 'Courier New', monospace;
             font-size: 13px;
-            border: 1px solid #ddd;
-            margin-bottom: 15px;
+            word-break: break-all;
+            margin-bottom: 20px;
+            border: 2px solid var(--gray-700);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+            position: relative;
         }
         
-        .action-buttons {
+        .url-display::before {
+            content: '>';
+            position: absolute;
+            left: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #00ff00;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        .action-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            gap: 12px;
+            margin-bottom: 12px;
         }
         
         .btn-action {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 6px;
-            font-size: 13px;
+            padding: 12px 16px;
+            border: 2px solid transparent;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: white;
+            color: var(--gray-700);
+            border-color: var(--gray-300);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
         
         .btn-copy {
-            background: #007bff;
+            background: var(--info);
             color: white;
+            border-color: var(--info);
         }
         
         .btn-copy:hover {
-            background: #0056b3;
+            background: #138496;
         }
         
         .btn-email {
-            background: #2196F3;
+            background: var(--primary);
             color: white;
+            border-color: var(--primary);
         }
         
         .btn-email:hover {
-            background: #0b7dda;
+            background: var(--primary-dark);
         }
         
         .btn-text {
-            background: #28a745;
+            background: var(--success);
             color: white;
-            position: relative;
+            border-color: var(--success);
         }
         
         .btn-text:hover {
@@ -230,98 +569,176 @@
         }
         
         .btn-text:disabled {
-            background: #6c757d;
+            background: var(--gray-500);
             cursor: not-allowed;
+            opacity: 0.6;
         }
         
-        .text-template {
-            background: #fff3cd;
-            padding: 15px;
-            border-radius: 8px;
+        .btn-test {
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent), var(--primary-light));
+            color: var(--primary-dark);
+            font-weight: 700;
+            margin-top: 12px;
+            border: 2px solid var(--primary-light);
+        }
+        
+        .btn-test:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .template-box {
+            background: linear-gradient(135deg, var(--gray-100), white);
+            padding: 20px;
+            border-radius: var(--radius);
             margin-top: 20px;
-            border: 1px solid #ffc107;
+            border: 2px solid var(--gray-200);
+            position: relative;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .template-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            color: var(--gray-700);
+            margin-bottom: 16px;
+            font-size: 16px;
+        }
+        
+        .template-content {
             white-space: pre-wrap;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--gray-800);
+            background: white;
+            padding: 16px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--gray-300);
+            margin-bottom: 16px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .sms-success, .sms-error {
+            padding: 16px;
+            border-radius: var(--radius-sm);
+            margin-top: 16px;
+            display: none;
+            animation: slideDown 0.3s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .sms-success {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            border: 2px solid var(--success);
+            color: #155724;
+        }
+        
+        .sms-error {
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+            border: 2px solid var(--danger);
+            color: #721c24;
         }
         
         .copy-status {
             display: none;
-            color: #28a745;
-            font-weight: 600;
+            background: var(--success);
+            color: white;
+            padding: 12px;
+            border-radius: var(--radius-sm);
             text-align: center;
-            margin-top: 10px;
+            margin-top: 16px;
+            font-weight: 600;
+            animation: fadeInOut 3s ease-out;
         }
         
-        .instructions {
-            background: #fff3cd;
-            border: 1px solid #ffc107;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .instructions h4 {
-            color: #856404;
-            margin-bottom: 8px;
-        }
-        
-        .instructions ol {
-            margin-left: 20px;
-            color: #856404;
-            font-size: 14px;
-        }
-        
-        .instructions li {
-            margin-bottom: 5px;
-        }
-        
-        .warning {
-            color: #dc3545;
-            font-weight: bold;
-        }
-        
-        .notes-info {
-            background: #d1ecf1;
-            border: 1px solid #bee5eb;
-            border-radius: 6px;
-            padding: 10px;
-            margin-top: 5px;
-            font-size: 12px;
-            color: #0c5460;
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: scale(0.9); }
+            20% { opacity: 1; transform: scale(1); }
+            80% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.9); }
         }
         
         .test-link-notice {
-            background: #d4edda;
-            border: 1px solid #c3e6cb;
-            border-radius: 6px;
-            padding: 10px;
-            margin-top: 10px;
-            font-size: 12px;
-            color: #155724;
+            background: linear-gradient(135deg, var(--accent-light), var(--accent));
+            border: 2px solid var(--primary-light);
+            color: var(--primary-dark);
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            margin-top: 16px;
+            font-size: 14px;
+            font-weight: 500;
             display: none;
+            animation: slideUp 0.3s ease-out;
         }
         
-        .sms-success {
-            background: #d4edda;
-            border: 1px solid #c3e6cb;
-            color: #155724;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            display: none;
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.6s linear infinite;
         }
         
-        .sms-error {
-            background: #f8d7da;
-            border: 1px solid #f5c6cb;
-            color: #721c24;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            display: none;
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
         
-        @media (max-width: 600px) {
-            .row {
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--gray-100);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--gray-400);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--gray-500);
+        }
+        
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 10px;
+            }
+            
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+            
+            .form-row {
                 grid-template-columns: 1fr;
             }
             
@@ -333,12 +750,24 @@
                 grid-template-columns: 1fr;
             }
             
-            .action-buttons {
+            .action-grid {
                 grid-template-columns: 1fr;
             }
             
-            .header h1 {
-                font-size: 20px;
+            .badges {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        
+        /* Print styles */
+        @media print {
+            body {
+                background: white;
+            }
+            
+            .btn, .button-group {
+                display: none;
             }
         }
     </style>
@@ -346,15 +775,20 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>📄 ACORD 35 Cancellation Link Generator</h1>
-            <p>Bill Layne Insurance Agency - Staff Tool</p>
-            <span class="system-badge">⚠️ CANCELLATION SYSTEM</span>
-            <span class="sms-status">✅ SMS ENABLED</span>
+            <div class="header-content">
+                <div class="header-icon">🔗</div>
+                <h1>Cancellation Link Generator</h1>
+                <p>Bill Layne Insurance Agency - Staff Portal</p>
+                <div class="badges">
+                    <span class="badge badge-danger">⚠️ CANCELLATION SYSTEM</span>
+                    <span class="badge badge-success">✅ SMS ENABLED</span>
+                </div>
+            </div>
         </div>
         
         <div class="form-container">
             <div class="instructions">
-                <h4>📌 Instructions:</h4>
+                <h4>Quick Start Guide</h4>
                 <ol>
                     <li>Fill in all customer and policy information</li>
                     <li>Double-check cancellation date and time</li>
@@ -366,121 +800,141 @@
             </div>
             
             <form id="linkGenerator">
-                <div class="section-title">Customer Information</div>
-                
-                <div class="row">
-                    <div class="form-group full-width">
-                        <label>Insured Name *</label>
-                        <input type="text" id="insuredName" required>
+                <div class="section">
+                    <div class="section-header">
+                        <div class="section-icon">👤</div>
+                        <div class="section-title">Customer Information</div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label>Insured Name <span class="required">*</span></label>
+                            <input type="text" id="insuredName" placeholder="Enter full name" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label>Address</label>
+                            <input type="text" id="insuredAddress" placeholder="Street address, city, state, ZIP">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="tel" id="insuredPhone" placeholder="(555) 123-4567">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="insuredEmail" placeholder="customer@email.com">
+                        </div>
                     </div>
                 </div>
                 
-                <div class="row">
-                    <div class="form-group full-width">
-                        <label>Address</label>
-                        <input type="text" id="insuredAddress">
+                <div class="section">
+                    <div class="section-header">
+                        <div class="section-icon">📋</div>
+                        <div class="section-title">Policy Information</div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Policy Number <span class="required">*</span></label>
+                            <input type="text" id="policyNumber" placeholder="POL-123456" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Insurance Company <span class="required">*</span></label>
+                            <select id="company" required>
+                                <option value="">Select Company...</option>
+                                <option value="Nationwide">Nationwide</option>
+                                <option value="Progressive">Progressive</option>
+                                <option value="National General">National General</option>
+                                <option value="Alamance">Alamance</option>
+                                <option value="Travelers">Travelers</option>
+                                <option value="Foremost">Foremost</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Policy Type <span class="required">*</span></label>
+                            <select id="policyType" required>
+                                <option value="">Select Type...</option>
+                                <option value="Auto">Auto</option>
+                                <option value="Home">Home</option>
+                                <option value="Life">Life</option>
+                                <option value="Business">Business</option>
+                                <option value="Umbrella">Umbrella</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Effective Date</label>
+                            <input type="date" id="effectiveDate">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Expiration Date</label>
+                            <input type="date" id="expirationDate">
+                        </div>
                     </div>
                 </div>
                 
-                <div class="row">
-                    <div class="form-group">
-                        <label>Phone</label>
-                        <input type="tel" id="insuredPhone">
+                <div class="section">
+                    <div class="section-header">
+                        <div class="section-icon">📅</div>
+                        <div class="section-title">Cancellation Details</div>
                     </div>
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" id="insuredEmail">
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Cancellation Date <span class="required">*</span></label>
+                            <input type="date" id="cancelDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Cancellation Time</label>
+                            <select id="cancelTime">
+                                <option value="12:01 AM" selected>12:01 AM (Start of Day)</option>
+                                <option value="11:59 PM">11:59 PM (End of Day)</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-                
-                <div class="section-title">Policy Information</div>
-                
-                <div class="row">
-                    <div class="form-group">
-                        <label>Policy Number *</label>
-                        <input type="text" id="policyNumber" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Insurance Company *</label>
-                        <select id="company" required>
-                            <option value="">Select Company...</option>
-                            <option value="Nationwide">Nationwide</option>
-                            <option value="Progressive">Progressive</option>
-                            <option value="National General">National General</option>
-                            <option value="Alamance">Alamance</option>
-                            <option value="Travelers">Travelers</option>
-                            <option value="Foremost">Foremost</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="row">
-                    <div class="form-group">
-                        <label>Policy Type *</label>
-                        <select id="policyType" required>
-                            <option value="">Select Type...</option>
-                            <option value="Auto">Auto</option>
-                            <option value="Home">Home</option>
-                            <option value="Life">Life</option>
-                            <option value="Business">Business</option>
-                            <option value="Umbrella">Umbrella</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Effective Date</label>
-                        <input type="date" id="effectiveDate">
+                    
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label>Reason for Cancellation <span class="required">*</span></label>
+                            <select id="reason" required>
+                                <option value="">Select Reason...</option>
+                                <option value="Sold Vehicle">Sold Vehicle</option>
+                                <option value="Moved Out of State">Moved Out of State</option>
+                                <option value="Found Better Rate">Found Better Rate</option>
+                                <option value="No Longer Need Coverage">No Longer Need Coverage</option>
+                                <option value="Financial Hardship">Financial Hardship</option>
+                                <option value="Dissatisfied with Service">Dissatisfied with Service</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="row">
-                    <div class="form-group">
-                        <label>Expiration Date</label>
-                        <input type="date" id="expirationDate">
+                <div class="section">
+                    <div class="section-header">
+                        <div class="section-icon">📝</div>
+                        <div class="section-title">Special Notes</div>
                     </div>
-                </div>
-                
-                <div class="section-title">Cancellation Details</div>
-                
-                <div class="row">
-                    <div class="form-group">
-                        <label>Cancellation Date *</label>
-                        <input type="date" id="cancelDate" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Cancellation Time</label>
-                        <select id="cancelTime">
-                            <option value="12:01 AM" selected>12:01 AM (Start of Day)</option>
-                            <option value="11:59 PM">11:59 PM (End of Day)</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="row">
-                    <div class="form-group full-width">
-                        <label>Reason for Cancellation *</label>
-                        <select id="reason" required>
-                            <option value="">Select Reason...</option>
-                            <option value="Sold Vehicle">Sold Vehicle</option>
-                            <option value="Moved Out of State">Moved Out of State</option>
-                            <option value="Found Better Rate">Found Better Rate</option>
-                            <option value="No Longer Need Coverage">No Longer Need Coverage</option>
-                            <option value="Financial Hardship">Financial Hardship</option>
-                            <option value="Dissatisfied with Service">Dissatisfied with Service</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="section-title">Special Notes (Optional)</div>
-                
-                <div class="row">
-                    <div class="form-group full-width">
-                        <label>Staff Notes / Special Instructions</label>
-                        <textarea id="notes" placeholder="Add any special notes or instructions here (e.g., pending refund check, follow-up required, etc.)"></textarea>
-                        <div class="notes-info">
-                            ℹ️ These notes will appear on the PDF and in the Google Sheet but will NOT be visible to the customer
+                    
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label>Staff Notes / Special Instructions</label>
+                            <textarea id="notes" placeholder="Add any special notes or instructions here (e.g., pending refund check, follow-up required, etc.)"></textarea>
+                            <div class="notes-info">
+                                These notes will appear on the PDF and in the Google Sheet but will NOT be visible to the customer
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -500,10 +954,14 @@
             </form>
             
             <div id="resultSection">
-                <div class="result-title">✅ Cancellation Link Generated!</div>
+                <div class="result-header">
+                    <div class="result-icon">✅</div>
+                    <div class="result-title">Cancellation Link Generated!</div>
+                </div>
+                
                 <div class="url-display" id="generatedUrl"></div>
                 
-                <div class="action-buttons">
+                <div class="action-grid">
                     <button class="btn-action btn-copy" onclick="copyLink()">
                         📋 Copy Link
                     </button>
@@ -515,7 +973,7 @@
                     </button>
                 </div>
                 
-                <button class="btn-action" style="width: 100%; margin-top: 10px; background: #17a2b8; color: white;" onclick="testLink()">
+                <button class="btn-action btn-test" onclick="testLink()">
                     🔍 Test Link (Opens in New Tab)
                 </button>
                 
@@ -527,25 +985,29 @@
                 <div class="sms-error" id="smsError">
                     <strong>❌ SMS Failed</strong><br>
                     <span id="smsErrorMessage"></span><br>
-                    <button class="btn-action btn-copy" style="margin-top: 10px;" onclick="fallbackToAgencyMatrix()">
+                    <button class="btn-action" style="margin-top: 10px;" onclick="fallbackToAgencyMatrix()">
                         Open Agency Matrix Instead
                     </button>
                 </div>
                 
-                <div class="text-template" id="textTemplate" style="display: none;">
-                    <strong>📱 Text Message Template:</strong><br><br>
-                    <span id="textMessage"></span>
-                    <br><br>
-                    <button class="btn-action btn-copy" style="width: 100%; margin-bottom: 10px;" onclick="copyTextMessage()">
+                <div class="template-box" id="textTemplate" style="display: none;">
+                    <div class="template-header">
+                        <span>📱</span>
+                        <span>Text Message Template</span>
+                    </div>
+                    <div class="template-content" id="textMessage"></div>
+                    <button class="btn-action" style="width: 100%;" onclick="copyTextMessage()">
                         📋 Copy Text Message
                     </button>
                 </div>
                 
-                <div class="text-template" id="emailTemplate" style="display: none; margin-top: 15px;">
-                    <strong>📧 Email Template:</strong><br><br>
-                    <span id="emailMessage"></span>
-                    <br><br>
-                    <button class="btn-action btn-copy" style="width: 100%;" onclick="copyEmailMessage()">
+                <div class="template-box" id="emailTemplate" style="display: none;">
+                    <div class="template-header">
+                        <span>📧</span>
+                        <span>Email Template</span>
+                    </div>
+                    <div class="template-content" id="emailMessage"></div>
+                    <button class="btn-action" style="width: 100%;" onclick="copyEmailMessage()">
                         📋 Copy Email Template
                     </button>
                 </div>
@@ -592,7 +1054,8 @@
                 cancelDate: cancelDate,
                 cancelTime: cancelTime,
                 reason: reason,
-                notes: document.getElementById('notes').value || ''
+                notes: document.getElementById('notes').value || '',
+                formVersion: 'v3.0' // Track version
             });
             
             // Generate the URL - using the actual domain
@@ -610,12 +1073,12 @@
             
             // Generate text message
             const phone = document.getElementById('insuredPhone').value || 'No phone';
-            const textMsg = `Hi ${insuredName.split(' ')[0]},\n\nPer your request, here's the link to sign your ${policyType} policy cancellation form (Policy: ${policyNumber}).\n\nCancellation Date: ${formatDate(cancelDate)} at ${cancelTime}\n\nPlease review and sign:\n${currentGeneratedUrl}\n\nThank you,\nBill Layne Insurance Agency\n336-835-1993`;
+            const textMsg = `Hi ${insuredName.split(' ')[0]},\n\nPer your request, here's the link to sign your ${policyType} policy cancellation form (Policy: ${policyNumber}).\n\nCancellation Date: ${formatDate(cancelDate)} at ${cancelTime}\n\n📱 Mobile-friendly form:\n${currentGeneratedUrl}\n\nThank you,\nBill Layne Insurance Agency\n336-835-1993`;
             
             currentTextMessage = textMsg;
             
-            // Generate email template
-            const emailMsg = `Subject: Action Required - Sign Cancellation Request for Policy ${policyNumber}\n\nDear ${insuredName},\n\nPer your request to cancel your ${policyType} policy, please complete the electronic cancellation form.\n\nPolicy Details:\n• Policy Number: ${policyNumber}\n• Insurance Company: ${company}\n• Cancellation Date: ${formatDate(cancelDate)}\n• Cancellation Time: ${cancelTime}\n• Reason: ${reason}\n\nPlease click the link below to review and sign your cancellation request:\n\n${currentGeneratedUrl}\n\nIMPORTANT: Your coverage will terminate on the date and time shown above. Please ensure you have replacement coverage if needed.\n\nIf you have any questions or wish to discuss alternatives, please call us at 336-835-1993.\n\nThank you,\nBill Layne Insurance Agency\n1283 N Bridge St, Elkin NC 28621\nSave@BillLayneInsurance.com`;
+            // Generate email template with enhanced messaging
+            const emailMsg = `Subject: Action Required - Sign Cancellation Request for Policy ${policyNumber}\n\nDear ${insuredName},\n\nPer your request to cancel your ${policyType} policy, please complete the electronic cancellation form.\n\nPolicy Details:\n• Policy Number: ${policyNumber}\n• Insurance Company: ${company}\n• Cancellation Date: ${formatDate(cancelDate)}\n• Cancellation Time: ${cancelTime}\n• Reason: ${reason}\n\nPlease click the link below to review and sign your cancellation request:\n\n${currentGeneratedUrl}\n\n✨ New: The form now auto-saves your progress and works perfectly on mobile devices!\n\nIMPORTANT: Your coverage will terminate on the date and time shown above. Please ensure you have replacement coverage if needed.\n\nIf you have any questions or wish to discuss alternatives, please call us at 336-835-1993.\n\nThank you,\nBill Layne Insurance Agency\n1283 N Bridge St, Elkin NC 28621\nSave@BillLayneInsurance.com`;
             
             document.getElementById('textMessage').textContent = textMsg;
             document.getElementById('emailMessage').textContent = emailMsg;
@@ -627,7 +1090,7 @@
             document.getElementById('smsError').style.display = 'none';
             
             // Scroll to results
-            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             
             // Log the generated parameters for debugging
             console.log('Generated URL Parameters:', {
@@ -644,72 +1107,72 @@
         }
         
         async function sendSMS() {
-    const phone = document.getElementById('insuredPhone').value;
-    const insuredName = document.getElementById('insuredName').value;
-    
-    if (!phone) {
-        alert('Please enter a phone number to send text message');
-        document.getElementById('insuredPhone').focus();
-        return;
-    }
-    
-    const phoneDigits = phone.replace(/\D/g, '');
-    
-    if (phoneDigits.length < 10) {
-        alert('Please enter a complete 10-digit phone number');
-        return;
-    }
-    
-    // Show loading state
-    const smsButton = document.getElementById('smsButton');
-    const originalButtonText = smsButton.textContent;
-    smsButton.textContent = '📤 Sending...';
-    smsButton.disabled = true;
-    
-    // Hide previous status messages
-    document.getElementById('smsSuccess').style.display = 'none';
-    document.getElementById('smsError').style.display = 'none';
-    
-    try {
-        // Send SMS via Google Apps Script using POST method
-        const formData = new FormData();
-        formData.append('action', 'sendSMS');
-        formData.append('to', phoneDigits);
-        formData.append('name', insuredName);
-        formData.append('message', currentTextMessage);
-        
-        const response = await fetch(SCRIPT_URL, {
-            method: 'POST',
-            body: formData
-        });
-        
-        const result = await response.json();
-        
-        if (result.status === 'Success') {
-            // Show success message
-            document.getElementById('smsSuccessMessage').textContent = 
-                `Text message sent to ${insuredName.split(' ')[0]} at ${phone}`;
-            document.getElementById('smsSuccess').style.display = 'block';
+            const phone = document.getElementById('insuredPhone').value;
+            const insuredName = document.getElementById('insuredName').value;
             
-            showCopyStatus(`✔ SMS sent successfully!`);
-        } else {
-            // Show error message
-            document.getElementById('smsErrorMessage').textContent = 
-                result.message || 'SMS service temporarily unavailable';
-            document.getElementById('smsError').style.display = 'block';
+            if (!phone) {
+                alert('Please enter a phone number to send text message');
+                document.getElementById('insuredPhone').focus();
+                return;
+            }
+            
+            const phoneDigits = phone.replace(/\D/g, '');
+            
+            if (phoneDigits.length < 10) {
+                alert('Please enter a complete 10-digit phone number');
+                return;
+            }
+            
+            // Show loading state
+            const smsButton = document.getElementById('smsButton');
+            const originalButtonText = smsButton.innerHTML;
+            smsButton.innerHTML = '<span class="loading"></span> Sending...';
+            smsButton.disabled = true;
+            
+            // Hide previous status messages
+            document.getElementById('smsSuccess').style.display = 'none';
+            document.getElementById('smsError').style.display = 'none';
+            
+            try {
+                // Send SMS via Google Apps Script using POST method
+                const formData = new FormData();
+                formData.append('action', 'sendSMS');
+                formData.append('to', phoneDigits);
+                formData.append('name', insuredName);
+                formData.append('message', currentTextMessage);
+                
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.status === 'Success') {
+                    // Show success message
+                    document.getElementById('smsSuccessMessage').textContent = 
+                        `Text message sent to ${insuredName.split(' ')[0]} at ${phone}`;
+                    document.getElementById('smsSuccess').style.display = 'block';
+                    
+                    showCopyStatus(`✔ SMS sent successfully!`);
+                } else {
+                    // Show error message
+                    document.getElementById('smsErrorMessage').textContent = 
+                        result.message || 'SMS service temporarily unavailable';
+                    document.getElementById('smsError').style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error sending SMS:', error);
+                // Show error message
+                document.getElementById('smsErrorMessage').textContent = 
+                    'Error sending text message. You can copy the message and use Agency Matrix instead.';
+                document.getElementById('smsError').style.display = 'block';
+            } finally {
+                // Restore button state
+                smsButton.innerHTML = originalButtonText;
+                smsButton.disabled = false;
+            }
         }
-    } catch (error) {
-        console.error('Error sending SMS:', error);
-        // Show error message
-        document.getElementById('smsErrorMessage').textContent = 
-            'Error sending text message. You can copy the message and use Agency Matrix instead.';
-        document.getElementById('smsError').style.display = 'block';
-    } finally {
-        // Restore button state
-        smsButton.textContent = originalButtonText;
-        smsButton.disabled = false;
-    }
-}
         
         async function fallbackToAgencyMatrix() {
             const phone = document.getElementById('insuredPhone').value;
@@ -784,6 +1247,8 @@ Please click the link below to review and sign your cancellation request:
 
 ${currentGeneratedUrl}
 
+✨ New: The form now auto-saves your progress and works perfectly on mobile devices!
+
 IMPORTANT: Your coverage will terminate on the date and time shown above. Please ensure you have replacement coverage if needed.
 
 If you have any questions or wish to discuss alternatives, please call us at 336-835-1993.
@@ -847,6 +1312,10 @@ Save@BillLayneInsurance.com`;
             const status = document.getElementById('copyStatus');
             status.textContent = message;
             status.style.display = 'block';
+            status.style.animation = 'none';
+            setTimeout(() => {
+                status.style.animation = 'fadeInOut 3s ease-out';
+            }, 10);
             setTimeout(() => {
                 status.style.display = 'none';
             }, 3000);
