@@ -1878,6 +1878,27 @@
                     if (field) {
                         if (urlParam.includes('Date')) {
                             field.value = formatDate(params[urlParam]);
+                        } else if (field.tagName === 'SELECT') {
+                            // For select fields, check if the value matches an existing option
+                            const optionExists = Array.from(field.options).some(opt => opt.value === params[urlParam]);
+                            if (optionExists) {
+                                field.value = params[urlParam];
+                            } else {
+                                // Value doesn't match any option - set to "Other" and populate the other-company input
+                                field.value = 'Other';
+                                if (fieldId === 'display-company') {
+                                    const otherCompanyRow = document.getElementById('otherCompanyRow');
+                                    const otherCompanyInput = document.getElementById('other-company-input');
+                                    const companyHidden = document.getElementById('company');
+                                    if (otherCompanyRow && otherCompanyInput) {
+                                        otherCompanyRow.style.display = 'flex';
+                                        otherCompanyInput.value = params[urlParam];
+                                        otherCompanyInput.setAttribute('readonly', true);
+                                        otherCompanyInput.style.backgroundColor = '#f0f0f0';
+                                        if (companyHidden) companyHidden.value = params[urlParam];
+                                    }
+                                }
+                            }
                         } else {
                             field.value = params[urlParam];
                         }
@@ -1893,6 +1914,20 @@
                 const hiddenField = document.getElementById(key);
                 if (hiddenField) {
                     hiddenField.value = value;
+                }
+            }
+            
+            // Backward compatibility: if company=Other was passed directly (old links),
+            // show the other-company input so the customer can type the company name
+            const companyField = document.getElementById('display-company');
+            if (companyField && companyField.value === 'Other') {
+                const otherCompanyRow = document.getElementById('otherCompanyRow');
+                const otherCompanyInput = document.getElementById('other-company-input');
+                if (otherCompanyRow && otherCompanyInput && !otherCompanyInput.value) {
+                    otherCompanyRow.style.display = 'flex';
+                    otherCompanyInput.removeAttribute('readonly');
+                    otherCompanyInput.style.backgroundColor = '';
+                    otherCompanyInput.setAttribute('required', 'required');
                 }
             }
             
