@@ -358,10 +358,16 @@
         @media (max-width: 600px) {
             .mobile-footer-nav { 
                 display: block; 
+                padding: 10px 12px 14px;
             }
             
             body { 
-                padding-bottom: 120px; 
+                padding-bottom: 140px; 
+            }
+            
+            .container {
+                border-radius: 0;
+                box-shadow: none;
             }
             
             .field-row {
@@ -370,22 +376,102 @@
             
             .field-label {
                 margin-bottom: 5px;
+                font-size: 13px;
             }
             
             .header h1 {
                 font-size: 20px;
             }
             
+            .header p {
+                font-size: 13px;
+            }
+            
             /* Larger touch targets for mobile */
             input, select, textarea {
-                min-height: 44px;
+                min-height: 48px;
                 font-size: 16px !important; /* Prevents zoom on iOS */
                 padding: 12px !important;
             }
             
+            /* Checkbox touch targets - 48px minimum per Material Design */
+            .legal-checkbox-group {
+                padding: 12px;
+                margin-bottom: 12px;
+                background: rgba(255,255,255,0.5);
+                border-radius: 12px;
+                border: 1px solid #e9ecef;
+            }
+            
             .legal-checkbox-group input[type="checkbox"] {
-                min-width: 24px;
-                min-height: 24px;
+                min-width: 28px;
+                min-height: 28px;
+                margin-top: 0;
+                /* Invisible expanded touch area */
+                padding: 10px;
+                cursor: pointer;
+            }
+            
+            .legal-checkbox-group label {
+                font-size: 13.5px;
+                line-height: 1.5;
+                padding: 4px 0;
+            }
+            
+            /* Signature buttons stack on very narrow screens */
+            .signature-buttons {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            
+            .signature-buttons .btn {
+                padding: 14px 10px;
+                font-size: 14px;
+                flex: 1 1 30%;
+                min-height: 48px;
+            }
+            
+            /* Signature pad taller on mobile for easier signing */
+            #signature-pad {
+                height: 200px;
+            }
+            
+            /* Legal text better spacing */
+            .legal-text {
+                font-size: 12.5px;
+                line-height: 1.7;
+                padding: 12px;
+            }
+            
+            .warning-box {
+                padding: 15px;
+                font-size: 13px;
+            }
+            
+            .warning-box .legal-statement {
+                font-size: 12.5px;
+                line-height: 1.6;
+            }
+            
+            /* Section titles */
+            .section-title {
+                font-size: 15px;
+            }
+            
+            .signature-title {
+                font-size: 15px;
+            }
+            
+            /* Submit button */
+            .btn-submit {
+                font-size: 17px;
+                padding: 16px;
+                border-radius: 14px;
+            }
+            
+            /* Save indicator above mobile footer */
+            .save-indicator {
+                bottom: 150px !important;
             }
             
             .success-actions {
@@ -400,20 +486,39 @@
         .step-indicators {
             display: flex;
             justify-content: space-around;
+            margin-bottom: 8px;
+            gap: 6px;
+        }
+        
+        .step-progress {
+            height: 4px;
+            background: #e9ecef;
+            border-radius: 2px;
             margin-bottom: 10px;
-            gap: 5px;
+            overflow: hidden;
+        }
+        
+        .step-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745, #20c997);
+            border-radius: 2px;
+            transition: width 0.4s ease;
         }
         
         .step {
             flex: 1;
-            padding: 8px 5px;
-            border-radius: 20px;
-            font-size: 11px;
+            padding: 10px 5px;
+            border-radius: 12px;
+            font-size: 12px;
             background: var(--light);
             text-align: center;
             transition: all 0.3s;
             font-weight: 600;
             border: 2px solid transparent;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .step.active {
@@ -430,20 +535,27 @@
         
         .btn-continue {
             width: 100%;
-            padding: 12px;
+            padding: 16px;
             background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
             color: white;
             border: none;
-            border-radius: var(--radius);
-            font-size: 16px;
-            font-weight: 600;
+            border-radius: 14px;
+            font-size: 17px;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
+            min-height: 52px;
+            letter-spacing: 0.3px;
+            box-shadow: 0 4px 12px rgba(26, 95, 122, 0.25);
         }
         
         .btn-continue:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(26, 95, 122, 0.3);
+        }
+        
+        .btn-continue:active {
+            transform: translateY(0);
         }
         
         /* Auto-save indicators */
@@ -1159,6 +1271,9 @@
 
     <!-- Mobile Footer Navigation -->
     <div class="mobile-footer-nav">
+        <div class="step-progress">
+            <div class="step-progress-bar" id="stepProgressBar" style="width: 25%"></div>
+        </div>
         <div class="step-indicators">
             <span class="step active" data-step="1">Info</span>
             <span class="step" data-step="2">Details</span>
@@ -1630,6 +1745,12 @@
             }
             
             currentStep = step;
+            
+            // Update progress bar
+            const progressBar = document.getElementById('stepProgressBar');
+            if (progressBar) {
+                progressBar.style.width = (step / totalSteps * 100) + '%';
+            }
             
             // Resize signature canvas when signature step becomes visible
             // (canvas has 0 dimensions when hidden, so must resize after showing)
