@@ -1295,6 +1295,9 @@
             }
             
             resizeCanvas() {
+                // Skip resize if canvas is hidden (offsetWidth/Height would be 0)
+                if (!this.canvas.offsetWidth || !this.canvas.offsetHeight) return;
+                
                 const ratio = Math.max(window.devicePixelRatio || 1, 1);
                 this.canvas.width = this.canvas.offsetWidth * ratio;
                 this.canvas.height = this.canvas.offsetHeight * ratio;
@@ -1627,6 +1630,12 @@
             }
             
             currentStep = step;
+            
+            // Resize signature canvas when signature step becomes visible
+            // (canvas has 0 dimensions when hidden, so must resize after showing)
+            if (step === 4 && enhancedSignature) {
+                setTimeout(() => enhancedSignature.resizeCanvas(), 50);
+            }
             
             // Scroll to top on step change
             window.scrollTo({ top: 0, behavior: 'smooth' });
