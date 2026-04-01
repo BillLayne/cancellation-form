@@ -1,10 +1,10 @@
 var CONFIG = {
   SHEET_ID: '1Bs_37_XbkIZ0e7CsUFcbdZDlVjb_ggre4ptxho5tHjE',
-  OFFICE_EMAIL: 'bill@billlayneinsurance.com',
+  OFFICE_EMAIL: 'Save@BillLayneInsurance.com',
   AGENCY_NAME: 'Bill Layne Insurance Agency',
   AGENCY_PHONE: '(336) 835-1993',
   AGENCY_WEBSITE: 'https://www.billlayneinsurance.com',
-  AGENCY_ADDRESS: '127 CC Camp Rd, Elkin, NC 28621',
+  AGENCY_ADDRESS: '1283 N Bridge St, Elkin, NC 28621',
   LOGO_URL: 'https://i.imgur.com/lxu9nfT.png',
   TIMEZONE: 'America/New_York'
 };
@@ -168,7 +168,7 @@ function sendCustomerEmail_(p, confirmNum) {
     '<img src="' + CONFIG.LOGO_URL + '" alt="Bill Layne Insurance" width="140" height="35" style="display:block;margin:0 auto 12px;max-width:140px;height:auto;border:0;">',
     '<p style="margin:0 0 4px;font-family:Arial,sans-serif;font-size:14px;color:#e2e8f0;">' + CONFIG.AGENCY_NAME + '</p>',
     '<p style="margin:0 0 4px;font-family:Arial,sans-serif;font-size:13px;color:#94a3b8;">' + CONFIG.AGENCY_ADDRESS + '</p>',
-    '<p style="margin:0 0 12px;font-family:Arial,sans-serif;font-size:13px;color:#94a3b8;"><a href="tel:3368351993" style="color:#60a5fa;text-decoration:none;">' + CONFIG.AGENCY_PHONE + '</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="mailto:bill@billlayneinsurance.com" style="color:#60a5fa;text-decoration:none;">bill@billlayneinsurance.com</a></p>',
+    '<p style="margin:0 0 12px;font-family:Arial,sans-serif;font-size:13px;color:#94a3b8;"><a href="tel:3368351993" style="color:#60a5fa;text-decoration:none;">' + CONFIG.AGENCY_PHONE + '</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="mailto:Save@BillLayneInsurance.com" style="color:#60a5fa;text-decoration:none;">Save@BillLayneInsurance.com</a></p>',
     '</td></tr>',
     '<tr><td style="padding:0 28px 20px;text-align:center;"><p style="margin:0;font-family:Arial,sans-serif;font-size:11px;color:#475569;">&copy; 2026 Bill Layne Insurance Agency. All rights reserved.</p></td></tr>',
     '</table></td></tr>',
