@@ -6,7 +6,8 @@ var CONFIG = {
   AGENCY_WEBSITE: 'https://www.billlayneinsurance.com',
   AGENCY_ADDRESS: '1283 N Bridge St, Elkin, NC 28621',
   LOGO_URL: 'https://i.imgur.com/lxu9nfT.png',
-  TIMEZONE: 'America/New_York'
+  TIMEZONE: 'America/New_York',
+  DRIVE_FOLDER_NAME: 'BLI Cancellation Requests'
 };
 
 function doPost(e) {
@@ -15,10 +16,13 @@ function doPost(e) {
     var confirmNum = p.confirmationNumber || generateConfirmation_();
 
     logToSheet_(p, confirmNum);
-    sendOfficeEmail_(p, confirmNum);
+
+    var pdfFile = createCancellationPdf_(p, confirmNum);
+
+    sendOfficeEmail_(p, confirmNum, pdfFile);
 
     if (p.insuredEmail) {
-      sendCustomerEmail_(p, confirmNum);
+      sendCustomerEmail_(p, confirmNum, pdfFile);
     }
 
     return ContentService.createTextOutput('Success').setMimeType(ContentService.MimeType.TEXT);
@@ -39,6 +43,111 @@ function generateConfirmation_() {
   var d = Utilities.formatDate(now, CONFIG.TIMEZONE, 'yyMMdd');
   var r = Math.random().toString(36).slice(2, 6).toUpperCase();
   return 'CANCEL-' + d + '-' + r;
+}
+
+// ── DRIVE FOLDER (auto-create) ──
+
+function getOrCreateRootFolder_() {
+  var folders = DriveApp.getFoldersByName(CONFIG.DRIVE_FOLDER_NAME);
+  if (folders.hasNext()) return folders.next();
+  return DriveApp.createFolder(CONFIG.DRIVE_FOLDER_NAME);
+}
+
+function getOrCreateSubFolder_(parent, name) {
+  var folders = parent.getFoldersByName(name);
+  if (folders.hasNext()) return folders.next();
+  return parent.createFolder(name);
+}
+
+// ── PDF GENERATION ──
+
+function createCancellationPdf_(p, confirmNum) {
+  var root = getOrCreateRootFolder_();
+  var yearMonth = Utilities.formatDate(new Date(), CONFIG.TIMEZONE, 'yyyy-MM');
+  var monthFolder = getOrCreateSubFolder_(root, yearMonth);
+
+  var docName = confirmNum + ' - Cancellation Request';
+  var doc = DocumentApp.create(docName);
+  var docId = doc.getId();
+  var body = doc.getBody();
+
+  body.setMarginTop(36);
+  body.setMarginBottom(28);
+  body.setMarginLeft(50);
+  body.setMarginRight(50);
+
+  var navy = '#1a2744';
+  var gray = '#555555';
+
+  // Header
+  var h1 = body.appendParagraph('BILL LAYNE INSURANCE AGENCY');
+  h1.setFontSize(16).setBold(true).setForegroundColor(navy).setAlignment(DocumentApp.HorizontalAlignment.CENTER).setSpacingAfter(0).setSpacingBefore(0);
+
+  var h2 = body.appendParagraph('1283 N Bridge St, Elkin, NC 28621 \u2022 (336) 835-1993 \u2022 Save@BillLayneInsurance.com');
+  h2.setFontSize(8).setForegroundColor(gray).setAlignment(DocumentApp.HorizontalAlignment.CENTER).setSpacingAfter(2).setSpacingBefore(0);
+
+  var h3 = body.appendParagraph('CANCELLATION REQUEST - CONF #' + confirmNum);
+  h3.setFontSize(12).setBold(true).setForegroundColor(navy).setAlignment(DocumentApp.HorizontalAlignment.CENTER).setSpacingAfter(2).setSpacingBefore(4);
+
+  body.appendHorizontalRule();
+
+  // Policy Info Table
+  var table = body.appendTable();
+  table.setBorderWidth(0);
+
+  addTableRow_(table, 'INSURED: ' + (p.insuredName || ''), 'POLICY: ' + (p.policyNumber || ''));
+  addTableRow_(table, (p.insuredAddress || ''), 'PHONE: ' + (p.insuredPhone || ''));
+  addTableRow_(table, 'EMAIL: ' + (p.insuredEmail || ''), '');
+  addTableRow_(table, 'COMPANY: ' + (p.company || ''), 'TYPE: ' + (p.policyType || ''));
+  addTableRow_(table, 'CANCEL DATE: ' + (p.cancelDate || ''), 'CANCEL TIME: ' + (p.cancelTime || ''));
+  addTableRow_(table, 'REASON: ' + (p.reason || ''), '');
+
+  if (p.notes) {
+    var notesP = body.appendParagraph('NOTES: ' + p.notes);
+    notesP.setFontSize(9).setSpacingAfter(4).setSpacingBefore(4);
+    notesP.editAsText().setBold(0, 6, true);
+  }
+
+  body.appendHorizontalRule();
+
+  // Statement
+  var stmt = body.appendParagraph('CANCELLATION STATEMENT: I, ' + (p.insuredName || '') + ', hereby request the cancellation of the above-referenced insurance policy. I understand that upon cancellation, all coverage under this policy will terminate as of the date and time specified above. I acknowledge that I will be responsible for obtaining replacement coverage if needed and that any lapse in coverage may result in higher premiums in the future.');
+  stmt.setFontSize(9).setLineSpacing(1.1).setSpacingAfter(6).setSpacingBefore(4);
+  stmt.editAsText().setBold(0, 25, true);
+
+  // Signature
+  body.appendHorizontalRule();
+  var sigTitle = body.appendParagraph('ELECTRONIC SIGNATURE');
+  sigTitle.setFontSize(11).setBold(true).setAlignment(DocumentApp.HorizontalAlignment.CENTER).setSpacingAfter(4).setSpacingBefore(4);
+
+  if (p.typedSignature) {
+    var sigLine = body.appendParagraph(p.typedSignature);
+    sigLine.setFontSize(18).setItalic(true).setAlignment(DocumentApp.HorizontalAlignment.CENTER).setSpacingAfter(4);
+  }
+
+  var sigMeta = body.appendParagraph((p.insuredName || '') + ' \u2022 ' + (p.signatureDateTime || Utilities.formatDate(new Date(), CONFIG.TIMEZONE, "M/d/yyyy h:mm a")));
+  sigMeta.setFontSize(7).setForegroundColor(gray).setAlignment(DocumentApp.HorizontalAlignment.CENTER).setSpacingAfter(4);
+
+  var legal = body.appendParagraph('Electronic signature valid per E-SIGN Act \u2022 Bill Layne Insurance Agency \u2022 www.BillLayneInsurance.com');
+  legal.setFontSize(7).setForegroundColor(gray).setAlignment(DocumentApp.HorizontalAlignment.CENTER).setSpacingAfter(0);
+
+  doc.saveAndClose();
+
+  var docFile = DriveApp.getFileById(docId);
+  var pdfBlob = docFile.getAs(MimeType.PDF).setName(docName + '.pdf');
+  var pdfFile = monthFolder.createFile(pdfBlob);
+  docFile.setTrashed(true);
+
+  return pdfFile;
+}
+
+function addTableRow_(table, left, right) {
+  var row = table.appendTableRow();
+  var c1 = row.appendTableCell(left);
+  c1.setWidth(280);
+  c1.getChild(0).asParagraph().setFontSize(9).setSpacingAfter(1).setSpacingBefore(1);
+  var c2 = row.appendTableCell(right);
+  c2.getChild(0).asParagraph().setFontSize(9).setSpacingAfter(1).setSpacingBefore(1);
 }
 
 // ── SHEET LOGGING ──
@@ -70,7 +179,7 @@ function logToSheet_(p, confirmNum) {
 
 // ── OFFICE EMAIL ──
 
-function sendOfficeEmail_(p, confirmNum) {
+function sendOfficeEmail_(p, confirmNum, pdfFile) {
   var subject = '[CANCELLATION] ' + (p.insuredName || 'Unknown') + ' - Policy ' + (p.policyNumber || 'N/A') + ' (' + confirmNum + ')';
 
   var rows = '';
@@ -86,19 +195,22 @@ function sendOfficeEmail_(p, confirmNum) {
   rows += row_('Cancel Time', p.cancelTime);
   rows += row_('Reason', p.reason);
   rows += row_('Notes', p.notes);
-  rows += row_('Entry Mode', p.entryMode);
   rows += row_('Signature', p.typedSignature);
   rows += row_('Signed At', p.signatureDateTime);
+  if (pdfFile) rows += row_('PDF', '<a href="' + pdfFile.getUrl() + '">' + pdfFile.getName() + '</a>');
 
   var html = '<div style="font-family:Arial,sans-serif;max-width:600px;"><h2 style="color:#dc2626;margin:0 0 16px;">Cancellation Request Received</h2><table style="width:100%;border-collapse:collapse;">' + rows + '</table></div>';
+
+  var attachments = pdfFile ? [pdfFile.getBlob().setName(pdfFile.getName())] : [];
 
   MailApp.sendEmail({
     to: CONFIG.OFFICE_EMAIL,
     subject: subject,
     htmlBody: html,
-    body: 'Cancellation request from ' + (p.insuredName || 'Unknown') + ' - Policy ' + (p.policyNumber || 'N/A') + ' - Confirmation: ' + confirmNum,
+    body: 'Cancellation request from ' + (p.insuredName || 'Unknown') + ' - Policy ' + (p.policyNumber || 'N/A'),
     replyTo: p.insuredEmail || CONFIG.OFFICE_EMAIL,
-    name: CONFIG.AGENCY_NAME
+    name: CONFIG.AGENCY_NAME,
+    attachments: attachments
   });
 }
 
@@ -109,7 +221,7 @@ function row_(label, value) {
 
 // ── CUSTOMER CONFIRMATION EMAIL ──
 
-function sendCustomerEmail_(p, confirmNum) {
+function sendCustomerEmail_(p, confirmNum, pdfFile) {
   var firstName = (p.insuredName || 'there').split(' ')[0];
   var carrier = p.company || 'Your Insurance Company';
   var policyType = p.policyType || 'Policy';
@@ -127,190 +239,82 @@ function sendCustomerEmail_(p, confirmNum) {
     '<table cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="#f1f5f9" style="background-color:#f1f5f9;"><tr><td align="center" style="padding:24px 16px;">',
     '<table cellpadding="0" cellspacing="0" border="0" width="600" class="email-container" style="width:600px;max-width:600px;margin:0 auto;">',
 
-    // ── CARD 1: HEADER ──
     '<tr><td style="padding-bottom:4px;">',
     '<table cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#fafafa;border-radius:16px 16px 0 0;border:1px solid #e2e8f0;border-bottom:none;">',
     '<tr><td style="height:4px;background-color:#003f87;font-size:0;line-height:0;border-radius:16px 16px 0 0;">&nbsp;</td></tr>',
-    '<tr><td style="padding:20px 24px;" class="card-pad">',
-    '<table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>',
-    '<td align="center" valign="middle">',
-    '<table cellpadding="0" cellspacing="0" border="0"><tr><td bgcolor="#ffffff" style="background-color:#ffffff;border-radius:8px;padding:8px 12px;">',
-    '<img src="' + logoUrl + '" width="160" alt="Bill Layne Insurance Agency" style="display:block;width:160px;max-width:160px;height:auto;">',
-    '</td></tr></table></td>',
-    '</tr></table></td></tr>',
-    '<tr><td style="padding:0 24px 14px;text-align:center;">',
-    '<p style="margin:0;font-size:11px;color:#64748b;font-family:Arial,sans-serif;letter-spacing:0.3px;">Cancellation Confirmation &bull; ' + esc_(carrier) + ' &bull; Bill Layne Insurance Agency</p>',
-    '</td></tr></table></td></tr>',
+    '<tr><td style="padding:20px 24px;" class="card-pad"><table cellpadding="0" cellspacing="0" border="0" width="100%"><tr><td align="center" valign="middle"><table cellpadding="0" cellspacing="0" border="0"><tr><td bgcolor="#ffffff" style="background-color:#ffffff;border-radius:8px;padding:8px 12px;"><img src="' + logoUrl + '" width="160" alt="Bill Layne Insurance Agency" style="display:block;width:160px;max-width:160px;height:auto;"></td></tr></table></td></tr></table></td></tr>',
+    '<tr><td style="padding:0 24px 14px;text-align:center;"><p style="margin:0;font-size:11px;color:#64748b;font-family:Arial,sans-serif;letter-spacing:0.3px;">Cancellation Confirmation &bull; ' + esc_(carrier) + ' &bull; Bill Layne Insurance Agency</p></td></tr></table></td></tr>',
 
-    // ── CARD 2: HERO BLUE ──
-    '<tr><td style="padding-bottom:4px;">',
-    '<table cellpadding="0" cellspacing="0" border="0" width="100%" style="border:1px solid #e2e8f0;border-top:none;border-bottom:none;">',
-    '<tr><td class="hero-pad" style="padding:36px 32px 40px;background-color:#003f87;text-align:center;">',
-
-    '<table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 16px;"><tr><td style="background-color:#0058b9;border-radius:20px;padding:5px 16px;">',
-    '<span style="font-size:11px;font-weight:700;color:#ffffff;font-family:Arial,sans-serif;letter-spacing:1.5px;text-transform:uppercase;">&#128203; Cancellation Confirmed</span>',
-    '</td></tr></table>',
-
+    '<tr><td style="padding-bottom:4px;"><table cellpadding="0" cellspacing="0" border="0" width="100%" style="border:1px solid #e2e8f0;border-top:none;border-bottom:none;"><tr><td class="hero-pad" style="padding:36px 32px 40px;background-color:#003f87;text-align:center;">',
+    '<table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 16px;"><tr><td style="background-color:#0058b9;border-radius:20px;padding:5px 16px;"><span style="font-size:11px;font-weight:700;color:#ffffff;font-family:Arial,sans-serif;letter-spacing:1.5px;text-transform:uppercase;">&#128203; Cancellation Confirmed</span></td></tr></table>',
     '<p style="margin:0 0 6px;font-size:13px;font-weight:600;color:rgba(255,255,255,0.80);font-family:Arial,sans-serif;letter-spacing:0.5px;text-transform:uppercase;">Cancelled at Insured\'s Request</p>',
     '<p style="margin:0 0 20px;font-size:28px;font-weight:700;color:#ffffff;font-family:Arial,sans-serif;line-height:1.2;">' + esc_(p.insuredName || '') + '</p>',
-
-    '<table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;"><tr>',
-    '<td style="background-color:#0058b9;border-radius:16px;padding:20px 40px;border:1px solid rgba(255,255,255,0.30);text-align:center;">',
+    '<table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;"><tr><td style="background-color:#0058b9;border-radius:16px;padding:20px 40px;border:1px solid rgba(255,255,255,0.30);text-align:center;">',
     '<p style="margin:0 0 4px;font-size:11px;font-weight:700;color:#C8A84E;font-family:Arial,sans-serif;letter-spacing:1.5px;text-transform:uppercase;">Cancellation Effective</p>',
     '<p class="hero-date" style="margin:0;font-size:32px;font-weight:700;color:#ffffff;font-family:Arial,sans-serif;line-height:1.1;">' + esc_(p.cancelDate || '') + '</p>',
     '<p style="margin:6px 0 0;font-size:13px;color:rgba(255,255,255,0.75);font-family:Arial,sans-serif;">' + esc_(carrier) + ' &bull; ' + esc_(policyType) + ' &bull; Policy ' + esc_(p.policyNumber || '') + '</p>',
-    '</td></tr></table>',
+    '</td></tr></table></td></tr></table></td></tr>',
 
-    '</td></tr></table></td></tr>',
+    '<tr><td style="padding-bottom:4px;"><table cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="#ffffff" style="background-color:#ffffff;border:1px solid #e2e8f0;border-top:none;border-bottom:none;">',
+    '<tr><td style="padding:28px 28px 0;" class="card-pad"><p style="margin:0 0 16px;font-size:15px;color:#334155;font-family:Arial,sans-serif;line-height:1.65;">' + esc_(firstName) + ', your ' + esc_(carrier) + ' ' + esc_(policyType) + ' policy has been cancelled at your request. Your signed cancellation form is on file and your coverage terminates as of ' + esc_(p.cancelDate || '') + ' at ' + esc_(p.cancelTime || '12:01 AM') + '. A copy of your cancellation request is attached to this email.</p></td></tr>',
 
-    // ── CARD 3: BODY + DETAILS ──
-    '<tr><td style="padding-bottom:4px;">',
-    '<table cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="#ffffff" style="background-color:#ffffff;border:1px solid #e2e8f0;border-top:none;border-bottom:none;">',
-    '<tr><td style="padding:28px 28px 0;" class="card-pad">',
-    '<p style="margin:0 0 16px;font-size:15px;color:#334155;font-family:Arial,sans-serif;line-height:1.65;">' + esc_(firstName) + ', your ' + esc_(carrier) + ' ' + esc_(policyType) + ' policy has been cancelled at your request. Your signed cancellation form is on file and your coverage terminates as of ' + esc_(p.cancelDate || '') + ' at ' + esc_(p.cancelTime || '12:01 AM') + '.</p>',
-    '</td></tr>',
-
-    '<tr><td style="padding:0 28px 24px;" class="card-pad">',
-    '<table cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#f0f9ff;border-radius:12px;border:1px solid #bae6fd;">',
-    '<tr><td style="padding:18px 20px;">',
+    '<tr><td style="padding:0 28px 24px;" class="card-pad"><table cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#f0f9ff;border-radius:12px;border:1px solid #bae6fd;"><tr><td style="padding:18px 20px;">',
     '<p style="margin:0 0 12px;font-size:10px;font-weight:700;color:#0369a1;font-family:Arial,sans-serif;letter-spacing:1.5px;text-transform:uppercase;">Cancellation Details</p>',
-
     detailRow_('Confirmation #', confirmNum, true),
     detailRow_('Insured', p.insuredName, false),
     detailRow_('Policy Number', p.policyNumber, false),
     detailRow_('Insurance Company', carrier, false),
     detailRow_('Policy Type', policyType, false),
-
     '<table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom:8px;"><tr><td style="height:1px;background-color:#e2e8f0;font-size:0;line-height:0;">&nbsp;</td></tr></table>',
-
     detailRow_('Cancel Date', p.cancelDate, true),
     detailRow_('Cancel Time', p.cancelTime, false),
     detailRow_('Reason', p.reason, false),
     detailRowLast_('Signed At', p.signatureDateTime || localTime),
-
     '</td></tr></table></td></tr></table></td></tr>',
 
-    // ── CARD 4: IMPORTANT DISCLOSURES ──
-    '<tr><td style="padding-bottom:4px;">',
-    '<table cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="#fafafa" style="background-color:#fafafa;border:1px solid #e2e8f0;border-top:none;border-bottom:none;">',
-    '<tr><td style="padding:24px 28px;" class="card-pad">',
+    '<tr><td style="padding-bottom:4px;"><table cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="#fafafa" style="background-color:#fafafa;border:1px solid #e2e8f0;border-top:none;border-bottom:none;"><tr><td style="padding:24px 28px;" class="card-pad">',
     '<p style="margin:0 0 4px;font-size:10px;font-weight:700;color:#64748b;font-family:Arial,sans-serif;letter-spacing:1.5px;text-transform:uppercase;">Important Information</p>',
     '<p style="margin:0 0 16px;font-size:20px;font-weight:700;color:#0f172a;font-family:Arial,sans-serif;">What You Should Know</p>',
-
-    '<table cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#fffbeb;border-radius:12px;border:1px solid #fde68a;margin-bottom:12px;">',
-    '<tr><td style="padding:16px 20px;">',
-    '<p style="margin:0 0 6px;font-size:13px;font-weight:700;color:#92400e;font-family:Arial,sans-serif;">&#9888;&#65039; Coverage Gap Warning</p>',
-    '<p style="margin:0;font-size:13px;color:#78350f;font-family:Arial,sans-serif;line-height:1.55;">Any period without insurance coverage may result in higher premiums when you obtain new coverage. Most carriers apply a surcharge for lapses of 30 days or more.</p>',
-    '</td></tr></table>',
-
-    '<table cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#f0fdf4;border-radius:12px;border:1px solid #bbf7d0;">',
-    '<tr><td style="padding:16px 20px;">',
-    '<p style="margin:0 0 6px;font-size:13px;font-weight:700;color:#166534;font-family:Arial,sans-serif;">&#128176; Premium Refund</p>',
-    '<p style="margin:0;font-size:13px;color:#14532d;font-family:Arial,sans-serif;line-height:1.55;">If any unearned premium is owed, ' + esc_(carrier) + ' will process your refund within 15 business days. Contact us at (336) 835-1993 if you haven\'t received it within that timeframe.</p>',
-    '</td></tr></table>',
-
+    '<table cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#fffbeb;border-radius:12px;border:1px solid #fde68a;margin-bottom:12px;"><tr><td style="padding:16px 20px;"><p style="margin:0 0 6px;font-size:13px;font-weight:700;color:#92400e;font-family:Arial,sans-serif;">&#9888;&#65039; Coverage Gap Warning</p><p style="margin:0;font-size:13px;color:#78350f;font-family:Arial,sans-serif;line-height:1.55;">Any period without insurance coverage may result in higher premiums when you obtain new coverage. Most carriers apply a surcharge for lapses of 30 days or more.</p></td></tr></table>',
+    '<table cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#f0fdf4;border-radius:12px;border:1px solid #bbf7d0;"><tr><td style="padding:16px 20px;"><p style="margin:0 0 6px;font-size:13px;font-weight:700;color:#166534;font-family:Arial,sans-serif;">&#128176; Premium Refund</p><p style="margin:0;font-size:13px;color:#14532d;font-family:Arial,sans-serif;line-height:1.55;">If any unearned premium is owed, ' + esc_(carrier) + ' will process your refund within 15 business days. Contact us at (336) 835-1993 if you haven\'t received it within that timeframe.</p></td></tr></table>',
     '</td></tr></table></td></tr>',
 
-    // ── CARD 5: SIGN-OFF + CTA ──
-    '<tr><td style="padding-bottom:4px;">',
-    '<table cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="#ffffff" style="background-color:#ffffff;border:1px solid #e2e8f0;border-top:none;border-bottom:none;">',
-    '<tr><td style="padding:24px 28px;" class="card-pad">',
-
+    '<tr><td style="padding-bottom:4px;"><table cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="#ffffff" style="background-color:#ffffff;border:1px solid #e2e8f0;border-top:none;border-bottom:none;"><tr><td style="padding:24px 28px;" class="card-pad">',
     '<p style="margin:0 0 4px;font-size:15px;color:#334155;font-family:Arial,sans-serif;line-height:1.6;">Thanks in advance,</p>',
     '<p style="margin:0 0 16px;font-size:15px;font-weight:700;color:#0f172a;font-family:Arial,sans-serif;">&mdash; Bill Layne</p>',
-
-    '<table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom:20px;"><tr><td style="padding:0 4px;text-align:center;">',
-    '<p style="margin:0;font-size:13px;color:#64748b;font-family:Arial,sans-serif;line-height:1.6;font-style:italic;">If you change your mind or need coverage again in the future, this email comes straight to me &#8212; just reply.</p>',
-    '</td></tr></table>',
-
-    '<table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom:12px;"><tr><td align="center">',
-    '<table cellpadding="0" cellspacing="0" border="0"><tr><td style="border:2px solid #003f87;border-radius:12px;padding:14px 36px;">',
-    '<a href="mailto:Save@BillLayneInsurance.com?subject=Cancellation%20Received%20-%20' + encodeURIComponent(p.insuredName || '') + '" style="display:block;font-size:15px;font-weight:700;color:#003f87;font-family:Arial,sans-serif;text-decoration:none;text-align:center;">Reply to Confirm Receipt</a>',
-    '</td></tr></table></td></tr></table>',
-
-    '<table cellpadding="0" cellspacing="0" border="0" width="100%"><tr><td align="center">',
-    '<table cellpadding="0" cellspacing="0" border="0"><tr><td class="btn-td" style="background-color:#003f87;border-radius:12px;padding:14px 36px;">',
-    '<a href="tel:3368351993" style="display:block;font-size:15px;font-weight:700;color:#ffffff;font-family:Arial,sans-serif;text-decoration:none;text-align:center;">Call (336) 835-1993</a>',
-    '</td></tr></table></td></tr></table>',
-
+    '<table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom:20px;"><tr><td style="padding:0 4px;text-align:center;"><p style="margin:0;font-size:13px;color:#64748b;font-family:Arial,sans-serif;line-height:1.6;font-style:italic;">If you change your mind or need coverage again in the future, this email comes straight to me &#8212; just reply.</p></td></tr></table>',
+    '<table cellpadding="0" cellspacing="0" border="0" width="100%"><tr><td align="center"><table cellpadding="0" cellspacing="0" border="0"><tr><td class="btn-td" style="background-color:#003f87;border-radius:12px;padding:14px 36px;"><a href="tel:3368351993" style="display:block;font-size:15px;font-weight:700;color:#ffffff;font-family:Arial,sans-serif;text-decoration:none;text-align:center;">Call (336) 835-1993</a></td></tr></table></td></tr></table>',
     '</td></tr></table></td></tr>',
 
-    // ── CARD 6: DISCLAIMER ──
-    '<tr><td style="padding-bottom:0;">',
-    '<table cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="#fafafa" style="background-color:#fafafa;border:1px solid #e2e8f0;border-top:none;border-bottom:none;">',
-    '<tr><td style="padding:20px 28px;" class="card-pad">',
-    '<p style="margin:0;font-size:11px;color:#94a3b8;font-family:Arial,sans-serif;line-height:1.6;">This confirmation is issued on behalf of ' + esc_(carrier) + ' and documents the cancellation of the above-referenced policy at the insured\'s request. Coverage terminates ' + esc_(p.cancelDate || '') + ' at ' + esc_(p.cancelTime || '12:01 AM') + ' per the terms of the policy and applicable North Carolina law. This notice has been sent to the insured at the email address of record.<br><br>Bill Layne Insurance Agency &mdash; Licensed NC Property &amp; Casualty Agent<br>1283 N Bridge St, Elkin, NC 28621 &bull; (336) 835-1993</p>',
+    '<tr><td style="padding-bottom:0;"><table cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="#fafafa" style="background-color:#fafafa;border:1px solid #e2e8f0;border-top:none;border-bottom:none;"><tr><td style="padding:20px 28px;" class="card-pad">',
+    '<p style="margin:0;font-size:11px;color:#94a3b8;font-family:Arial,sans-serif;line-height:1.6;">This confirmation documents the cancellation of the above-referenced policy at the insured\'s request. Coverage terminates ' + esc_(p.cancelDate || '') + ' at ' + esc_(p.cancelTime || '12:01 AM') + ' per the terms of the policy and applicable North Carolina law.<br><br>Bill Layne Insurance Agency &mdash; Licensed NC Property &amp; Casualty Agent<br>1283 N Bridge St, Elkin, NC 28621 &bull; (336) 835-1993</p>',
     '</td></tr></table></td></tr>',
 
-    // ── FOOTER ──
-    '<tr><td>',
-    '<table cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="#fafafa" style="background-color:#fafafa;border-radius:0 0 16px 16px;border:1px solid #e2e8f0;border-top:none;">',
-    '<tr><td style="padding:28px 24px;text-align:center;" class="card-pad">',
-
+    '<tr><td><table cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="#fafafa" style="background-color:#fafafa;border-radius:0 0 16px 16px;border:1px solid #e2e8f0;border-top:none;"><tr><td style="padding:28px 24px;text-align:center;" class="card-pad">',
     '<table cellpadding="0" cellspacing="0" border="0" width="60" style="margin:0 auto 20px auto;"><tr><td style="height:3px;background-color:#003f87;font-size:0;line-height:0;">&nbsp;</td></tr></table>',
-
-    '<table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 12px auto;"><tr><td bgcolor="#ffffff" style="background-color:#ffffff;border-radius:8px;padding:8px 12px;">',
-    '<img src="' + logoUrl + '" width="140" alt="Bill Layne Insurance Agency" style="display:block;width:140px;max-width:140px;height:auto;">',
-    '</td></tr></table>',
-
+    '<table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 12px auto;"><tr><td bgcolor="#ffffff" style="background-color:#ffffff;border-radius:8px;padding:8px 12px;"><img src="' + logoUrl + '" width="140" alt="Bill Layne Insurance Agency" style="display:block;width:140px;max-width:140px;height:auto;"></td></tr></table>',
     '<p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#0f172a;font-family:Arial,sans-serif;">Bill Layne Insurance Agency</p>',
     '<p style="margin:0 0 2px;font-size:12px;color:#64748b;font-family:Arial,sans-serif;">1283 N Bridge St &bull; Elkin, NC 28621</p>',
     '<p style="margin:0 0 2px;font-size:12px;color:#64748b;font-family:Arial,sans-serif;"><a href="tel:3368351993" style="color:#64748b;text-decoration:none;">(336) 835-1993</a> &bull; <a href="mailto:Save@BillLayneInsurance.com" style="color:#64748b;text-decoration:none;">Save@BillLayneInsurance.com</a></p>',
     '<p style="margin:0 0 14px;font-size:12px;color:#64748b;font-family:Arial,sans-serif;"><a href="https://www.BillLayneInsurance.com" style="color:#64748b;text-decoration:none;">www.BillLayneInsurance.com</a> &bull; Est. 2005</p>',
-
-    '<table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 14px auto;"><tr>',
-    '<td style="padding:0 6px;"><table cellpadding="0" cellspacing="0" border="0"><tr><td style="background-color:#e2e8f0;border-radius:6px;padding:6px 12px;"><a href="https://www.facebook.com/dollarbillagency" style="font-size:11px;color:#003f87;font-family:Arial,sans-serif;text-decoration:none;font-weight:700;">Facebook</a></td></tr></table></td>',
-    '<td style="padding:0 6px;"><table cellpadding="0" cellspacing="0" border="0"><tr><td style="background-color:#e2e8f0;border-radius:6px;padding:6px 12px;"><a href="https://www.youtube.com/@ncautoandhome" style="font-size:11px;color:#003f87;font-family:Arial,sans-serif;text-decoration:none;font-weight:700;">YouTube</a></td></tr></table></td>',
-    '<td style="padding:0 6px;"><table cellpadding="0" cellspacing="0" border="0"><tr><td style="background-color:#e2e8f0;border-radius:6px;padding:6px 12px;"><a href="https://www.instagram.com/ncautoandhome" style="font-size:11px;color:#003f87;font-family:Arial,sans-serif;text-decoration:none;font-weight:700;">Instagram</a></td></tr></table></td>',
-    '<td style="padding:0 6px;"><table cellpadding="0" cellspacing="0" border="0"><tr><td style="background-color:#e2e8f0;border-radius:6px;padding:6px 12px;"><a href="https://twitter.com/shopsavecompare" style="font-size:11px;color:#003f87;font-family:Arial,sans-serif;text-decoration:none;font-weight:700;">X</a></td></tr></table></td>',
-    '</tr></table>',
-
-    '<table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 14px auto;"><tr><td style="background-color:#f8fafc;border-radius:8px;padding:8px 14px;border:1px solid #e2e8f0;">',
-    '<p style="margin:0;font-size:12px;font-weight:700;color:#0f172a;font-family:Arial,sans-serif;">4.9 &#11088;&#11088;&#11088;&#11088;&#11088; <span style="font-weight:400;color:#64748b;">100+ Google Reviews</span></p>',
-    '</td></tr></table>',
-
-    '<p style="margin:0;font-size:11px;color:#94a3b8;font-family:Arial,sans-serif;text-align:center;">You\'re receiving this because you requested cancellation of your ' + esc_(carrier) + ' policy.<br>&copy; 2026 Bill Layne Insurance Agency. All rights reserved.</p>',
-
+    '<table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 14px auto;"><tr><td style="padding:0 6px;"><table cellpadding="0" cellspacing="0" border="0"><tr><td style="background-color:#e2e8f0;border-radius:6px;padding:6px 12px;"><a href="https://www.facebook.com/dollarbillagency" style="font-size:11px;color:#003f87;font-family:Arial,sans-serif;text-decoration:none;font-weight:700;">Facebook</a></td></tr></table></td><td style="padding:0 6px;"><table cellpadding="0" cellspacing="0" border="0"><tr><td style="background-color:#e2e8f0;border-radius:6px;padding:6px 12px;"><a href="https://www.youtube.com/@ncautoandhome" style="font-size:11px;color:#003f87;font-family:Arial,sans-serif;text-decoration:none;font-weight:700;">YouTube</a></td></tr></table></td><td style="padding:0 6px;"><table cellpadding="0" cellspacing="0" border="0"><tr><td style="background-color:#e2e8f0;border-radius:6px;padding:6px 12px;"><a href="https://www.instagram.com/ncautoandhome" style="font-size:11px;color:#003f87;font-family:Arial,sans-serif;text-decoration:none;font-weight:700;">Instagram</a></td></tr></table></td></tr></table>',
+    '<table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 14px auto;"><tr><td style="background-color:#f8fafc;border-radius:8px;padding:8px 14px;border:1px solid #e2e8f0;"><p style="margin:0;font-size:12px;font-weight:700;color:#0f172a;font-family:Arial,sans-serif;">4.9 &#11088;&#11088;&#11088;&#11088;&#11088; <span style="font-weight:400;color:#64748b;">100+ Google Reviews</span></p></td></tr></table>',
+    '<p style="margin:0;font-size:11px;color:#94a3b8;font-family:Arial,sans-serif;text-align:center;">&copy; 2026 Bill Layne Insurance Agency. All rights reserved.</p>',
     '</td></tr></table></td></tr>',
 
-    '</table></td></tr></table>',
-    '</body></html>'
+    '</table></td></tr></table></body></html>'
   ].join('');
 
-  var plain = [
-    'Cancellation Confirmed - ' + (p.insuredName || ''),
-    '',
-    firstName + ', your ' + carrier + ' ' + policyType + ' policy has been cancelled at your request.',
-    'Coverage terminates ' + (p.cancelDate || '') + ' at ' + (p.cancelTime || '12:01 AM') + '.',
-    '',
-    '--- CANCELLATION DETAILS ---',
-    'Confirmation #: ' + confirmNum,
-    'Insured: ' + (p.insuredName || ''),
-    'Policy Number: ' + (p.policyNumber || ''),
-    'Insurance Company: ' + carrier,
-    'Policy Type: ' + policyType,
-    'Cancel Date: ' + (p.cancelDate || ''),
-    'Cancel Time: ' + (p.cancelTime || ''),
-    'Reason: ' + (p.reason || ''),
-    '',
-    'WARNING: Any period without coverage may result in higher premiums.',
-    'If a refund is owed, ' + carrier + ' will process within 15 business days.',
-    '',
-    'Questions? Call (336) 835-1993 or reply to this email.',
-    '',
-    '-- Bill Layne',
-    'Bill Layne Insurance Agency',
-    '1283 N Bridge St, Elkin, NC 28621',
-    '(336) 835-1993 | Save@BillLayneInsurance.com'
-  ].join('\n');
+  var attachments = pdfFile ? [pdfFile.getBlob().setName(pdfFile.getName())] : [];
 
   MailApp.sendEmail({
     to: p.insuredEmail,
     subject: subject,
     htmlBody: html,
-    body: plain,
+    body: 'Cancellation confirmed for ' + (p.insuredName || '') + ' - ' + carrier + ' policy ' + (p.policyNumber || '') + ' effective ' + (p.cancelDate || '') + '. Confirmation: ' + confirmNum,
     replyTo: CONFIG.OFFICE_EMAIL,
-    name: CONFIG.AGENCY_NAME
+    name: CONFIG.AGENCY_NAME,
+    attachments: attachments
   });
 }
 
