@@ -71,10 +71,10 @@ function createCancellationPdf_(p, confirmNum) {
   var docId = doc.getId();
   var body = doc.getBody();
 
-  body.setMarginTop(36);
-  body.setMarginBottom(28);
-  body.setMarginLeft(50);
-  body.setMarginRight(50);
+  body.setMarginTop(28);
+  body.setMarginBottom(20);
+  body.setMarginLeft(45);
+  body.setMarginRight(45);
 
   var navy = '#1a2744';
   var gray = '#555555';
@@ -112,27 +112,19 @@ function createCancellationPdf_(p, confirmNum) {
 
   // ── IMPORTANT NOTICE ──
   var noticeHead = body.appendParagraph('\u26A0\uFE0F Important Notice');
-  noticeHead.setFontSize(9).setBold(true).setForegroundColor('#92400e').setSpacingAfter(2).setSpacingBefore(4);
+  noticeHead.setFontSize(8).setBold(true).setForegroundColor('#92400e').setSpacingAfter(1).setSpacingBefore(2);
 
-  var notices = [
-    '\u2022 Coverage will terminate on the date and time shown above',
-    '\u2022 No claims will be covered after the cancellation date',
-    '\u2022 You may be without insurance coverage',
-    '\u2022 Any refund will be calculated per policy terms'
-  ];
-  for (var i = 0; i < notices.length; i++) {
-    var np = body.appendParagraph(notices[i]);
-    np.setFontSize(8).setForegroundColor('#78350f').setSpacingAfter(0).setSpacingBefore(0);
-  }
+  var noticeText = body.appendParagraph('\u2022 Coverage will terminate on the date and time shown above  \u2022 No claims will be covered after the cancellation date  \u2022 You may be without insurance coverage  \u2022 Any refund will be calculated per policy terms');
+  noticeText.setFontSize(7).setForegroundColor('#78350f').setSpacingAfter(2).setSpacingBefore(0);
 
   // ── FORMAL CANCELLATION REQUEST ──
   var formalReq = body.appendParagraph('Please accept this notice as a formal insured\'s request to cancel the policy referenced above as permitted under the policy and law of this state. As the named insured under the above referenced policy I am specifically requesting that you cancel this policy effective the date above. I understand that I will be billed and be responsible for any premium due as a result of this cancellation. In the event of a refund, please send such refund to the mailing address noted above. I acknowledge that pursuant to this request that there will be no coverage under the above referenced policy of any kind as of the effective date of this request.');
-  formalReq.setFontSize(8).setLineSpacing(1.05).setSpacingAfter(4).setSpacingBefore(6);
+  formalReq.setFontSize(7).setLineSpacing(1.0).setSpacingAfter(2).setSpacingBefore(2);
 
   // ── LEGAL ACKNOWLEDGMENTS & CERTIFICATIONS ──
   body.appendHorizontalRule();
   var legalHead = body.appendParagraph('LEGAL ACKNOWLEDGMENTS & CERTIFICATIONS');
-  legalHead.setFontSize(9).setBold(true).setForegroundColor(navy).setAlignment(DocumentApp.HorizontalAlignment.CENTER).setSpacingAfter(4).setSpacingBefore(4);
+  legalHead.setFontSize(8).setBold(true).setForegroundColor(navy).setAlignment(DocumentApp.HorizontalAlignment.CENTER).setSpacingAfter(2).setSpacingBefore(2);
 
   var acks = [
     '\u2611 I certify under penalty of perjury that I am the named insured or legally authorized to cancel this policy. False statements may result in criminal prosecution.',
@@ -143,22 +135,22 @@ function createCancellationPdf_(p, confirmNum) {
   ];
   for (var j = 0; j < acks.length; j++) {
     var ap = body.appendParagraph(acks[j]);
-    ap.setFontSize(7).setLineSpacing(1.05).setSpacingAfter(2).setSpacingBefore(1);
+    ap.setFontSize(6.5).setLineSpacing(1.0).setSpacingAfter(1).setSpacingBefore(0);
   }
 
   // ── ELECTRONIC SIGNATURE ──
   body.appendHorizontalRule();
   var sigTitle = body.appendParagraph('ELECTRONIC SIGNATURE REQUIRED');
-  sigTitle.setFontSize(10).setBold(true).setAlignment(DocumentApp.HorizontalAlignment.CENTER).setSpacingAfter(2).setSpacingBefore(4);
+  sigTitle.setFontSize(8).setBold(true).setAlignment(DocumentApp.HorizontalAlignment.CENTER).setSpacingAfter(1).setSpacingBefore(2);
 
-  var sigAck = body.appendParagraph('By signing below, I acknowledge that:\n\u2022 I am requesting cancellation of the above-referenced policy\n\u2022 The policy is either lost, destroyed, or being retained\n\u2022 No claims will be made after the cancellation date\n\u2022 Any premium adjustment will be made per policy terms\n\u2022 This representation is true and accurate');
-  sigAck.setFontSize(7).setSpacingAfter(4).setSpacingBefore(2);
+  var sigAck = body.appendParagraph('By signing below, I acknowledge that: \u2022 I am requesting cancellation of the above-referenced policy \u2022 The policy is either lost, destroyed, or being retained \u2022 No claims will be made after the cancellation date \u2022 Any premium adjustment will be made per policy terms \u2022 This representation is true and accurate');
+  sigAck.setFontSize(6.5).setSpacingAfter(2).setSpacingBefore(1);
 
   // Drawn signature image (from canvas)
   if (p.signature && p.signature.indexOf('data:image') === 0) {
     var sigBlob = createSignatureBlob_(p.signature, confirmNum);
     var sigImg = body.appendImage(sigBlob);
-    sigImg.setWidth(220);
+    sigImg.setWidth(160).setHeight(60);
     sigImg.getParent().asParagraph().setAlignment(DocumentApp.HorizontalAlignment.CENTER);
   } else if (p.typedSignature) {
     var sigLine = body.appendParagraph(p.typedSignature);
@@ -166,10 +158,10 @@ function createCancellationPdf_(p, confirmNum) {
   }
 
   var sigMeta = body.appendParagraph((p.insuredName || '') + ' \u2022 ' + (p.signatureDateTime || Utilities.formatDate(new Date(), CONFIG.TIMEZONE, "M/d/yyyy h:mm a")));
-  sigMeta.setFontSize(7).setForegroundColor(gray).setAlignment(DocumentApp.HorizontalAlignment.CENTER).setSpacingAfter(4);
+  sigMeta.setFontSize(6).setForegroundColor(gray).setAlignment(DocumentApp.HorizontalAlignment.CENTER).setSpacingAfter(2).setSpacingBefore(2);
 
   var legalFooter = body.appendParagraph('Electronic signature valid per E-SIGN Act & NC Uniform Electronic Transactions Act (N.C.G.S. \u00A7 66-311 et seq.) \u2022 Bill Layne Insurance Agency \u2022 www.BillLayneInsurance.com');
-  legalFooter.setFontSize(6).setForegroundColor(gray).setAlignment(DocumentApp.HorizontalAlignment.CENTER).setSpacingAfter(0);
+  legalFooter.setFontSize(6).setForegroundColor(gray).setAlignment(DocumentApp.HorizontalAlignment.CENTER).setSpacingAfter(0).setSpacingBefore(0);
 
   doc.saveAndClose();
 
