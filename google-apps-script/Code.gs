@@ -120,7 +120,14 @@ function createCancellationPdf_(p, confirmNum) {
   var sigTitle = body.appendParagraph('ELECTRONIC SIGNATURE');
   sigTitle.setFontSize(11).setBold(true).setAlignment(DocumentApp.HorizontalAlignment.CENTER).setSpacingAfter(4).setSpacingBefore(4);
 
-  if (p.typedSignature) {
+  // Drawn signature image (from canvas)
+  if (p.signature && p.signature.indexOf('data:image') === 0) {
+    var sigBlob = createSignatureBlob_(p.signature, confirmNum);
+    var sigImg = body.appendImage(sigBlob);
+    sigImg.setWidth(220);
+    sigImg.getParent().asParagraph().setAlignment(DocumentApp.HorizontalAlignment.CENTER);
+  } else if (p.typedSignature) {
+    // Typed signature fallback
     var sigLine = body.appendParagraph(p.typedSignature);
     sigLine.setFontSize(18).setItalic(true).setAlignment(DocumentApp.HorizontalAlignment.CENTER).setSpacingAfter(4);
   }
@@ -139,6 +146,19 @@ function createCancellationPdf_(p, confirmNum) {
   docFile.setTrashed(true);
 
   return pdfFile;
+}
+
+function createSignatureBlob_(signatureUrl, confirmationNumber) {
+  var parts = signatureUrl.split(',');
+  if (parts.length < 2) {
+    throw new Error('Invalid signature data URL.');
+  }
+  var header = parts[0];
+  var base64Data = parts[1];
+  var mimeMatch = header.match(/^data:(image\/[a-zA-Z0-9.+-]+);base64$/);
+  var mimeType = mimeMatch ? mimeMatch[1] : 'image/png';
+  var bytes = Utilities.base64Decode(base64Data);
+  return Utilities.newBlob(bytes, mimeType, confirmationNumber + '-signature.png');
 }
 
 function addTableRow_(table, left, right) {
