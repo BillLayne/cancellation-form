@@ -110,15 +110,49 @@ function createCancellationPdf_(p, confirmNum) {
 
   body.appendHorizontalRule();
 
-  // Statement
-  var stmt = body.appendParagraph('CANCELLATION STATEMENT: I, ' + (p.insuredName || '') + ', hereby request the cancellation of the above-referenced insurance policy. I understand that upon cancellation, all coverage under this policy will terminate as of the date and time specified above. I acknowledge that I will be responsible for obtaining replacement coverage if needed and that any lapse in coverage may result in higher premiums in the future.');
-  stmt.setFontSize(9).setLineSpacing(1.1).setSpacingAfter(6).setSpacingBefore(4);
-  stmt.editAsText().setBold(0, 25, true);
+  // ── IMPORTANT NOTICE ──
+  var noticeHead = body.appendParagraph('\u26A0\uFE0F Important Notice');
+  noticeHead.setFontSize(9).setBold(true).setForegroundColor('#92400e').setSpacingAfter(2).setSpacingBefore(4);
 
-  // Signature
+  var notices = [
+    '\u2022 Coverage will terminate on the date and time shown above',
+    '\u2022 No claims will be covered after the cancellation date',
+    '\u2022 You may be without insurance coverage',
+    '\u2022 Any refund will be calculated per policy terms'
+  ];
+  for (var i = 0; i < notices.length; i++) {
+    var np = body.appendParagraph(notices[i]);
+    np.setFontSize(8).setForegroundColor('#78350f').setSpacingAfter(0).setSpacingBefore(0);
+  }
+
+  // ── FORMAL CANCELLATION REQUEST ──
+  var formalReq = body.appendParagraph('Please accept this notice as a formal insured\'s request to cancel the policy referenced above as permitted under the policy and law of this state. As the named insured under the above referenced policy I am specifically requesting that you cancel this policy effective the date above. I understand that I will be billed and be responsible for any premium due as a result of this cancellation. In the event of a refund, please send such refund to the mailing address noted above. I acknowledge that pursuant to this request that there will be no coverage under the above referenced policy of any kind as of the effective date of this request.');
+  formalReq.setFontSize(8).setLineSpacing(1.05).setSpacingAfter(4).setSpacingBefore(6);
+
+  // ── LEGAL ACKNOWLEDGMENTS & CERTIFICATIONS ──
   body.appendHorizontalRule();
-  var sigTitle = body.appendParagraph('ELECTRONIC SIGNATURE');
-  sigTitle.setFontSize(11).setBold(true).setAlignment(DocumentApp.HorizontalAlignment.CENTER).setSpacingAfter(4).setSpacingBefore(4);
+  var legalHead = body.appendParagraph('LEGAL ACKNOWLEDGMENTS & CERTIFICATIONS');
+  legalHead.setFontSize(9).setBold(true).setForegroundColor(navy).setAlignment(DocumentApp.HorizontalAlignment.CENTER).setSpacingAfter(4).setSpacingBefore(4);
+
+  var acks = [
+    '\u2611 I certify under penalty of perjury that I am the named insured or legally authorized to cancel this policy. False statements may result in criminal prosecution.',
+    '\u2611 I understand I am financially responsible for any claims, damages, or losses that occur after the cancellation effective date and time listed above.',
+    '\u2611 I consent to electronic signature and agree it has the same legal effect as a handwritten signature per the NC Uniform Electronic Transactions Act (N.C.G.S. \u00A7 66-311 et seq.).',
+    '\u2611 I certify all information provided is true and accurate. I understand providing false information may void this cancellation request and any associated refunds.',
+    '\u2611 I UNDERSTAND THIS CANCELLATION IS FINAL once processed and I am voluntarily terminating my insurance coverage with full knowledge of the consequences.'
+  ];
+  for (var j = 0; j < acks.length; j++) {
+    var ap = body.appendParagraph(acks[j]);
+    ap.setFontSize(7).setLineSpacing(1.05).setSpacingAfter(2).setSpacingBefore(1);
+  }
+
+  // ── ELECTRONIC SIGNATURE ──
+  body.appendHorizontalRule();
+  var sigTitle = body.appendParagraph('ELECTRONIC SIGNATURE REQUIRED');
+  sigTitle.setFontSize(10).setBold(true).setAlignment(DocumentApp.HorizontalAlignment.CENTER).setSpacingAfter(2).setSpacingBefore(4);
+
+  var sigAck = body.appendParagraph('By signing below, I acknowledge that:\n\u2022 I am requesting cancellation of the above-referenced policy\n\u2022 The policy is either lost, destroyed, or being retained\n\u2022 No claims will be made after the cancellation date\n\u2022 Any premium adjustment will be made per policy terms\n\u2022 This representation is true and accurate');
+  sigAck.setFontSize(7).setSpacingAfter(4).setSpacingBefore(2);
 
   // Drawn signature image (from canvas)
   if (p.signature && p.signature.indexOf('data:image') === 0) {
@@ -127,7 +161,6 @@ function createCancellationPdf_(p, confirmNum) {
     sigImg.setWidth(220);
     sigImg.getParent().asParagraph().setAlignment(DocumentApp.HorizontalAlignment.CENTER);
   } else if (p.typedSignature) {
-    // Typed signature fallback
     var sigLine = body.appendParagraph(p.typedSignature);
     sigLine.setFontSize(18).setItalic(true).setAlignment(DocumentApp.HorizontalAlignment.CENTER).setSpacingAfter(4);
   }
@@ -135,8 +168,8 @@ function createCancellationPdf_(p, confirmNum) {
   var sigMeta = body.appendParagraph((p.insuredName || '') + ' \u2022 ' + (p.signatureDateTime || Utilities.formatDate(new Date(), CONFIG.TIMEZONE, "M/d/yyyy h:mm a")));
   sigMeta.setFontSize(7).setForegroundColor(gray).setAlignment(DocumentApp.HorizontalAlignment.CENTER).setSpacingAfter(4);
 
-  var legal = body.appendParagraph('Electronic signature valid per E-SIGN Act \u2022 Bill Layne Insurance Agency \u2022 www.BillLayneInsurance.com');
-  legal.setFontSize(7).setForegroundColor(gray).setAlignment(DocumentApp.HorizontalAlignment.CENTER).setSpacingAfter(0);
+  var legalFooter = body.appendParagraph('Electronic signature valid per E-SIGN Act & NC Uniform Electronic Transactions Act (N.C.G.S. \u00A7 66-311 et seq.) \u2022 Bill Layne Insurance Agency \u2022 www.BillLayneInsurance.com');
+  legalFooter.setFontSize(6).setForegroundColor(gray).setAlignment(DocumentApp.HorizontalAlignment.CENTER).setSpacingAfter(0);
 
   doc.saveAndClose();
 
